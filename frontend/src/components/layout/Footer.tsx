@@ -12,8 +12,8 @@ export const Footer: React.FC = () => {
           {/* Brand Col */}
           <div className="lg:col-span-2 space-y-4">
             <Link href="/" className="flex items-center space-x-3">
-              <div className="h-10 flex items-center justify-center p-1 rounded-xl bg-slate-900 border border-slate-800">
-                <img src="/logo.png" alt="ElectronLearners Logo" className="h-8 w-auto object-contain" />
+              <div className="h-10 flex items-center justify-center p-1.5 rounded-xl bg-slate-900 border border-slate-800">
+                <img src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/logo.png`} alt="ElectronLearners Logo" className="h-7 w-auto object-contain" />
               </div>
               <span className="text-xl font-heading font-bold text-white">
                 Electron<span className="text-blue-500">Learners</span>

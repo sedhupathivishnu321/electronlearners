@@ -51,7 +51,7 @@ export default function CertificatesPage() {
         {/* Header Badge */}
         <div className="flex justify-center">
           <div className="h-16 p-2 rounded-2xl bg-slate-900 border border-amber-500/50 shadow-xl flex items-center justify-center">
-            <img src="/logo.png" alt="ElectronLearners Logo" className="h-12 w-auto object-contain" />
+            <img src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/logo.png`} alt="ElectronLearners Logo" className="h-12 w-auto object-contain" />
           </div>
         </div>
 

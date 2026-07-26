@@ -17,8 +17,8 @@ export const Header: React.FC = () => {
           
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-3 group">
-            <div className="h-11 flex items-center justify-center p-1 rounded-xl bg-slate-900 border border-slate-800 shadow-md group-hover:scale-105 transition-transform">
-              <img src="/logo.png" alt="ElectronLearners Logo" className="h-9 w-auto object-contain" />
+            <div className="h-11 flex items-center justify-center p-1.5 rounded-xl bg-slate-900 border border-slate-800 shadow-md group-hover:scale-105 transition-transform">
+              <img src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/logo.png`} alt="ElectronLearners Logo" className="h-8 w-auto object-contain" />
             </div>
             <div>
               <span className="text-xl font-heading font-extrabold tracking-tight text-white">
