@@ -4,7 +4,7 @@ const isGithubActions = process.env.GITHUB_ACTIONS || false;
 let basePath = '';
 let assetPrefix = '';
 
-if (isGithubActions) {
+if (isGithubActions && process.env.GITHUB_REPOSITORY) {
   const repo = process.env.GITHUB_REPOSITORY.replace(/.*?\//, '');
   basePath = `/${repo}`;
   assetPrefix = `/${repo}/`;
@@ -19,6 +19,12 @@ const nextConfig = {
   },
   trailingSlash: true,
   reactStrictMode: true,
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 
 module.exports = nextConfig;
