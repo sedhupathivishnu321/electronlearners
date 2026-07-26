@@ -198,7 +198,7 @@ export const PRODUCTS_DATA: STEMProduct[] = [
     ],
     specifications: {
       "Op-Amp Supply": "+/- 15V or Single 5V-12V",
-      "Audio Output": 0.5W into 8 ohms"
+      "Audio Output": "0.5W into 8 ohms"
     },
     assemblySteps: [
       "Set up dual rail power supply or single-ended supply",
