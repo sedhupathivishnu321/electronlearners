@@ -91,11 +91,11 @@ export default function CoursesCatalog() {
 
             <div className="p-5 pt-0 flex items-center justify-between border-t border-slate-800/80 mt-4">
               <div>
-                <span className="text-lg font-bold text-white font-heading">₹{course.price}</span>
+                <span className="text-lg font-extrabold text-emerald-400 font-heading">FREE</span>
                 <span className="text-xs text-slate-500 line-through ml-2">₹{course.originalPrice}</span>
               </div>
-              <Link href={`/courses/${course.id}`} className="px-3.5 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-semibold shadow-md shadow-cyan-600/30">
-                Enroll Course
+              <Link href={`/courses/${course.id}`} className="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold shadow-md shadow-emerald-600/30">
+                Enroll Free
               </Link>
             </div>
           </div>

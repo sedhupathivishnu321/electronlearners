@@ -321,9 +321,9 @@ export default function Home() {
               </div>
 
               <div className="p-5 pt-0 flex items-center justify-between border-t border-slate-800/80 mt-4">
-                <span className="text-base font-bold text-white font-heading">₹{course.price}</span>
-                <Link href={`/courses/${course.id}`} className="px-3 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-semibold">
-                  Enroll Now
+                <span className="text-base font-extrabold text-emerald-400 font-heading">FREE</span>
+                <Link href={`/courses/${course.id}`} className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold">
+                  Enroll Free
                 </Link>
               </div>
             </div>
