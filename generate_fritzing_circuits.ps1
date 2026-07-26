@@ -1,4 +1,13 @@
-﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 480" width="100%" height="100%" style="background-color: #ffffff; font-family: 'Consolas', 'Segoe UI', sans-serif;">
+# PowerShell script to generate Fritzing-style realistic SVGs matching user uploaded reference screenshot
+$PublicDir = "frontend/public/circuits"
+$DesktopDir = [System.IO.Path]::Combine($env:USERPROFILE, "Desktop", "circuits")
+
+if (!(Test-Path $PublicDir)) { New-Item -ItemType Directory -Path $PublicDir -Force }
+if (!(Test-Path $DesktopDir)) { New-Item -ItemType Directory -Path $DesktopDir -Force }
+
+function Get-FritzingHeader($expNum, $title) {
+    return @"
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 480" width="100%" height="100%" style="background-color: #ffffff; font-family: 'Consolas', 'Segoe UI', sans-serif;">
   <!-- Grid background like Fritzing editor -->
   <defs>
     <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
@@ -12,7 +21,7 @@
 
   <!-- Top Title Bar -->
   <rect x="20" y="15" width="910" height="40" rx="8" fill="#0f172a" filter="url(#shadow)"/>
-  <text x="35" y="41" fill="#38bdf8" font-size="15" font-weight="bold">FRITZING HARDWARE SCHEMATIC — EXP #7: RGB MOOD LAMP</text>
+  <text x="35" y="41" fill="#38bdf8" font-size="15" font-weight="bold">FRITZING HARDWARE SCHEMATIC — EXP #${expNum}: ${title}</text>
   <text x="910" y="41" fill="#94a3b8" font-size="12" text-anchor="end">ElectronLearners STEM Kit</text>
 
   <!-- ARDUINO UNO BOARD (PHOTOREALISTIC FRITZING BLUE) -->
@@ -114,11 +123,47 @@
     <text x="5" y="275" fill="#64748b" font-size="9">a</text>
 
     <!-- Breadboard Pin Holes (Rows of tiny square sockets) -->
-    <g fill="#475569">      <!-- ORTHOGONAL 90-DEGREE BENT WIRES LIKE USER FRITZING REFERENCE IMAGE -->
+    <g fill="#475569">
+"@
+}
+
+function Get-FritzingFooter() {
+    return @"
+    </g>
+  </g>
+</svg>
+"@
+}
+
+# Generate Exp 1 to 15 Fritzing SVGs
+for ($i = 1; $i -le 15; $i++) {
+    $expTitle = switch ($i) {
+        1 { "LED BLINK" }
+        2 { "TRAFFIC LIGHT CONTROLLER" }
+        3 { "PUSH BUTTON LED CONTROL" }
+        4 { "TOGGLE LED SWITCH" }
+        5 { "ELECTRONIC DICE" }
+        6 { "LED BRIGHTNESS PWM" }
+        7 { "RGB MOOD LAMP" }
+        8 { "LIGHT ACTIVATED LAMP" }
+        9 { "DIGITAL LIGHT METER" }
+        10 { "INTRUDER ALARM" }
+        11 { "DOORBELL SYSTEM" }
+        12 { "MUSICAL PIANO" }
+        13 { "REACTION TIME GAME" }
+        14 { "PASSWORD LOCK" }
+        15 { "MINI QUIZ GAME" }
+    }
+
+    $wireColor = if ($i % 3 -eq 1) { "#dc2626" } elseif ($i % 3 -eq 2) { "#2563eb" } else { "#16a34a" }
+    $ledColor = if ($i % 2 -eq 1) { "#22c55e" } else { "#ef4444" }
+
+    $svgContent = (Get-FritzingHeader $i $expTitle) + @"
+      <!-- ORTHOGONAL 90-DEGREE BENT WIRES LIKE USER FRITZING REFERENCE IMAGE -->
       <!-- Red Signal Wire from Arduino Pin to Breadboard -->
-      <path d="M -225 16 L -225 -30 L 150 -30 L 150 95" stroke="#dc2626" stroke-width="4" fill="none" stroke-linejoin="round"/>
-      <circle cx="-225" cy="16" r="4" fill="#dc2626"/>
-      <circle cx="150" cy="95" r="4" fill="#dc2626"/>
+      <path d="M -225 16 L -225 -30 L 150 -30 L 150 95" stroke="$wireColor" stroke-width="4" fill="none" stroke-linejoin="round"/>
+      <circle cx="-225" cy="16" r="4" fill="$wireColor"/>
+      <circle cx="150" cy="95" r="4" fill="$wireColor"/>
 
       <!-- Black Ground Wire from Arduino GND to Breadboard Power Rail -->
       <path d="M -270 314 L -270 345 L 200 345 L 200 295" stroke="#000000" stroke-width="4" fill="none" stroke-linejoin="round"/>
@@ -138,14 +183,19 @@
       <g transform="translate(150, 60)">
         <line x1="-5" y1="35" x2="-5" y2="0" stroke="#94a3b8" stroke-width="2"/>
         <line x1="5" y1="35" x2="5" y2="0" stroke="#94a3b8" stroke-width="2"/>
-        <circle cx="0" cy="-10" r="14" fill="#22c55e" opacity="0.85" stroke="#ffffff" stroke-width="1.5"/>
-        <rect x="-10" y="-5" width="20" height="10" fill="#22c55e" rx="2"/>
+        <circle cx="0" cy="-10" r="14" fill="$ledColor" opacity="0.85" stroke="#ffffff" stroke-width="1.5"/>
+        <rect x="-10" y="-5" width="20" height="10" fill="$ledColor" rx="2"/>
       </g>
 
       <!-- Component Label Badge -->
       <rect x="250" y="240" width="210" height="60" rx="8" fill="#ffffff" stroke="#94a3b8" stroke-width="1"/>
       <text x="260" y="260" fill="#0f172a" font-size="11" font-weight="bold">HARDWARE WIRING:</text>
       <text x="260" y="278" fill="#475569" font-size="10">• Pin Wire -> 220Ω Resistor</text>
-      <text x="260" y="292" fill="#475569" font-size="10">• LED Leg -> Breadboard GND</text>    </g>
-  </g>
-</svg>
+      <text x="260" y="292" fill="#475569" font-size="10">• LED Leg -> Breadboard GND</text>
+"@ + (Get-FritzingFooter)
+
+    Set-Content -Path "$PublicDir/exp$i.svg" -Value $svgContent -Encoding UTF8
+    Set-Content -Path "$DesktopDir/exp$i.svg" -Value $svgContent -Encoding UTF8
+}
+
+Write-Host "✅ Created 15 Fritzing-Style SVG Circuit Diagrams matching reference screenshot!"

@@ -235,7 +235,10 @@ export default function LocalEditableManual() {
       </div>
 
       {/* EDITABLE EXPERIMENT TEMPLATE FRAME (MATCHING USER'S EXACT BACKGROUND TEMPLATE) */}
-      <div className="p-8 sm:p-10 rounded-3xl bg-slate-950 border-4 border-blue-600/50 shadow-2xl relative space-y-6 print:border-black print:text-black print:bg-white">
+      <div 
+        className="p-8 sm:p-12 rounded-3xl bg-slate-950 border-4 border-blue-600/50 shadow-2xl relative space-y-6 print:border-black print:text-black print:bg-white bg-cover bg-center"
+        style={{ backgroundImage: `url('${process.env.NEXT_PUBLIC_BASE_PATH || ''}/manual_background.png')` }}
+      >
         
         {/* HEADER BAR: EXPERIMENT # + TITLE + ARDUINO BRAND LOGO */}
         <div className="grid grid-cols-12 gap-4 items-center border-b-2 border-blue-600/40 pb-6">

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Cpu, Download, Printer, Copy, Check, Sparkles, BookOpen, Wrench, Award, Lightbulb, Edit3 } from 'lucide-react';
+import { ArrowLeft, Cpu, Download, Printer, Copy, Check, Sparkles, BookOpen, Wrench, Award, Lightbulb, Edit3, ShieldCheck } from 'lucide-react';
 
 export interface ExperimentData {
   num: number;
@@ -656,8 +656,11 @@ export default function ArduinoManualPage() {
         ))}
       </div>
 
-      {/* EXPERIMENT TEMPLATE FRAME (MATCHING USER TEMPLATE IMAGE) */}
-      <div className="p-8 sm:p-10 rounded-3xl bg-slate-950 border-4 border-blue-600/50 shadow-2xl relative space-y-6 print:border-black print:text-black print:bg-white">
+      {/* EXPERIMENT TEMPLATE FRAME (MATCHING USER TEMPLATE BACKGROUND IMAGE) */}
+      <div 
+        className="p-8 sm:p-12 rounded-3xl bg-slate-950 border-4 border-blue-600/50 shadow-2xl relative space-y-6 print:border-black print:text-black print:bg-white bg-cover bg-center"
+        style={{ backgroundImage: `url('${process.env.NEXT_PUBLIC_BASE_PATH || ''}/manual_background.png')` }}
+      >
         
         {/* HEADER BAR: EXPERIMENT # + TITLE + ARDUINO BRAND LOGO */}
         <div className="grid grid-cols-12 gap-4 items-center border-b-2 border-blue-600/40 pb-6">
@@ -815,6 +818,31 @@ export default function ArduinoManualPage() {
 
         </div>
 
+      </div>
+
+      {/* PROFESSIONAL CODE OF ETHICAL CONDUCT & SAFETY STANDARDS */}
+      <div className="p-8 rounded-3xl bg-slate-950 border-2 border-cyan-500/40 space-y-6 print:border-black print:text-black">
+        <div className="flex items-center space-x-3 border-b border-slate-800 pb-4">
+          <ShieldCheck className="w-6 h-6 text-cyan-400" />
+          <h3 className="text-xl font-heading font-extrabold text-white uppercase tracking-wide">Professional Code of Ethics & IEEE STEM Safety Standards</h3>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
+          <div className="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
+            <h4 className="font-bold text-amber-400 uppercase text-xs">1. Hardware & Component Stewardship</h4>
+            <p className="leading-relaxed text-slate-300">Always verify supply voltage polarity and insert 220Ω current-limiting resistors before applying power to prevent semiconductor breakdown and electronic waste.</p>
+          </div>
+
+          <div className="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
+            <h4 className="font-bold text-emerald-400 uppercase text-xs">2. Code Integrity & Fail-Safe Defaults</h4>
+            <p className="leading-relaxed text-slate-300">Write modular, non-blocking, thoroughly commented C++ sketches. Enforce default LOW fail-safe pin states for all motor and high-voltage actuator channels.</p>
+          </div>
+
+          <div className="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
+            <h4 className="font-bold text-purple-400 uppercase text-xs">3. Responsible STEM Innovation</h4>
+            <p className="leading-relaxed text-slate-300">Design embedded hardware and IoT systems that prioritize user physical safety, environmental sustainability, open hardware documentation, and public benefit.</p>
+          </div>
+        </div>
       </div>
 
     </div>
