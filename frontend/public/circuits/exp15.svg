@@ -1,0 +1,41 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 650 350" width="100%" height="100%" style="background-color: #0b1329; font-family: Arial, sans-serif;">
+  <rect width="650" height="350" fill="#0b1329" rx="16" stroke="#1e293b" stroke-width="2"/>
+  
+  <!-- Title Badge -->
+  <rect x="20" y="15" width="610" height="35" rx="8" fill="#1e293b" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="30" y="38" fill="#60a5fa" font-size="14" font-weight="bold">CIRCUIT SCHEMATIC DIAGRAM: EXP #15 - MINI QUIZ GAME</text>
+  
+  <!-- Arduino Uno Board Graphic -->
+  <rect x="30" y="75" width="180" height="240" rx="12" fill="#006699" stroke="#0099cc" stroke-width="2"/>
+  <rect x="40" y="85" width="40" height="30" fill="#cccccc" rx="3"/>
+  <text x="45" y="105" fill="#333333" font-size="10" font-weight="bold">USB</text>
+  <rect x="150" y="150" width="50" height="100" fill="#111111" rx="4"/>
+  <text x="155" y="200" fill="#ffffff" font-size="9" font-weight="bold">ATmega328P</text>
+  <text x="80" y="140" fill="#ffffff" font-size="16" font-weight="bold">ARDUINO</text>
+  <text x="95" y="160" fill="#00ccff" font-size="14" font-weight="bold">UNO R3</text>
+  
+  <!-- Pin Headers -->
+  <rect x="195" y="85" width="10" height="220" fill="#222222"/>
+  <text x="175" y="100" fill="#00ffcc" font-size="10" font-weight="bold">PINS</text>
+
+  <!-- Component Breadboard Area -->
+  <rect x="270" y="75" width="350" height="240" rx="12" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+  <text x="285" y="100" fill="#94a3b8" font-size="12" font-weight="bold">BREADBOARD HARDWARE WIRING</text>
+  
+  <!-- Schematic Wires & Connections -->
+  <path d="M 205 100 L 270 100" stroke="#ef4444" stroke-width="3" fill="none" stroke-dasharray="4"/>
+  <text x="215" y="95" fill="#ef4444" font-size="10" font-weight="bold">5V Power</text>
+
+  <path d="M 205 290 L 270 290" stroke="#3b82f6" stroke-width="3" fill="none"/>
+  <text x="215" y="285" fill="#60a5fa" font-size="10" font-weight="bold">GND Ground</text>
+
+  <!-- Experiment Specific Hardware Details -->
+  <g transform="translate(290, 120)">
+    <rect x="0" y="0" width="310" height="170" rx="8" fill="#090d16" stroke="#2563eb" stroke-width="1"/>
+    <text x="15" y="30" fill="#34d399" font-size="12" font-weight="bold">Components & Connections:</text>
+    <text x="15" y="45" fill="#f8fafc" font-size="11">• Pins 2,3,4,5 ---> Answer Keys A, B, C, D</text><text x="15" y="75" fill="#22c55e" font-size="11">• Pin 10 (Green) &amp; Pin 11 (Red) Feedback</text><text x="15" y="105" fill="#67e8f9" font-size="11">• USB Serial Prompt UI &amp; Score Counter</text>
+  </g>
+  
+  <!-- Footer Status -->
+  <text x="30" y="335" fill="#64748b" font-size="10">ElectronLearners STEM Kit • Experiment #15 Schematic</text>
+</svg>

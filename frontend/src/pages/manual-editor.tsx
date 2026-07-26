@@ -384,17 +384,24 @@ export default function LocalEditableManual() {
                 <Cpu className="w-4 h-4" />
                 <span>CIRCUIT DIAGRAM & SCHEMATIC WIRING</span>
               </div>
-              <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 font-mono text-xs text-cyan-300 overflow-x-auto leading-relaxed">
-                {isEditing ? (
-                  <textarea
-                    rows={4}
-                    value={currentExp.circuitDiagram}
-                    onChange={(e) => handleUpdateField('circuitDiagram', e.target.value)}
-                    className="w-full bg-slate-950 text-cyan-300 font-mono text-xs p-2 rounded border border-slate-800"
-                  />
-                ) : (
-                  <pre>{currentExp.circuitDiagram}</pre>
-                )}
+              <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col items-center space-y-3">
+                <img
+                  src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/circuits/exp${currentExp.num}.svg`}
+                  alt={`Circuit Diagram Exp ${currentExp.num}`}
+                  className="w-full max-w-2xl h-auto rounded-xl border border-cyan-500/30 shadow-lg object-contain"
+                />
+                <div className="w-full font-mono text-xs text-cyan-300">
+                  {isEditing ? (
+                    <textarea
+                      rows={4}
+                      value={currentExp.circuitDiagram}
+                      onChange={(e) => handleUpdateField('circuitDiagram', e.target.value)}
+                      className="w-full bg-slate-950 text-cyan-300 font-mono text-xs p-2 rounded border border-slate-800"
+                    />
+                  ) : (
+                    <pre>{currentExp.circuitDiagram}</pre>
+                  )}
+                </div>
               </div>
             </div>
 
