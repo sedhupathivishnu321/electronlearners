@@ -73,7 +73,7 @@ export const PRODUCTS_DATA: STEMProduct[] = [
       "Build basic LED circuit on breadboard with 220-ohm resistor",
       "Upload blink.ino sketch from downloadable source files"
     ],
-    manualUrl: "/downloads/manuals/Arduino_Starter_Kit_Guide.pdf",
+    manualUrl: "/manual",
     datasheetUrl: "/downloads/datasheets/ATmega328P_Datasheet.pdf",
     videoUrl: "https://www.youtube.com/watch?v=nL34zDTPkcs",
     faqs: [

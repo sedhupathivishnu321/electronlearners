@@ -36,6 +36,9 @@ export const Header: React.FC = () => {
             <Link href="/products" className="hover:text-blue-400 transition-colors flex items-center gap-1">
               <Cpu className="w-4 h-4 text-blue-500" /> Kits (20)
             </Link>
+            <Link href="/manual" className="hover:text-amber-400 transition-colors flex items-center gap-1">
+              <BookOpen className="w-4 h-4 text-amber-400" /> 15 Circuits Manual
+            </Link>
             <Link href="/tutorials" className="hover:text-red-400 transition-colors flex items-center gap-1">
               <Youtube className="w-4 h-4 text-red-500" /> YouTube
             </Link>
