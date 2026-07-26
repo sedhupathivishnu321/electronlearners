@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Cpu, Download, Printer, Copy, Check, Sparkles, BookOpen, Wrench, Award, Lightbulb } from 'lucide-react';
+import { ArrowLeft, Cpu, Download, Printer, Copy, Check, Sparkles, BookOpen, Wrench, Award, Lightbulb, Edit3 } from 'lucide-react';
 
 export interface ExperimentData {
   num: number;
@@ -627,6 +627,9 @@ export default function ArduinoManualPage() {
         </div>
 
         <div className="flex items-center space-x-3">
+          <Link href="/manual-editor" className="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow">
+            <Edit3 className="w-4 h-4" /> Open Editable Studio
+          </Link>
           <button
             onClick={handlePrint}
             className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs flex items-center gap-2 shadow-lg shadow-blue-600/30"
