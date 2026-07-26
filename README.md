@@ -1,7 +1,9 @@
-# ⚡ ElectronLearners Platform
-
-> **Learn. Build. Innovate.**  
-> Complete STEM Education & E-Commerce Platform with Physical Kits, Online Courses, YouTube Channel Integration (`@LetsGetEngagedin`), Project Libraries, Institutional Portals, and Enterprise Admin Panel.
+<div align="center">
+  <img src="frontend/public/logo.png" alt="ElectronLearners Logo" width="180" />
+  <h1>⚡ ElectronLearners Platform</h1>
+  <p><strong>Learn. Build. Innovate.</strong></p>
+  <p>Complete STEM Education & E-Commerce Platform with Physical Kits, Online Courses, YouTube Channel Integration (<a href="https://www.youtube.com/@LetsGetEngagedin">@LetsGetEngagedin</a>), Project Libraries, Institutional Portals, and Enterprise Admin Panel.</p>
+</div>
 
 ---
 
