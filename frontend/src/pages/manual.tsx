@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Cpu, Printer, Copy, Check, Sparkles, BookOpen, Wrench, Lightbulb, Edit3, ShieldCheck, Download } from 'lucide-react';
-import { EXPERIMENTS_15, ExperimentData } from './manual-editor';
+import { ArrowLeft, Cpu, Printer, Copy, Check, Sparkles, BookOpen, Wrench, Lightbulb, Edit3, ShieldCheck } from 'lucide-react';
+import { EXPERIMENTS_15 } from './manual-editor';
+import FritzingCircuit from '../components/FritzingCircuit';
+import { getAssetUrl } from '../utils/assets';
 
 export default function PerfectArduinoManualPage() {
   const [selectedExpNum, setSelectedExpNum] = useState<number>(1);
@@ -28,7 +30,7 @@ export default function PerfectArduinoManualPage() {
           <h1 className="text-3xl font-heading font-black text-white flex items-center gap-3">
             <span className="gradient-text-blue">Arduino STEM Kit</span> Official 15-Experiment Lab Manual
           </h1>
-          <p className="text-slate-400 text-xs mt-1">Pixel-perfect printable hardware guide designed for hands-on electronics & robotics education.</p>
+          <p className="text-slate-400 text-xs mt-1">Pixel-perfect hardware laboratory manual with Fritzing schematics & C++ code.</p>
         </div>
 
         <div className="flex items-center space-x-3">
@@ -61,19 +63,16 @@ export default function PerfectArduinoManualPage() {
         ))}
       </div>
 
-      {/* OUTER STEM DOODLE FRAME CONTAINER (MATCHING TEMPLATE FRAME) */}
-      <div className="max-w-6xl mx-auto p-4 sm:p-8 rounded-3xl bg-white border-4 border-slate-200 shadow-2xl relative print:p-0 print:border-none print:shadow-none">
+      {/* OUTER STEM CONTAINER */}
+      <div className="max-w-6xl mx-auto p-3 sm:p-6 rounded-3xl bg-slate-900 border-4 border-blue-600/40 shadow-2xl relative print:p-0 print:border-none print:shadow-none">
         
-        {/* DOODLE ICON HEADER OVERLAY BACKGROUND */}
-        <div className="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:16px_16px] rounded-3xl"></div>
-
-        {/* INNER NAVY BLUE EXPERIMENT CARD CONTAINER */}
-        <div className="relative z-10 p-6 sm:p-8 rounded-2xl bg-[#09152b] text-white border-2 border-blue-500/40 space-y-6 shadow-2xl print:bg-white print:text-black print:border-black">
+        {/* INNER EXPERIMENT CARD */}
+        <div className="relative z-10 p-6 sm:p-8 rounded-2xl bg-[#081329] text-white border-2 border-blue-500/40 space-y-6 shadow-2xl print:bg-white print:text-black">
           
-          {/* HEADER BAR: EXPERIMENT BADGE | RED TITLE BOX | ARDUINO BRAND LOGO */}
+          {/* HEADER BAR */}
           <div className="grid grid-cols-12 gap-4 items-center border-b-2 border-blue-500/30 pb-6">
             
-            {/* EXPERIMENT BADGE (BLUE CHEVRON) */}
+            {/* EXPERIMENT BADGE */}
             <div className="col-span-3 sm:col-span-2">
               <div className="px-4 py-3 rounded-xl bg-blue-600 text-white text-center shadow-lg shadow-blue-600/40 border border-blue-400/40">
                 <span className="block text-[9px] uppercase font-bold tracking-widest text-blue-200">EXPERIMENT</span>
@@ -90,11 +89,9 @@ export default function PerfectArduinoManualPage() {
               </div>
             </div>
 
-            {/* ARDUINO LOGO & ELECTRONLEARNERS BRAND */}
+            {/* ARDUINO / ELECTRONLEARNERS LOGO */}
             <div className="col-span-3 sm:col-span-2 flex justify-end items-center">
-              <div className="flex items-center space-x-2">
-                <img src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/logo.png`} alt="ElectronLearners Logo" className="h-10 w-auto object-contain" />
-              </div>
+              <img src={getAssetUrl('/logo.png')} alt="ElectronLearners Logo" className="h-10 w-auto object-contain" />
             </div>
           </div>
 
@@ -104,7 +101,6 @@ export default function PerfectArduinoManualPage() {
             {/* LEFT COLUMN: CONCEPT | COMPONENTS | LEARNING */}
             <div className="lg:col-span-4 space-y-5">
               
-              {/* CONCEPT BADGE & BOX */}
               <div className="space-y-1.5">
                 <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-lg bg-amber-500 text-slate-950 font-bold text-xs uppercase tracking-wider shadow">
                   <Lightbulb className="w-4 h-4 fill-current" />
@@ -115,7 +111,6 @@ export default function PerfectArduinoManualPage() {
                 </div>
               </div>
 
-              {/* COMPONENTS BADGE & LIST */}
               <div className="space-y-1.5">
                 <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-lg bg-emerald-600 text-white font-bold text-xs uppercase tracking-wider shadow">
                   <Wrench className="w-4 h-4" />
@@ -131,7 +126,6 @@ export default function PerfectArduinoManualPage() {
                 </div>
               </div>
 
-              {/* LEARNING BADGE & OBJECTIVES */}
               <div className="space-y-1.5">
                 <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-lg bg-purple-600 text-white font-bold text-xs uppercase tracking-wider shadow">
                   <BookOpen className="w-4 h-4" />
@@ -149,25 +143,13 @@ export default function PerfectArduinoManualPage() {
 
             </div>
 
-            {/* RIGHT COLUMN: FRITZING CIRCUIT SCHEMATIC | CODE | EXPLANATION */}
+            {/* RIGHT COLUMN: FRITZING CIRCUIT | CODE | EXPLANATION */}
             <div className="lg:col-span-8 space-y-5">
               
-              {/* FRITZING CIRCUIT SCHEMATIC IMAGE CONTAINER */}
-              <div className="space-y-1.5">
-                <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-lg bg-cyan-600 text-white font-bold text-xs uppercase tracking-wider shadow">
-                  <Cpu className="w-4 h-4" />
-                  <span>FRITZING HARDWARE WIRING SCHEMATIC</span>
-                </div>
-                <div className="p-3 rounded-xl bg-white border-2 border-cyan-500/40 shadow-inner flex flex-col items-center">
-                  <img
-                    src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/circuits/exp${exp.num}.svg`}
-                    alt={`Fritzing Circuit Exp ${exp.num}`}
-                    className="w-full max-h-72 object-contain rounded-lg"
-                  />
-                </div>
-              </div>
+              {/* NATIVE FRITZING CIRCUIT COMPONENT */}
+              <FritzingCircuit expNum={exp.num} title={exp.title} />
 
-              {/* ARDUINO C++ CODE BLOCK */}
+              {/* CODE BLOCK */}
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between">
                   <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-lg bg-blue-600 text-white font-bold text-xs uppercase tracking-wider shadow">
@@ -187,7 +169,7 @@ export default function PerfectArduinoManualPage() {
                 </div>
               </div>
 
-              {/* EXPLANATION BOX */}
+              {/* EXPLANATION */}
               <div className="space-y-1.5">
                 <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-lg bg-indigo-600 text-white font-bold text-xs uppercase tracking-wider shadow">
                   <span>EXPLANATION</span>
@@ -201,24 +183,21 @@ export default function PerfectArduinoManualPage() {
 
           </div>
 
-          {/* BOTTOM ROW: WORKING | RESULT | ENGINEER'S TIP */}
+          {/* BOTTOM ROW: WORKING | RESULT | TIP */}
           <div className="border-t-2 border-blue-500/30 pt-5 grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
             
             <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* WORKING PRINCIPLE */}
               <div className="p-3.5 rounded-xl bg-[#0f203c] border border-blue-900/60 space-y-1">
                 <span className="px-2 py-0.5 rounded bg-blue-600/30 text-blue-300 text-[10px] font-extrabold uppercase">WORKING PRINCIPLE</span>
                 <p className="text-xs text-slate-200 pt-1 leading-relaxed">{exp.working}</p>
               </div>
 
-              {/* EXPECTED RESULT */}
               <div className="p-3.5 rounded-xl bg-[#0f203c] border border-blue-900/60 space-y-1">
                 <span className="px-2 py-0.5 rounded bg-emerald-600/30 text-emerald-300 text-[10px] font-extrabold uppercase">EXPECTED RESULT</span>
                 <p className="text-xs text-slate-200 pt-1 leading-relaxed">{exp.result}</p>
               </div>
             </div>
 
-            {/* ENGINEER'S TIP (YELLOW HIGHLIGHT CARD) */}
             <div className="lg:col-span-4 p-4 rounded-xl bg-amber-500/20 border-2 border-amber-400 text-amber-100 space-y-1 flex flex-col justify-center shadow-lg">
               <div className="flex items-center space-x-2 font-bold text-xs text-amber-300 uppercase">
                 <Lightbulb className="w-4 h-4 fill-current text-amber-300" />
@@ -233,7 +212,7 @@ export default function PerfectArduinoManualPage() {
 
       </div>
 
-      {/* PROFESSIONAL CODE OF ETHICS & SAFETY STANDARDS */}
+      {/* PROFESSIONAL CODE OF ETHICS & IEEE SAFETY STANDARDS */}
       <div className="max-w-6xl mx-auto mt-8 p-8 rounded-3xl bg-slate-900 border-2 border-cyan-500/40 space-y-6 print:border-black print:text-black print:bg-white">
         <div className="flex items-center space-x-3 border-b border-slate-800 pb-4">
           <ShieldCheck className="w-6 h-6 text-cyan-400" />

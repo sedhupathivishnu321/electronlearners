@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { EXPERIMENTS_15, ExperimentData } from './manual';
-import { ArrowLeft, Save, Plus, Trash2, Printer, Download, Upload, Edit3, Check, Cpu, Lightbulb, Wrench, BookOpen, Sparkles, Copy } from 'lucide-react';
+import FritzingCircuit from '../components/FritzingCircuit';
+import { getAssetUrl } from '../utils/assets';
+import { ArrowLeft, Save, Plus, Trash2, Printer, Download, Upload, Edit3, Check, Cpu, Lightbulb, Wrench, BookOpen, Sparkles } from 'lucide-react';
 
 export default function LocalEditableManual() {
   const [experiments, setExperiments] = useState<ExperimentData[]>(EXPERIMENTS_15);
@@ -9,7 +11,6 @@ export default function LocalEditableManual() {
   const [isEditing, setIsEditing] = useState<boolean>(true);
   const [savedStatus, setSavedStatus] = useState<string | null>(null);
 
-  // Load from LocalStorage on mount if custom edits exist
   useEffect(() => {
     try {
       const saved = localStorage.getItem('el_custom_manual');
@@ -141,9 +142,9 @@ export default function LocalEditableManual() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8 print:p-0 print:m-0">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8 print:p-0 print:m-0 text-slate-100">
       
-      {/* Action Header */}
+      {/* ACTION HEADER */}
       <div className="flex flex-col md:flex-row items-center justify-between gap-4 border-b border-slate-800 pb-6 print:hidden">
         <div>
           <Link href="/manual" className="inline-flex items-center space-x-2 text-xs font-semibold text-slate-400 hover:text-white mb-2">
@@ -151,7 +152,7 @@ export default function LocalEditableManual() {
             <span>View Published Manual</span>
           </Link>
           <h1 className="text-3xl font-heading font-extrabold text-white">Local Editable Manual Studio</h1>
-          <p className="text-slate-400 text-xs">Create, edit, import/export, and print custom STEM Lab Manuals matching your exact visual background frame.</p>
+          <p className="text-slate-400 text-xs">Create, edit, import/export, and print custom STEM Lab Manuals.</p>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
@@ -199,7 +200,7 @@ export default function LocalEditableManual() {
         </div>
       )}
 
-      {/* Experiment Selector Carousel Bar */}
+      {/* EXPERIMENT SELECTOR TABS */}
       <div className="flex items-center space-x-2 overflow-x-auto pb-2 scrollbar-none print:hidden">
         {experiments.map((item, idx) => (
           <div key={idx} className="flex items-center shrink-0 space-x-1">
@@ -234,17 +235,14 @@ export default function LocalEditableManual() {
         )}
       </div>
 
-      {/* EDITABLE EXPERIMENT TEMPLATE FRAME (MATCHING USER'S EXACT BACKGROUND TEMPLATE) */}
-      <div 
-        className="p-8 sm:p-12 rounded-3xl bg-slate-950 border-4 border-blue-600/50 shadow-2xl relative space-y-6 print:border-black print:text-black print:bg-white bg-cover bg-center"
-        style={{ backgroundImage: `url('${process.env.NEXT_PUBLIC_BASE_PATH || ''}/manual_background.png')` }}
-      >
+      {/* EDITABLE EXPERIMENT CARD FRAME */}
+      <div className="p-6 sm:p-8 rounded-2xl bg-[#081329] border-2 border-blue-500/40 space-y-6 shadow-2xl">
         
-        {/* HEADER BAR: EXPERIMENT # + TITLE + ARDUINO BRAND LOGO */}
-        <div className="grid grid-cols-12 gap-4 items-center border-b-2 border-blue-600/40 pb-6">
+        {/* HEADER BAR */}
+        <div className="grid grid-cols-12 gap-4 items-center border-b-2 border-blue-500/30 pb-6">
           <div className="col-span-3 sm:col-span-2">
-            <div className="px-4 py-3 rounded-2xl bg-blue-600 text-white font-heading font-black text-center shadow-lg shadow-blue-600/30">
-              <span className="block text-[10px] uppercase font-bold tracking-widest text-blue-200">EXPERIMENT</span>
+            <div className="px-4 py-3 rounded-xl bg-blue-600 text-white text-center shadow-lg border border-blue-400/40">
+              <span className="block text-[9px] uppercase font-bold tracking-widest text-blue-200">EXPERIMENT</span>
               {isEditing ? (
                 <input
                   type="number"
@@ -253,52 +251,49 @@ export default function LocalEditableManual() {
                   className="w-16 bg-blue-700 text-white text-center font-bold text-xl rounded px-1"
                 />
               ) : (
-                <span className="text-2xl font-extrabold">#{currentExp.num}</span>
+                <span className="text-2xl font-black">#{currentExp.num}</span>
               )}
             </div>
           </div>
 
           <div className="col-span-6 sm:col-span-8 text-center">
-            <div className="p-4 rounded-2xl bg-slate-900 border-2 border-blue-500/40 shadow-inner">
+            <div className="px-6 py-3 rounded-xl bg-white border-2 border-blue-600 shadow-md">
               {isEditing ? (
                 <input
                   type="text"
                   value={currentExp.title}
                   onChange={(e) => handleUpdateField('title', e.target.value.toUpperCase())}
-                  className="w-full bg-slate-950 text-red-500 text-center font-heading font-black text-xl sm:text-2xl uppercase rounded px-2 py-1 border border-slate-800"
+                  className="w-full bg-white text-red-600 text-center font-heading font-black text-xl sm:text-2xl uppercase focus:outline-none"
                 />
               ) : (
-                <h2 className="text-xl sm:text-2xl font-heading font-black tracking-wide text-red-500 uppercase">{currentExp.title}</h2>
+                <h2 className="text-xl sm:text-2xl font-heading font-black text-red-600 uppercase">{currentExp.title}</h2>
               )}
             </div>
           </div>
 
-          <div className="col-span-3 sm:col-span-2 flex justify-end">
-            <div className="flex items-center space-x-2">
-              <img src="/logo.png" alt="ElectronLearners Logo" className="h-10 w-auto object-contain" />
-            </div>
+          <div className="col-span-3 sm:col-span-2 flex justify-end items-center">
+            <img src={getAssetUrl('/logo.png')} alt="ElectronLearners Logo" className="h-10 w-auto object-contain" />
           </div>
         </div>
 
-        {/* MAIN BODY GRID: LEFT SIDE (CONCEPT, COMPONENTS, LEARNING) vs RIGHT SIDE (CODE, CIRCUIT DIAGRAM, EXPLANATION) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        {/* MAIN BODY GRID */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           
-          {/* LEFT SIDEBAR (Concept, Components, Learning) */}
-          <div className="lg:col-span-4 space-y-6">
+          {/* LEFT COLUMN */}
+          <div className="lg:col-span-4 space-y-5">
             
-            {/* CONCEPT BOX */}
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-lg bg-amber-500 text-slate-950 font-bold text-xs uppercase tracking-wider shadow">
-                <Lightbulb className="w-4 h-4" />
+                <Lightbulb className="w-4 h-4 fill-current" />
                 <span>CONCEPT</span>
               </div>
-              <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 text-xs text-slate-200 font-semibold leading-relaxed">
+              <div className="p-3.5 rounded-xl bg-[#0f203c] border border-blue-900/60 text-xs text-slate-200">
                 {isEditing ? (
                   <textarea
                     rows={2}
                     value={currentExp.concept}
                     onChange={(e) => handleUpdateField('concept', e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl p-2 text-white font-normal"
+                    className="w-full bg-slate-950 border border-slate-800 rounded p-2 text-white"
                   />
                 ) : (
                   currentExp.concept
@@ -306,8 +301,7 @@ export default function LocalEditableManual() {
               </div>
             </div>
 
-            {/* COMPONENTS BOX */}
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <div className="flex items-center justify-between">
                 <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-lg bg-emerald-600 text-white font-bold text-xs uppercase tracking-wider shadow">
                   <Wrench className="w-4 h-4" />
@@ -317,7 +311,7 @@ export default function LocalEditableManual() {
                   <button onClick={handleAddComponent} className="text-emerald-400 text-[11px] font-bold hover:underline">+ Add Part</button>
                 )}
               </div>
-              <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-2 text-xs text-slate-300">
+              <div className="p-3.5 rounded-xl bg-[#0f203c] border border-blue-900/60 space-y-1.5 text-xs text-slate-200">
                 {currentExp.components.map((comp, idx) => (
                   <div key={idx} className="flex items-center justify-between space-x-2">
                     {isEditing ? (
@@ -341,8 +335,7 @@ export default function LocalEditableManual() {
               </div>
             </div>
 
-            {/* LEARNING OUTCOMES BOX */}
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <div className="flex items-center justify-between">
                 <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-lg bg-purple-600 text-white font-bold text-xs uppercase tracking-wider shadow">
                   <BookOpen className="w-4 h-4" />
@@ -352,7 +345,7 @@ export default function LocalEditableManual() {
                   <button onClick={handleAddLearning} className="text-purple-400 text-[11px] font-bold hover:underline">+ Add Outcome</button>
                 )}
               </div>
-              <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-2 text-xs text-slate-300">
+              <div className="p-3.5 rounded-xl bg-[#0f203c] border border-blue-900/60 space-y-1.5 text-xs text-slate-200">
                 {currentExp.learning.map((obj, idx) => (
                   <div key={idx} className="flex items-center justify-between space-x-2">
                     {isEditing ? (
@@ -378,51 +371,25 @@ export default function LocalEditableManual() {
 
           </div>
 
-          {/* RIGHT MAIN PANEL (Circuit Diagram, Code, Explanation) */}
-          <div className="lg:col-span-8 space-y-6">
+          {/* RIGHT COLUMN */}
+          <div className="lg:col-span-8 space-y-5">
             
-            {/* CIRCUIT DIAGRAM & SCHEMATIC WIRING BOX */}
-            <div className="space-y-2">
-              <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-lg bg-cyan-600 text-white font-bold text-xs uppercase tracking-wider shadow">
-                <Cpu className="w-4 h-4" />
-                <span>CIRCUIT DIAGRAM & SCHEMATIC WIRING</span>
-              </div>
-              <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col items-center space-y-3">
-                <img
-                  src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/circuits/exp${currentExp.num}.svg`}
-                  alt={`Circuit Diagram Exp ${currentExp.num}`}
-                  className="w-full max-w-2xl h-auto rounded-xl border border-cyan-500/30 shadow-lg object-contain"
-                />
-                <div className="w-full font-mono text-xs text-cyan-300">
-                  {isEditing ? (
-                    <textarea
-                      rows={4}
-                      value={currentExp.circuitDiagram}
-                      onChange={(e) => handleUpdateField('circuitDiagram', e.target.value)}
-                      className="w-full bg-slate-950 text-cyan-300 font-mono text-xs p-2 rounded border border-slate-800"
-                    />
-                  ) : (
-                    <pre>{currentExp.circuitDiagram}</pre>
-                  )}
-                </div>
-              </div>
-            </div>
+            {/* FRITZING CIRCUIT COMPONENT */}
+            <FritzingCircuit expNum={currentExp.num} title={currentExp.title} />
 
-            {/* ARDUINO C++ CODE BOX */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-lg bg-blue-600 text-white font-bold text-xs uppercase tracking-wider shadow">
-                  <Sparkles className="w-4 h-4" />
-                  <span>ARDUINO C++ CODE</span>
-                </div>
+            {/* CODE BLOCK */}
+            <div className="space-y-1.5">
+              <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-lg bg-blue-600 text-white font-bold text-xs uppercase tracking-wider shadow">
+                <Sparkles className="w-4 h-4" />
+                <span>ARDUINO C++ CODE SKETCH</span>
               </div>
-              <div className="p-5 rounded-2xl bg-[#090D16] border border-slate-800 text-emerald-400 font-mono text-xs overflow-x-auto leading-relaxed shadow-inner">
+              <div className="p-4 rounded-xl bg-[#040810] border border-blue-900/60 text-emerald-400 font-mono text-xs overflow-x-auto leading-relaxed shadow-inner">
                 {isEditing ? (
                   <textarea
-                    rows={8}
+                    rows={6}
                     value={currentExp.code}
                     onChange={(e) => handleUpdateField('code', e.target.value)}
-                    className="w-full bg-slate-950 text-emerald-400 font-mono text-xs p-3 rounded border border-slate-800"
+                    className="w-full bg-slate-950 text-emerald-400 font-mono text-xs p-2 rounded border border-slate-800"
                   />
                 ) : (
                   <pre><code>{currentExp.code}</code></pre>
@@ -430,12 +397,12 @@ export default function LocalEditableManual() {
               </div>
             </div>
 
-            {/* EXPLANATION BOX */}
-            <div className="space-y-2">
+            {/* EXPLANATION */}
+            <div className="space-y-1.5">
               <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-lg bg-indigo-600 text-white font-bold text-xs uppercase tracking-wider shadow">
                 <span>EXPLANATION</span>
               </div>
-              <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 text-xs text-slate-300 leading-relaxed">
+              <div className="p-3.5 rounded-xl bg-[#0f203c] border border-blue-900/60 text-xs text-slate-200 leading-relaxed">
                 {isEditing ? (
                   <textarea
                     rows={3}
@@ -453,13 +420,12 @@ export default function LocalEditableManual() {
 
         </div>
 
-        {/* BOTTOM FOOTER SECTION (WORKING, RESULT, ENGINEER'S TIP) */}
-        <div className="border-t-2 border-blue-600/40 pt-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+        {/* BOTTOM ROW */}
+        <div className="border-t-2 border-blue-500/30 pt-5 grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
           
           <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {/* WORKING */}
-            <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-1">
-              <span className="px-2 py-0.5 rounded bg-blue-600/30 text-blue-400 text-[10px] font-extrabold uppercase">WORKING PRINCIPLE</span>
+            <div className="p-3.5 rounded-xl bg-[#0f203c] border border-blue-900/60 space-y-1">
+              <span className="px-2 py-0.5 rounded bg-blue-600/30 text-blue-300 text-[10px] font-extrabold uppercase">WORKING PRINCIPLE</span>
               {isEditing ? (
                 <textarea
                   rows={2}
@@ -468,13 +434,12 @@ export default function LocalEditableManual() {
                   className="w-full bg-slate-950 text-slate-300 text-xs p-2 rounded border border-slate-800 mt-1"
                 />
               ) : (
-                <p className="text-xs text-slate-300 pt-1 leading-relaxed">{currentExp.working}</p>
+                <p className="text-xs text-slate-200 pt-1 leading-relaxed">{currentExp.working}</p>
               )}
             </div>
 
-            {/* RESULT */}
-            <div className="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-1">
-              <span className="px-2 py-0.5 rounded bg-emerald-600/30 text-emerald-400 text-[10px] font-extrabold uppercase">EXPECTED RESULT</span>
+            <div className="p-3.5 rounded-xl bg-[#0f203c] border border-blue-900/60 space-y-1">
+              <span className="px-2 py-0.5 rounded bg-emerald-600/30 text-emerald-300 text-[10px] font-extrabold uppercase">EXPECTED RESULT</span>
               {isEditing ? (
                 <textarea
                   rows={2}
@@ -483,15 +448,14 @@ export default function LocalEditableManual() {
                   className="w-full bg-slate-950 text-slate-300 text-xs p-2 rounded border border-slate-800 mt-1"
                 />
               ) : (
-                <p className="text-xs text-slate-300 pt-1 leading-relaxed">{currentExp.result}</p>
+                <p className="text-xs text-slate-200 pt-1 leading-relaxed">{currentExp.result}</p>
               )}
             </div>
           </div>
 
-          {/* ENGINEER'S TIP (YELLOW HIGHLIGHT BOX MATCHING TEMPLATE) */}
-          <div className="lg:col-span-4 p-4 rounded-2xl bg-amber-500/10 border-2 border-amber-500/40 text-amber-200 space-y-1 flex flex-col justify-center">
-            <div className="flex items-center space-x-2 font-bold text-xs text-amber-400 uppercase">
-              <Lightbulb className="w-4 h-4 fill-current text-amber-400" />
+          <div className="lg:col-span-4 p-4 rounded-xl bg-amber-500/20 border-2 border-amber-400 text-amber-100 space-y-1 flex flex-col justify-center shadow-lg">
+            <div className="flex items-center space-x-2 font-bold text-xs text-amber-300 uppercase">
+              <Lightbulb className="w-4 h-4 fill-current text-amber-300" />
               <span>ENGINEER'S TIP</span>
             </div>
             {isEditing ? (
@@ -499,10 +463,10 @@ export default function LocalEditableManual() {
                 rows={2}
                 value={currentExp.tip}
                 onChange={(e) => handleUpdateField('tip', e.target.value)}
-                className="w-full bg-slate-950 text-amber-200 text-xs p-2 rounded border border-slate-800"
+                className="w-full bg-slate-950 text-amber-100 text-xs p-2 rounded border border-slate-800"
               />
             ) : (
-              <p className="text-xs leading-relaxed text-amber-100">{currentExp.tip}</p>
+              <p className="text-xs leading-relaxed text-amber-100 font-medium">{currentExp.tip}</p>
             )}
           </div>
 
