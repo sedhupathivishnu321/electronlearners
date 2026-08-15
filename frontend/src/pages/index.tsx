@@ -138,10 +138,6 @@ export default function Home() {
                   <div className="p-5 space-y-2">
                     <div className="flex items-center justify-between text-xs text-slate-400">
                       <span className="text-cyan-400 font-medium">{product.category}</span>
-                      <div className="flex items-center gap-1 text-amber-400">
-                        <Star className="w-3.5 h-3.5 fill-current" />
-                        <span>{product.rating.toFixed(1)}</span>
-                      </div>
                     </div>
 
                     <Link href={`/products/${product.id}`} className="block">
@@ -287,42 +283,6 @@ export default function Home() {
               </div>
               <h3 className="text-sm font-semibold text-white tracking-wide font-heading">{item.title}</h3>
               <p className="text-slate-400 text-xs leading-relaxed">{item.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* 7. CUSTOMER REVIEWS */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-2xl mx-auto mb-12 space-y-2">
-          <h2 className="text-2xl sm:text-3xl font-heading font-bold text-white uppercase tracking-tight">Verified Customer Reviews</h2>
-          <p className="text-slate-400 text-sm">Genuine testimonials from makers, university students, and secondary school educators.</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[
-            { name: "Dr. K. Srinivasan", role: "Professor, PSG Tech", text: "We ordered 50 Arduino starter kits for our IoT lab. Component quality is premium, and the PDF manuals saved our lab assistants days of preparation.", rating: 5 },
-            { name: "Rahul Deshmukh", role: "Engineering Student", text: "The ESP32 Starter Kit was amazing! Followed the IoT weather station project. Adding the whole kit to the cart was so much cheaper than buying parts separately.", rating: 5 },
-            { name: "Aditi Roy", role: "DIY Maker", text: "The breadboard pins fit perfectly. I had a quick coding question, opened a support ticket, and the engineer resolved it with a code snippet in an hour.", rating: 5 }
-          ].map((rev, idx) => (
-            <div key={idx} className="p-6 rounded-2xl glass-card border border-slate-800 space-y-4 relative flex flex-col justify-between shadow-lg">
-              <div className="space-y-2">
-                <div className="flex items-center gap-1 text-amber-400">
-                  {[...Array(rev.rating)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-current" />
-                  ))}
-                </div>
-                <p className="text-slate-300 text-xs italic leading-relaxed">"{rev.text}"</p>
-              </div>
-              <div className="flex items-center gap-2 pt-4 border-t border-slate-800/60 mt-4">
-                <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-xs font-bold text-blue-400 font-heading">
-                  {rev.name[0]}
-                </div>
-                <div>
-                  <h4 className="text-xs font-bold text-white">{rev.name}</h4>
-                  <span className="text-[10px] text-slate-500 uppercase tracking-wider font-semibold">{rev.role}</span>
-                </div>
-              </div>
             </div>
           ))}
         </div>

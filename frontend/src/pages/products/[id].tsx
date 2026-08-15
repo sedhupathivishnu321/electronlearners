@@ -8,15 +8,10 @@ import { ShoppingCart, Heart, Star, Download, Play, CheckCircle, Shield, FileTex
 export default function ProductDetail() {
   const router = useRouter();
   const { id } = router.query;
-  const { products, addToCart, toggleWishlist, wishlist, reviews, submitReview } = useApp();
+  const { products, addToCart, toggleWishlist, wishlist } = useApp();
 
   const [quantity, setQuantity] = useState<number>(1);
-  const [activeTab, setActiveTab] = useState<'desc' | 'specs' | 'included' | 'compat' | 'how' | 'projects' | 'docs' | 'reviews' | 'qna'>('desc');
-  
-  // Review form states
-  const [reviewName, setReviewName] = useState<string>('');
-  const [reviewRating, setReviewRating] = useState<number>(5);
-  const [reviewText, setReviewText] = useState<string>('');
+  const [activeTab, setActiveTab] = useState<'desc' | 'specs' | 'included' | 'compat' | 'how' | 'projects' | 'docs' | 'qna'>('desc');
 
   // Find product by id or slug
   const product = products.find((p) => p.id === id || p.slug === id) || products[0];
@@ -46,9 +41,6 @@ export default function ProductDetail() {
     proj.shortDescription.toLowerCase().includes(product.name.toLowerCase().split(' ')[0])
   );
 
-  // Filter reviews
-  const approvedReviews = reviews.filter(r => r.productId === product.id && r.status === 'Approved');
-
   // Related products
   const relatedProducts = products
     .filter((p) => p.category === product.category && p.id !== product.id)
@@ -57,14 +49,6 @@ export default function ProductDetail() {
   const handleBuyNow = () => {
     addToCart(product, quantity);
     router.push('/cart');
-  };
-
-  const handleAddReview = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!reviewText.trim()) return;
-    submitReview(product.id, reviewRating, reviewText);
-    setReviewText('');
-    setReviewName('');
   };
 
   return (
@@ -112,12 +96,6 @@ export default function ProductDetail() {
             <h1 className="text-2xl sm:text-3xl font-heading font-extrabold text-white">{product.name}</h1>
             
             <div className="flex items-center space-x-4 text-xs pt-1">
-              <div className="flex items-center text-amber-400 gap-1">
-                <Star className="w-4 h-4 fill-current" />
-                <span className="font-bold">{product.rating.toFixed(1)}</span>
-                <span className="text-slate-500">({approvedReviews.length + product.reviewsCount} reviews)</span>
-              </div>
-              <span className="text-slate-700">•</span>
               <span className={`font-semibold ${product.stock > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
                 {product.stock > 0 ? `In Stock (Only ${product.stock} units left!)` : 'Out of Stock'}
               </span>
@@ -214,7 +192,6 @@ export default function ProductDetail() {
             { key: 'how', label: 'How to Use' },
             { key: 'projects', label: `Projects (${relatedProjects.length})` },
             { key: 'docs', label: 'Documentation' },
-            { key: 'reviews', label: `Reviews (${approvedReviews.length})` },
             { key: 'qna', label: 'Q&A' }
           ].map((tab) => (
             <button
@@ -385,85 +362,7 @@ export default function ProductDetail() {
             </div>
           )}
 
-          {activeTab === 'reviews' && (
-            <div className="space-y-6">
-              <h3 className="text-sm font-bold text-white uppercase tracking-wide">Approved Customer Reviews ({approvedReviews.length})</h3>
 
-              {approvedReviews.length > 0 ? (
-                <div className="space-y-4">
-                  {approvedReviews.map((rev) => (
-                    <div key={rev.id} className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
-                      <div className="flex items-center justify-between text-xs">
-                        <div className="flex items-center gap-2">
-                          <span className="font-bold text-white">{rev.customerName}</span>
-                          <span className="px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 text-[8px] font-bold uppercase tracking-wider">Verified Purchase</span>
-                        </div>
-                        <span className="text-slate-500 font-mono text-[10px]">{rev.createdAt.split('T')[0]}</span>
-                      </div>
-                      <div className="flex items-center gap-1 text-amber-400 text-xs">
-                        {[...Array(rev.rating)].map((_, i) => (
-                          <Star key={i} className="w-3.5 h-3.5 fill-current" />
-                        ))}
-                      </div>
-                      <p className="text-slate-300 text-xs">{rev.text}</p>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-xs text-slate-500">No approved reviews yet for this product. Be the first to leave a review below!</p>
-              )}
-
-              {/* Submit Review Form */}
-              <form onSubmit={handleAddReview} className="border-t border-slate-800 pt-6 space-y-4">
-                <h4 className="text-xs font-bold text-white uppercase tracking-wide">Submit a Product Review</h4>
-                
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-[10px] uppercase font-bold text-slate-400 mb-1.5">Rating (1 to 5 Stars)</label>
-                    <select
-                      value={reviewRating}
-                      onChange={(e) => setReviewRating(Number(e.target.value))}
-                      className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-blue-500"
-                    >
-                      <option value="5">⭐⭐⭐⭐⭐ (5 - Excellent)</option>
-                      <option value="4">⭐⭐⭐⭐ (4 - Very Good)</option>
-                      <option value="3">⭐⭐⭐ (3 - Average)</option>
-                      <option value="2">⭐⭐ (2 - Poor)</option>
-                      <option value="1">⭐ (1 - Unusable)</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-[10px] uppercase font-bold text-slate-400 mb-1.5">Name</label>
-                    <input
-                      type="text"
-                      placeholder="e.g. Priyan S."
-                      value={reviewName}
-                      onChange={(e) => setReviewName(e.target.value)}
-                      className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-blue-500"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-[10px] uppercase font-bold text-slate-400 mb-1.5">Your Review Content</label>
-                  <textarea
-                    rows={3}
-                    placeholder="Describe component quality, accuracy of manual, packaging..."
-                    value={reviewText}
-                    onChange={(e) => setReviewText(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-blue-500"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold flex items-center gap-1.5 shadow"
-                >
-                  <Send className="w-3.5 h-3.5" /> Submit Review for Moderation
-                </button>
-              </form>
-            </div>
-          )}
 
           {activeTab === 'qna' && (
             <div className="space-y-4">

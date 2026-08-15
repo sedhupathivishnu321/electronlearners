@@ -5,8 +5,8 @@
   "devFiles": [],
   "ampDevFiles": [],
   "lowPriorityFiles": [
-    "static/oM8EeV7oNcMenpIGNOw8x/_buildManifest.js",
-    "static/oM8EeV7oNcMenpIGNOw8x/_ssgManifest.js"
+    "static/6scBe6xIcNcWSG4TW9784/_buildManifest.js",
+    "static/6scBe6xIcNcWSG4TW9784/_ssgManifest.js"
   ],
   "rootMainFiles": [],
   "pages": {
@@ -14,13 +14,13 @@
       "static/chunks/webpack-8fa1640cc84ba8fe.js",
       "static/chunks/framework-64ad27b21261a9ce.js",
       "static/chunks/main-f4701d23e362eb77.js",
-      "static/chunks/pages/index-e13041f20a6d6039.js"
+      "static/chunks/pages/index-b434efde74dfc227.js"
     ],
     "/_app": [
       "static/chunks/webpack-8fa1640cc84ba8fe.js",
       "static/chunks/framework-64ad27b21261a9ce.js",
       "static/chunks/main-f4701d23e362eb77.js",
-      "static/css/23472c27c444f7f3.css",
+      "static/css/a5557922d81b06e8.css",
       "static/chunks/pages/_app-5593c09563f76c43.js"
     ],
     "/_error": [
@@ -39,7 +39,7 @@
       "static/chunks/webpack-8fa1640cc84ba8fe.js",
       "static/chunks/framework-64ad27b21261a9ce.js",
       "static/chunks/main-f4701d23e362eb77.js",
-      "static/chunks/pages/admin-0899a16824ad6e3d.js"
+      "static/chunks/pages/admin-ea351c3a1d7ec1e4.js"
     ],
     "/blog": [
       "static/chunks/webpack-8fa1640cc84ba8fe.js",
@@ -87,7 +87,7 @@
       "static/chunks/webpack-8fa1640cc84ba8fe.js",
       "static/chunks/framework-64ad27b21261a9ce.js",
       "static/chunks/main-f4701d23e362eb77.js",
-      "static/chunks/pages/courses-4101cf1a78dfacee.js"
+      "static/chunks/pages/courses-7a38ff682f9f2479.js"
     ],
     "/courses/[id]": [
       "static/chunks/webpack-8fa1640cc84ba8fe.js",
@@ -149,13 +149,13 @@
       "static/chunks/webpack-8fa1640cc84ba8fe.js",
       "static/chunks/framework-64ad27b21261a9ce.js",
       "static/chunks/main-f4701d23e362eb77.js",
-      "static/chunks/pages/products-da11d83c3a70b8a8.js"
+      "static/chunks/pages/products-26db3a8a77a97f6e.js"
     ],
     "/products/[id]": [
       "static/chunks/webpack-8fa1640cc84ba8fe.js",
       "static/chunks/framework-64ad27b21261a9ce.js",
       "static/chunks/main-f4701d23e362eb77.js",
-      "static/chunks/pages/products/[id]-8bc86c2d9cbffad5.js"
+      "static/chunks/pages/products/[id]-ab08d424cf1fcce8.js"
     ],
     "/projects": [
       "static/chunks/webpack-8fa1640cc84ba8fe.js",

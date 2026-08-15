@@ -503,10 +503,6 @@ export default function ProductsCatalog() {
                       <div className="p-5 space-y-2">
                         <div className="flex items-center justify-between text-xs text-slate-450">
                           <span className="text-cyan-400 font-medium">{product.category}</span>
-                          <div className="flex items-center gap-1 text-amber-400">
-                            <Star className="w-3.5 h-3.5 fill-current" />
-                            <span>{product.rating.toFixed(1)}</span>
-                          </div>
                         </div>
 
                         <Link href={`/products/${product.id}`} className="block">

@@ -151,7 +151,6 @@ export default function AdminDashboard() {
           { key: 'products', label: `Products (${products.length})`, icon: Cpu },
           { key: 'rfqs', label: `B2B RFQs (${rfqs.length})`, icon: ClipboardCheck },
           { key: 'tickets', label: `Tickets (${supportTickets.length})`, icon: MessageSquare },
-          { key: 'reviews', label: `Reviews (${reviews.length})`, icon: Star },
           { key: 'coupons', label: 'Coupons Manager', icon: Tag },
           { key: 'logs', label: 'Audit Log Desk', icon: Activity }
         ].map((tab) => {
@@ -434,51 +433,6 @@ export default function AdminDashboard() {
               )}
             </div>
 
-          </div>
-        )}
-
-        {/* 5. REVIEW MODERATION */}
-        {activeTab === 'reviews' && hasTabAccess('reviews') && (
-          <div className="space-y-6">
-            <h3 className="text-xs font-bold text-white uppercase tracking-wider">Customer Review Moderation Desk</h3>
-            
-            <div className="space-y-4">
-              {reviews.map((rev) => (
-                <div key={rev.id} className="p-4 rounded-xl bg-slate-950 border border-slate-850 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-3">
-                      <span className="font-bold text-white">{rev.customerName}</span>
-                      <span className="text-[10px] text-slate-500 font-mono">Product ID: {rev.productId}</span>
-                      <span className={`px-2 py-0.5 rounded text-[8px] font-bold uppercase ${
-                        rev.status === 'Approved' ? 'bg-emerald-500/10 text-emerald-450' : 'bg-amber-500/10 text-amber-450'
-                      }`}>{rev.status}</span>
-                    </div>
-                    <div className="flex items-center text-amber-450 gap-0.5">
-                      {[...Array(rev.rating)].map((_, i) => <Star key={i} className="w-3.5 h-3.5 fill-current" />)}
-                    </div>
-                    <p className="text-slate-350 italic">"{rev.text}"</p>
-                  </div>
-
-                  <div className="flex gap-2 shrink-0">
-                    {rev.status === 'Pending' && (
-                      <button
-                        onClick={() => approveReview(rev.id)}
-                        className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold"
-                      >
-                        Approve
-                      </button>
-                    )}
-                    <button
-                      onClick={() => deleteReview(rev.id)}
-                      className="p-2 rounded-lg bg-slate-850 hover:bg-red-650 hover:text-white border border-slate-800 text-slate-400 transition-all"
-                      title="Delete Review"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
         )}
 
