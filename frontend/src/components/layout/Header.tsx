@@ -23,7 +23,7 @@ export const Header: React.FC = () => {
             </div>
             <div>
               <span className="text-xl font-heading font-extrabold tracking-tight text-white">
-                Electron<span className="gradient-text-blue">Learners</span>
+                JR<span className="gradient-text-blue">Learners</span>
               </span>
               <span className="block text-[10px] uppercase font-semibold text-slate-400 tracking-widest">
                 Learn. Build. Innovate.

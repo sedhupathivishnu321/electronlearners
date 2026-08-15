@@ -17,7 +17,7 @@ export const Footer: React.FC = () => {
                 <Logo size="sm" />
               </div>
               <span className="text-xl font-heading font-bold text-white">
-                Electron<span className="text-blue-500">Learners</span>
+                JR<span className="text-blue-500">Learners</span>
               </span>
             </Link>
             <p className="text-xs leading-relaxed text-slate-400 max-w-sm">
