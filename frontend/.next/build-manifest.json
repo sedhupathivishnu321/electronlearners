@@ -5,8 +5,8 @@
   "devFiles": [],
   "ampDevFiles": [],
   "lowPriorityFiles": [
-    "static/I1HX5qRTUbv-n2MJ9XAt_/_buildManifest.js",
-    "static/I1HX5qRTUbv-n2MJ9XAt_/_ssgManifest.js"
+    "static/oM8EeV7oNcMenpIGNOw8x/_buildManifest.js",
+    "static/oM8EeV7oNcMenpIGNOw8x/_ssgManifest.js"
   ],
   "rootMainFiles": [],
   "pages": {
@@ -20,8 +20,8 @@
       "static/chunks/webpack-8fa1640cc84ba8fe.js",
       "static/chunks/framework-64ad27b21261a9ce.js",
       "static/chunks/main-f4701d23e362eb77.js",
-      "static/css/b9bc0f9d51decf5c.css",
-      "static/chunks/pages/_app-cddc8ee500debd82.js"
+      "static/css/23472c27c444f7f3.css",
+      "static/chunks/pages/_app-5593c09563f76c43.js"
     ],
     "/_error": [
       "static/chunks/webpack-8fa1640cc84ba8fe.js",
@@ -87,13 +87,13 @@
       "static/chunks/webpack-8fa1640cc84ba8fe.js",
       "static/chunks/framework-64ad27b21261a9ce.js",
       "static/chunks/main-f4701d23e362eb77.js",
-      "static/chunks/pages/courses-3e22cfd358c6e14f.js"
+      "static/chunks/pages/courses-4101cf1a78dfacee.js"
     ],
     "/courses/[id]": [
       "static/chunks/webpack-8fa1640cc84ba8fe.js",
       "static/chunks/framework-64ad27b21261a9ce.js",
       "static/chunks/main-f4701d23e362eb77.js",
-      "static/chunks/pages/courses/[id]-70edf0cb332778ce.js"
+      "static/chunks/pages/courses/[id]-25631163e4a35c67.js"
     ],
     "/dashboard": [
       "static/chunks/webpack-8fa1640cc84ba8fe.js",
@@ -149,7 +149,7 @@
       "static/chunks/webpack-8fa1640cc84ba8fe.js",
       "static/chunks/framework-64ad27b21261a9ce.js",
       "static/chunks/main-f4701d23e362eb77.js",
-      "static/chunks/pages/products-0c865e8fd49d958c.js"
+      "static/chunks/pages/products-da11d83c3a70b8a8.js"
     ],
     "/products/[id]": [
       "static/chunks/webpack-8fa1640cc84ba8fe.js",

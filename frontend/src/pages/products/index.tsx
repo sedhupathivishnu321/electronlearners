@@ -17,6 +17,7 @@ export default function ProductsCatalog() {
   const [selectedAvailability, setSelectedAvailability] = useState<string>('All');
   const [sortBy, setSortBy] = useState<'rating' | 'price-asc' | 'price-desc'>('rating');
   const [showComparison, setShowComparison] = useState<boolean>(true);
+  const [selectedKitsModal, setSelectedKitsModal] = useState<any | null>(null);
 
   // Sync state with URL Query Params
   useEffect(() => {
@@ -93,32 +94,72 @@ export default function ProductsCatalog() {
   const unoItem = products.find(p => p.id === 'prod-1') || products[0];
   const comparisonProducts = [
     {
-      name: "Arduino UNO R3",
+      name: "Arduino UNO R3 Starter Kit",
       digitalIO: "14 pins",
       analogInputs: "6 pins",
       flash: "32 KB",
       usb: "Type-B",
       beginner: "Yes (Excellent)",
+      projectsCount: "30+ Lab Projects",
+      addOnComponents: "I2C 16x2 LCD display, SG90 servo motor, DHT11 humidity unit, HC-SR04 ultrasonic sound sensor, 5V digital relay, Active buzzer, Light LDR sensors",
+      experiments: [
+        "Experiment 1: LED Blink (GPIO State Control)",
+        "Experiment 2: Traffic Light Sequence Controller",
+        "Experiment 3: LDR Intelligent Automatic Street Light",
+        "Experiment 4: Analog Sensor Calibration & Plotting",
+        "Experiment 5: RGB Color Mixing Mood Lamp",
+        "Experiment 6: SG90 Servo Sweep & Sweep Speed Controls",
+        "Experiment 7: 16x2 LCD Character Welcome Terminal",
+        "Experiment 8: DHT11 Digital Thermometer Log Display",
+        "Experiment 9: HC-SR04 Sound Distance Alert system",
+        "Experiment 10: 5V Home Appliance Relay Switching"
+      ],
       price: unoItem?.price || 1499,
       product: unoItem
     },
     {
-      name: "Arduino Nano V3",
+      name: "Arduino Nano V3 Starter Kit",
       digitalIO: "22 pins",
       analogInputs: "8 pins",
       flash: "32 KB",
       usb: "Mini-USB",
       beginner: "Yes (Breadboard)",
+      projectsCount: "15+ Prototyping Projects",
+      addOnComponents: "Breadboard breakout interface, MPU6050 Accelerometer Gyro, HC-05 Bluetooth transceivers, NRF24L01 RF communications module, Infrared IR receiver card",
+      experiments: [
+        "Experiment 1: Breadboard Blink & Multi-LED Arrays",
+        "Experiment 2: MPU6050 Motion Angles Angle Plotting",
+        "Experiment 3: Bluetooth Serial Remote Controls",
+        "Experiment 4: RF Transmitter-Receiver Telemetry Loop",
+        "Experiment 5: Infrared Remote Controller Command Decoder",
+        "Experiment 6: Ambient Light Sensor Sleep Mode Alarm",
+        "Experiment 7: SPI Digital Resistor Calibration",
+        "Experiment 8: Analog Comparator Interrupt Control"
+      ],
       price: Math.round((unoItem?.price || 1499) * 0.6),
       product: unoItem // fallback for add to cart
     },
     {
-      name: "Arduino Mega 2560",
+      name: "Arduino Mega 2560 Starter Kit",
       digitalIO: "54 pins",
       analogInputs: "16 pins",
       flash: "256 KB",
       usb: "Type-B",
       beginner: "Medium (Complex)",
+      projectsCount: "50+ Enterprise Projects",
+      addOnComponents: "3.2 inch TFT touch-screen shield, RC522 RFID Card Scanner, DS1307 Real Time Clock, Stepper motor + ULN2003 driver, Soil moisture probe, Gas sensor",
+      experiments: [
+        "Experiment 1: Bare-metal Multi-pin Register Masking",
+        "Experiment 2: 3.2\" TFT Screen UI Layout Layouts",
+        "Experiment 3: RFID Gate Security Card Verification",
+        "Experiment 4: DS1307 RTC Clock Time Alarm Alert",
+        "Experiment 5: Stepper Motor Step Driver Calibrations",
+        "Experiment 6: Soil Moisture Irrigation Water Relay System",
+        "Experiment 7: Gas Concentration Alarms with Buzzer",
+        "Experiment 8: FreeRTOS Task Scheduling & Multitasking",
+        "Experiment 9: Multi-bus UART Telemetry Console Logs",
+        "Experiment 10: Matrix Keypad Lock Password Verification"
+      ],
       price: Math.round((unoItem?.price || 1499) * 1.8),
       product: products.find(p => p.name.includes('Mega')) || unoItem
     }
@@ -231,9 +272,34 @@ export default function ProductsCatalog() {
                   ))}
                 </tr>
                 <tr>
+                  <td className="p-3 font-semibold text-slate-450">Projects Supported</td>
+                  {comparisonProducts.map((p, idx) => (
+                    <td key={idx} className="p-3 text-center font-semibold text-blue-300">{p.projectsCount}</td>
+                  ))}
+                </tr>
+                <tr>
+                  <td className="p-3 font-semibold text-slate-450">Add-on Modules</td>
+                  {comparisonProducts.map((p, idx) => (
+                    <td key={idx} className="p-3 text-center text-[10px] text-slate-450 max-w-[200px] leading-relaxed mx-auto">{p.addOnComponents}</td>
+                  ))}
+                </tr>
+                <tr>
+                  <td className="p-3 font-semibold text-slate-450">Syllabus / Lab Guides</td>
+                  {comparisonProducts.map((p, idx) => (
+                    <td key={idx} className="p-3 text-center">
+                      <button
+                        onClick={() => setSelectedKitsModal(p)}
+                        className="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-750 text-[10px] font-bold text-cyan-400 border border-slate-700 transition-all cursor-pointer shadow-md"
+                      >
+                        View Experiments List
+                      </button>
+                    </td>
+                  ))}
+                </tr>
+                <tr>
                   <td className="p-3 font-bold text-white">Estimated Price</td>
                   {comparisonProducts.map((p, idx) => (
-                    <td key={idx} className="p-3 text-center font-extrabold text-blue-400 text-sm">₹{p.price}</td>
+                    <td key={idx} className="p-3 text-center font-extrabold text-blue-450 text-sm">₹{p.price}</td>
                   ))}
                 </tr>
                 <tr className="bg-slate-900/10">
@@ -504,6 +570,59 @@ export default function ProductsCatalog() {
           )}
         </section>
       </div>
+
+      {/* Experiments List Modal */}
+      {selectedKitsModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+          <div className="bg-[#0F172A] border border-slate-800 rounded-2xl max-w-md w-full max-h-[80vh] flex flex-col overflow-hidden shadow-2xl">
+            {/* Modal Header */}
+            <div className="p-5 border-b border-slate-800 flex items-center justify-between">
+              <div>
+                <h3 className="text-sm font-bold text-white uppercase tracking-wide">{selectedKitsModal.name}</h3>
+                <span className="text-[10px] text-cyan-400 font-semibold">{selectedKitsModal.projectsCount}</span>
+              </div>
+              <button
+                onClick={() => setSelectedKitsModal(null)}
+                className="p-1 text-slate-400 hover:text-white rounded-lg bg-slate-900 border border-slate-800 transition-all text-xs font-bold"
+              >
+                ✕ Close
+              </button>
+            </div>
+            
+            {/* Modal Content */}
+            <div className="p-6 overflow-y-auto space-y-5 text-xs text-slate-300">
+              <div className="space-y-1">
+                <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Included Add-On Components</h4>
+                <p className="bg-slate-950/60 p-3 rounded-xl border border-slate-900 leading-relaxed text-slate-200">
+                  {selectedKitsModal.addOnComponents}
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">List of Practical Experiments</h4>
+                <div className="space-y-1.5">
+                  {selectedKitsModal.experiments?.map((exp: string, idx: number) => (
+                    <div key={idx} className="flex items-start gap-2.5 p-2 rounded-lg bg-slate-900/40 border border-slate-850">
+                      <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5 shrink-0"></span>
+                      <span>{exp}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-4 border-t border-slate-800 bg-slate-950/20 text-center">
+              <button
+                onClick={() => setSelectedKitsModal(null)}
+                className="px-6 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all shadow"
+              >
+                Understood, Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );

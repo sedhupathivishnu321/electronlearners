@@ -114,6 +114,7 @@ interface AppContextType {
   login: (email: string, password: string, role?: string) => boolean;
   logout: () => void;
   registerUser: (name: string, email: string, password: string, role: 'student' | 'teacher' | 'school') => boolean;
+  enrollCourse: (courseId: string) => void;
   
   // Orders Pipeline
   orders: Order[];
@@ -577,6 +578,37 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     showNotification("Signed out successfully.");
   };
 
+  const enrollCourse = (courseId: string) => {
+    if (!user) {
+      showNotification("Please login to enroll in courses.");
+      return;
+    }
+    if (user.enrolledCourseIds.includes(courseId)) {
+      showNotification("You are already enrolled in this course.");
+      return;
+    }
+    const updatedUser = {
+      ...user,
+      enrolledCourseIds: [...user.enrolledCourseIds, courseId]
+    };
+    setUser(updatedUser);
+    try {
+      const savedUsersStr = localStorage.getItem('el_registered_users');
+      if (savedUsersStr) {
+        const registeredUsers = JSON.parse(savedUsersStr);
+        const updatedUsers = registeredUsers.map((u: any) => 
+          u.email.toLowerCase() === user.email.toLowerCase()
+            ? { ...u, enrolledCourseIds: [...(u.enrolledCourseIds || []), courseId] }
+            : u
+        );
+        localStorage.setItem('el_registered_users', JSON.stringify(updatedUsers));
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    showNotification("Enrolled successfully! Happy learning.");
+  };
+
   // Orders pipeline
   const placeOrder = (
     shippingAddress: Order['shippingAddress'],
@@ -817,6 +849,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         login,
         logout,
         registerUser,
+        enrollCourse,
         orders,
         placeOrder,
         updateOrderStatus,

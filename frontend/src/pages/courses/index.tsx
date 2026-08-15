@@ -5,7 +5,7 @@ import { useApp } from '../../context/AppContext';
 import { BookOpen, Star, Clock, Users, Award, Search, ShoppingCart } from 'lucide-react';
 
 export default function CoursesCatalog() {
-  const { products, addToCart } = useApp();
+  const { products, addToCart, user, enrollCourse } = useApp();
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   // Filter courses based on search query
@@ -100,8 +100,7 @@ export default function CoursesCatalog() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {filteredCourses.map((course) => {
           const kitProduct = getRecommendedKit(course.recommendedHardwareId);
-          const bundlePrice = Math.round(course.price * 0.5) + (kitProduct?.price || 0);
-          const originalBundlePrice = course.originalPrice + (kitProduct?.originalPrice || 0);
+          const isEnrolled = user?.enrolledCourseIds.includes(course.id);
 
           return (
             <div key={course.id} className="glass-card glass-card-hover rounded-2xl overflow-hidden border border-slate-800 flex flex-col justify-between shadow-xl">
@@ -150,15 +149,21 @@ export default function CoursesCatalog() {
                   {/* Course Only */}
                   <div className="flex items-center justify-between text-xs">
                     <div>
-                      <span className="text-slate-400">Course Only:</span>
-                      <span className="font-bold text-white ml-2">₹{course.price}</span>
+                      <span className="text-slate-400">Course Tuition:</span>
+                      <span className="font-extrabold text-emerald-450 ml-2 uppercase tracking-wide">FREE</span>
                     </div>
-                    <button
-                      onClick={() => handleBuyCourse(course)}
-                      className="px-3 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 text-[10px] font-semibold border border-slate-700 transition-all"
-                    >
-                      Buy Course
-                    </button>
+                    {isEnrolled ? (
+                      <span className="px-3 py-1.5 rounded-xl bg-slate-800 text-[10px] font-bold text-slate-500 border border-slate-850 cursor-default">
+                        Enrolled
+                      </span>
+                    ) : (
+                      <button
+                        onClick={() => enrollCourse(course.id)}
+                        className="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-bold transition-all shadow-md"
+                      >
+                        Enroll Free
+                      </button>
+                    )}
                   </div>
 
                   {/* Course + Kit Bundle Funnel */}
@@ -167,15 +172,18 @@ export default function CoursesCatalog() {
                       <div className="flex items-center justify-between text-[11px]">
                         <span className="font-bold text-blue-400">Course + Hardware Kit Bundle</span>
                         <div className="flex flex-col items-end">
-                          <span className="font-extrabold text-white">₹{bundlePrice}</span>
-                          <span className="text-[9px] text-slate-500 line-through">₹{originalBundlePrice}</span>
+                          <span className="font-extrabold text-white">₹{kitProduct.price}</span>
+                          <span className="text-[9px] text-slate-500 line-through">₹{kitProduct.originalPrice}</span>
                         </div>
                       </div>
                       <button
-                        onClick={() => handleBuyBundle(course, kitProduct)}
+                        onClick={() => {
+                          addToCart(kitProduct, 1);
+                          enrollCourse(course.id);
+                        }}
                         className="w-full py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-[10px] font-bold transition-all shadow-md shadow-blue-600/10 flex items-center justify-center gap-1"
                       >
-                        <ShoppingCart className="w-3.5 h-3.5" /> Buy Bundle (Save ₹{originalBundlePrice - bundlePrice})
+                        <ShoppingCart className="w-3.5 h-3.5" /> Buy Kit & Enroll (Save ₹{kitProduct.originalPrice - kitProduct.price})
                       </button>
                     </div>
                   )}

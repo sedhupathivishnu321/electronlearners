@@ -8,7 +8,7 @@ import { Play, CheckCircle, Award, BookOpen, Clock, Users, ArrowLeft, Lock, Shop
 export default function CourseDetail() {
   const router = useRouter();
   const { id } = router.query;
-  const { products, user, addToCart } = useApp();
+  const { products, user, addToCart, enrollCourse } = useApp();
 
   const course = COURSES_DATA.find((c) => c.id === id || c.slug === id) || COURSES_DATA[0];
 
@@ -26,7 +26,7 @@ export default function CourseDetail() {
 
   // Check if course or corresponding recommended hardware kit is purchased by the logged-in user
   const isPurchased = user
-    ? user.purchasedProductIds.includes(`course-virtual-${course.id}`) ||
+    ? user.enrolledCourseIds.includes(course.id) ||
       user.purchasedProductIds.includes(course.recommendedHardwareId) ||
       user.role === 'admin' || user.role === 'store_manager'
     : false;
@@ -130,21 +130,35 @@ export default function CourseDetail() {
                 <Lock className="w-12 h-12 text-slate-650" />
                 <div className="space-y-1">
                   <h3 className="text-sm font-bold text-white uppercase tracking-wider">Lesson Locked</h3>
-                  <p className="text-xs text-slate-400 max-w-sm">This lesson is locked. Enroll in the course or purchase the Hardware Kit Bundle to unlock lifetime access.</p>
+                  <p className="text-xs text-slate-400 max-w-sm">This lesson is locked. Enroll in the course for free or buy the recommended physical hardware kit to follow along.</p>
                 </div>
                 <div className="flex gap-3">
-                  <button
-                    onClick={handleBuyCourse}
-                    className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-all"
-                  >
-                    Buy Course
-                  </button>
-                  <button
-                    onClick={handleBuyBundle}
-                    className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition-all flex items-center gap-1"
-                  >
-                    <ShoppingCart className="w-3.5 h-3.5" /> Buy Bundle
-                  </button>
+                  {user ? (
+                    <button
+                      onClick={() => enrollCourse(course.id)}
+                      className="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition-all"
+                    >
+                      Enroll Free
+                    </button>
+                  ) : (
+                    <Link
+                      href="/login"
+                      className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition-all"
+                    >
+                      Sign In to Enroll
+                    </Link>
+                  )}
+                  {kitProduct && (
+                    <button
+                      onClick={() => {
+                        addToCart(kitProduct, 1);
+                        router.push('/cart');
+                      }}
+                      className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-all flex items-center gap-1"
+                    >
+                      <ShoppingCart className="w-3.5 h-3.5" /> Buy Kit (₹{kitProduct.price})
+                    </button>
+                  )}
                 </div>
               </div>
             )}
@@ -188,9 +202,9 @@ export default function CourseDetail() {
             <div className="p-5 rounded-2xl bg-gradient-to-b from-blue-950/20 to-slate-950 border border-blue-500/20 space-y-4 shadow-xl relative overflow-hidden">
               <div className="absolute top-0 right-0 w-16 h-16 bg-blue-500/10 blur-xl rounded-full"></div>
               <div className="space-y-1">
-                <span className="px-2 py-0.5 rounded bg-blue-500/20 text-blue-400 text-[9px] font-bold uppercase">Bundle Discount</span>
-                <h4 className="text-xs font-bold text-white uppercase tracking-wider">Unlock Lifetime Access + Hardware</h4>
-                <p className="text-[10px] text-slate-400">Buy the course bundled with the recommended physical hardware kit to save ₹{originalBundlePrice - bundlePrice}.</p>
+                <span className="px-2 py-0.5 rounded bg-blue-500/20 text-blue-400 text-[9px] font-bold uppercase">Learning Bundle</span>
+                <h4 className="text-xs font-bold text-white uppercase tracking-wider">Get the Physical Kit</h4>
+                <p className="text-[10px] text-slate-400">Follow along with actual hardware by purchasing the recommended kit bundle.</p>
               </div>
 
               <div className="bg-slate-900/60 p-3 rounded-lg border border-slate-800 flex items-center justify-between text-[11px]">
@@ -201,17 +215,29 @@ export default function CourseDetail() {
               </div>
 
               <div className="flex gap-2">
+                {user ? (
+                  <button
+                    onClick={() => enrollCourse(course.id)}
+                    className="flex-grow py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] font-bold transition-all shadow"
+                  >
+                    Enroll Now (Free)
+                  </button>
+                ) : (
+                  <Link
+                    href="/login"
+                    className="flex-grow py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-[10px] font-bold transition-all shadow flex items-center justify-center"
+                  >
+                    Sign In to Enroll
+                  </Link>
+                )}
                 <button
-                  onClick={handleBuyCourse}
-                  className="flex-grow py-2 rounded-lg bg-slate-850 hover:bg-slate-800 text-slate-300 text-[10px] font-bold border border-slate-800 transition-all"
+                  onClick={() => {
+                    addToCart(kitProduct, 1);
+                    router.push('/cart');
+                  }}
+                  className="flex-grow py-2 rounded-lg bg-slate-850 hover:bg-slate-800 text-slate-350 text-[10px] font-bold border border-slate-800 transition-all flex items-center justify-center gap-1"
                 >
-                  Buy Course Only
-                </button>
-                <button
-                  onClick={handleBuyBundle}
-                  className="flex-grow py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-[10px] font-bold transition-all shadow flex items-center justify-center gap-1"
-                >
-                  <ShoppingCart className="w-3.5 h-3.5" /> Buy Bundle (₹{bundlePrice})
+                  <ShoppingCart className="w-3.5 h-3.5" /> Buy Kit
                 </button>
               </div>
             </div>
