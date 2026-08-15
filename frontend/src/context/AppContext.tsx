@@ -485,7 +485,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           name: role === 'admin' ? "SEDHU SUPER ADMIN" : `SEDHU ${role.toUpperCase()}`,
           email,
           role: role as any,
-          institution: "ElectronLearners Commerce Platform",
+          institution: "JR Learners Commerce Platform",
           enrolledCourseIds: [],
           purchasedProductIds: [],
           certificates: []

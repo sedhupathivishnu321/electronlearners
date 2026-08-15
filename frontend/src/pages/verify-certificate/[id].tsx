@@ -33,7 +33,7 @@ export default function VerifyCertificate() {
         </div>
         <div className="flex justify-between border-b border-slate-800/80 pb-2">
           <span className="text-slate-400">Issuing Organization:</span>
-          <span className="text-cyan-400 font-semibold">ElectronLearners STEM Education</span>
+          <span className="text-cyan-400 font-semibold">JR Learners STEM Education</span>
         </div>
         <div className="flex justify-between">
           <span className="text-slate-400">Status:</span>
@@ -43,7 +43,7 @@ export default function VerifyCertificate() {
 
       <Link href="/" className="inline-flex items-center space-x-2 text-xs text-slate-400 hover:text-white pt-4">
         <ArrowLeft className="w-4 h-4" />
-        <span>Return to ElectronLearners Home</span>
+        <span>Return to JR Learners Home</span>
       </Link>
 
     </div>

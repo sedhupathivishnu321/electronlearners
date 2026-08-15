@@ -40,14 +40,14 @@ export default function BlogPostDetail() {
         </p>
         <div className="prose prose-invert max-w-none text-xs sm:text-sm space-y-4">
           <p>
-            Welcome to the official technical article on <strong>{blog.title}</strong> by the ElectronLearners engineering team.
+            Welcome to the official technical article on <strong>{blog.title}</strong> by the JR Learners engineering team.
           </p>
           <h3 className="text-lg font-bold text-white font-heading pt-2">System Design & Implementation</h3>
           <p>
             When designing embedded hardware or wiring breadboard circuits, signal integrity and stable power rails are essential. Always place decoupling capacitors near microcontrollers and keep high-current motor drivers isolated from sensitive ADC measurement pins.
           </p>
           <pre className="bg-slate-950 p-4 rounded-xl text-emerald-400 font-mono text-xs overflow-x-auto border border-slate-800">
-            <code>{`// ElectronLearners Verified C++ Driver Snippet
+            <code>{`// JR Learners Verified C++ Driver Snippet
 void setup() {
   pinMode(13, OUTPUT);
   Serial.begin(115200);

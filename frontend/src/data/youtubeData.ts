@@ -50,7 +50,7 @@ export const YOUTUBE_TUTORIALS: YouTubeTutorial[] = [
       "USB Cable"
     ],
     codeDownloadName: "Arduino_Beginner_Master_Code.ino",
-    codeSnippet: `// ElectronLearners YouTube Tutorial Sketch - @LetsGetEngagedin
+    codeSnippet: `// JR Learners YouTube Tutorial Sketch - @LetsGetEngagedin
 const int LED_PIN = 9; // PWM pin
 const int POT_PIN = A0;
 
@@ -113,7 +113,7 @@ const int RELAY_PIN = 26;
 void handleRoot() {
   String html = "<!DOCTYPE html><html><head><title>ESP32 Control</title></head>";
   html += "<body style='background:#0F172A;color:#fff;font-family:sans-serif;text-align:center;padding:50px;'>";
-  html += "<h1>ElectronLearners Smart Home</h1>";
+  html += "<h1>JR Learners Smart Home</h1>";
   html += "<a href='/on'><button style='padding:15px 30px;font-size:20px;background:#10B981;color:#fff;border:none;border-radius:8px;'>TURN ON</button></a> ";
   html += "<a href='/off'><button style='padding:15px 30px;font-size:20px;background:#EF4444;color:#fff;border:none;border-radius:8px;'>TURN OFF</button></a>";
   html += "</body></html>";
@@ -171,7 +171,7 @@ void loop() {
       "18650 Li-Ion Batteries"
     ],
     codeDownloadName: "PID_LineFollower_LetsGetEngagedin.ino",
-    codeSnippet: `// PID Line Follower Code - ElectronLearners / @LetsGetEngagedin
+    codeSnippet: `// PID Line Follower Code - JR Learners / @LetsGetEngagedin
 float Kp = 25.0, Ki = 0.0, Kd = 15.0;
 float error = 0, previousError = 0, integral = 0, derivative = 0;
 int baseSpeed = 150;
@@ -214,7 +214,7 @@ void loop() {
     ],
     componentsNeeded: [
       "KiCad 8 Software (Free Open Source)",
-      "ElectronLearners PCB Design Kit"
+      "JR Learners PCB Design Kit"
     ],
     codeDownloadName: "555_Flasher_KiCad_Project.zip",
     codeSnippet: `# KiCad 8 Gerber Export Checklist:
@@ -270,7 +270,7 @@ while True:
         cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 2)
         cv2.putText(frame, "Face Detected", (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
         
-    cv2.imshow("ElectronLearners AI Vision", frame)
+    cv2.imshow("JR Learners AI Vision", frame)
     if cv2.waitKey(1) == 27:
         break
 

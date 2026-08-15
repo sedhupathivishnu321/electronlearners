@@ -27,7 +27,7 @@ export default function CertificatesPage() {
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-800 pb-6 print:hidden">
         <div>
           <span className="text-xs font-bold text-amber-400 uppercase tracking-widest">Official Certification</span>
-          <h1 className="text-3xl font-heading font-extrabold text-white mt-1">ElectronLearners STEM Certificate</h1>
+          <h1 className="text-3xl font-heading font-extrabold text-white mt-1">JR Learners STEM Certificate</h1>
         </div>
 
         <div className="flex items-center space-x-3">
@@ -60,7 +60,7 @@ export default function CertificatesPage() {
           <span className="text-xs uppercase font-extrabold tracking-[0.3em] text-amber-400">
             Certificate of Engineering Completion
           </span>
-          <h2 className="text-3xl sm:text-4xl font-heading font-extrabold text-white">ElectronLearners STEM Platform</h2>
+          <h2 className="text-3xl sm:text-4xl font-heading font-extrabold text-white">JR Learners STEM Platform</h2>
         </div>
 
         <p className="text-xs text-slate-400 uppercase tracking-widest">This is to certify that</p>

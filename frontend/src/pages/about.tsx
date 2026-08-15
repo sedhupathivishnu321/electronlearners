@@ -9,7 +9,7 @@ export default function AboutPage() {
         <span className="px-3 py-1 rounded-full bg-blue-600/20 text-blue-400 text-xs font-bold uppercase tracking-wider">
           Company Story
         </span>
-        <h1 className="text-4xl font-heading font-extrabold text-white">About ElectronLearners</h1>
+        <h1 className="text-4xl font-heading font-extrabold text-white">About JR Learners</h1>
         <p className="text-slate-300 text-sm leading-relaxed">
           Empowering millions of learners across India through hands-on practical electronics, microcontrollers, robotics, IoT, and edge artificial intelligence.
         </p>

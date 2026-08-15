@@ -267,10 +267,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 6. WHY ELECTRONLEARNERS */}
+      {/* 6. WHY JR Learners */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-12 space-y-2">
-          <h2 className="text-2xl sm:text-3xl font-heading font-bold text-white uppercase tracking-tight">Why Choose ElectronLearners?</h2>
+          <h2 className="text-2xl sm:text-3xl font-heading font-bold text-white uppercase tracking-tight">Why Choose JR Learners?</h2>
           <p className="text-slate-400 text-sm">We construct a complete operational experience—from hardware parts to structured curriculum.</p>
         </div>
 

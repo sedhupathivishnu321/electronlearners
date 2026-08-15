@@ -419,7 +419,7 @@ void setup() {
   lcd.backlight();
   
   lcd.setCursor(0, 0);
-  lcd.print("ElectronLearners");
+  lcd.print("JR Learners");
   lcd.setCursor(0, 1);
   lcd.print("Platform Active");
   
@@ -442,7 +442,7 @@ void loop() {
     components: [
       { id: 'uno1', type: 'arduino_uno', name: 'Arduino Uno', x: 40, y: 150, width: 240, height: 180, pins: COMPONENT_SPECS.arduino_uno.pins },
       { id: 'bb1', type: 'breadboard', name: 'Breadboard', x: 310, y: 190, width: 320, height: 100, pins: COMPONENT_SPECS.breadboard.pins },
-      { id: 'lcd1', type: 'lcd_i2c', name: 'I2C LCD 16x2', x: 380, y: 40, width: 160, height: 90, pins: COMPONENT_SPECS.lcd_i2c.pins, state: { line1: 'ElectronLearners', line2: 'Platform Active' } }
+      { id: 'lcd1', type: 'lcd_i2c', name: 'I2C LCD 16x2', x: 380, y: 40, width: 160, height: 90, pins: COMPONENT_SPECS.lcd_i2c.pins, state: { line1: 'JR Learners', line2: 'Platform Active' } }
     ],
     wires: [
       { id: 'w1', fromCompId: 'uno1', fromPin: '5v', toCompId: 'lcd1', toPin: 'vcc', color: '#EF4444' },
@@ -645,7 +645,7 @@ export default function Simulator() {
 
             if (comp.type === 'lcd_i2c') {
               if (hasPower && hasI2C) {
-                updatedState.line1 = 'ElectronLearners';
+                updatedState.line1 = 'JR Learners';
                 updatedState.line2 = `Scan Count: ${simCounterRef.current}`;
               } else {
                 updatedState.line1 = '';
@@ -676,7 +676,7 @@ export default function Simulator() {
       let state = { ...comp.state };
       if (comp.type === 'led') state.on = false;
       if (comp.type === 'lcd_i2c') {
-        state.line1 = 'ElectronLearners';
+        state.line1 = 'JR Learners';
         state.line2 = 'Platform Active';
       }
       return { ...comp, state };
@@ -944,7 +944,7 @@ export default function Simulator() {
   return (
     <div className="bg-[#0F172A] text-slate-100 min-h-screen pb-12">
       <Head>
-        <title>⚡ ElectronLearners IDE & Circuit Simulator (ArduinoForge)</title>
+        <title>⚡ JR Learners IDE & Circuit Simulator (ArduinoForge)</title>
         <meta name="description" content="Simulate Arduino, ESP32 and electronic circuits in real-time. Drag components, wire them on a breadboard, write C/C++ code, and verify circuits offline." />
       </Head>
 

@@ -11,8 +11,8 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <AppProvider>
       <Head>
-        <title>ElectronLearners | Hands-On STEM Kits, Projects & Courses</title>
-        <meta name="description" content="Master Electronics, Arduino, ESP32, Robotics, AI & PCB Design with ElectronLearners physical STEM kits, structured courses, and open-source project guides." />
+        <title>JR Learners | Hands-On STEM Kits, Projects & Courses</title>
+        <meta name="description" content="Master Electronics, Arduino, ESP32, Robotics, AI & PCB Design with JR Learners physical STEM kits, structured courses, and open-source project guides." />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

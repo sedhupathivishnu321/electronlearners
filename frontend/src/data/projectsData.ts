@@ -170,7 +170,7 @@ export const PROJECTS_DATA: STEMProject[] = Array.from({ length: 100 }, (_, inde
     ],
     circuitDescription: `Connect VCC pin to 5V/3.3V power rail, GND pin to common ground. Connect signal output pin to GPIO #${(index % 12) + 2} on the ${cat} microcontroller.`,
     sourceCode: cat === 'Python' ? 
-`# ElectronLearners Project #${idNum} - ${title}
+`# JR Learners Project #${idNum} - ${title}
 import time
 
 def main():
@@ -181,7 +181,7 @@ def main():
 if __name__ == "__main__":
     main()`
 :
-`// ElectronLearners Project #${idNum} - ${title}
+`// JR Learners Project #${idNum} - ${title}
 // Microcontroller Code for ${cat}
 
 const int SENSOR_PIN = ${(index % 10) + 2};

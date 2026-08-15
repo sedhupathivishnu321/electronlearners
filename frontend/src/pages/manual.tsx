@@ -90,7 +90,7 @@ export default function PerfectArduinoManualPage() {
               </div>
             </div>
 
-            {/* ARDUINO / ELECTRONLEARNERS LOGO */}
+            {/* ARDUINO / JR Learners LOGO */}
             <div className="col-span-3 sm:col-span-2 flex justify-end items-center">
               <Logo size="sm" />
             </div>

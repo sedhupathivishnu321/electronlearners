@@ -142,7 +142,7 @@ export default function ProductDetail() {
                 <span className="text-slate-500">SKU:</span> <span className="font-mono text-white ml-1">EL-{product.id.split('-')[1] || '001'}</span>
               </div>
               <div>
-                <span className="text-slate-500">Brand:</span> <span className="text-white ml-1">ElectronLearners</span>
+                <span className="text-slate-500">Brand:</span> <span className="text-white ml-1">JR Learners</span>
               </div>
               <div>
                 <span className="text-slate-500">Availability:</span> <span className="text-white ml-1">{product.stock > 0 ? 'Available' : 'Out of Stock'}</span>

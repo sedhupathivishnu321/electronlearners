@@ -846,12 +846,12 @@ export const PRODUCTS_DATA: STEMProduct[] = [
     badge: "Flagship Ecosystem",
     image: "https://images.unsplash.com/photo-1581092335397-9583fe92d232?w=600&auto=format&fit=crop&q=80",
     shortDesc: "The ultimate 500+ component master lab suit with Arduino, ESP32, Raspberry Pi Pico, Motors, OLEDs, and Heavy Carry Case.",
-    description: "The dream workshop in a box for serious engineers, makerspaces, and university labs! Packed with over 500 premium hardware parts, 4 microcontroller development platforms, heavy-duty aluminum tool carrying briefcase, and lifetime access to all ElectronLearners courses.",
+    description: "The dream workshop in a box for serious engineers, makerspaces, and university labs! Packed with over 500 premium hardware parts, 4 microcontroller development platforms, heavy-duty aluminum tool carrying briefcase, and lifetime access to all JR Learners courses.",
     learningObjectives: [
       "Master complete cross-platform STEM engineering (Arduino, ESP32, Raspberry Pi Pico)",
       "Build complex capstone engineering thesis projects",
       "Integrate robotics, wireless IoT, edge AI, and analog electronics",
-      "Lifetime access to ElectronLearners Certified Courses"
+      "Lifetime access to JR Learners Certified Courses"
     ],
     components: [
       { name: "Heavy Aluminum Tool Carrying Case", quantity: 1 },
@@ -868,14 +868,14 @@ export const PRODUCTS_DATA: STEMProduct[] = [
     },
     assemblySteps: [
       "Unpack aluminum flight case and inspect compartment organization",
-      "Scan QR code on inside lid to unlock ElectronLearners Master Pass",
+      "Scan QR code on inside lid to unlock JR Learners Master Pass",
       "Begin Capstone Engineering Project #1: Automated Environmental Drone Base"
     ],
     manualUrl: "/downloads/manuals/Engineering_Innovation_Master_Guide.pdf",
     datasheetUrl: "/downloads/datasheets/Master_Component_Catalog.pdf",
     videoUrl: "https://www.youtube.com/watch?v=p_9v_7v9v9_1",
     faqs: [
-      { question: "Does this come with lifetime online course access?", answer: "Yes! Purchasing this kit includes a coupon code for 100% free access to all 15 ElectronLearners courses." }
+      { question: "Does this come with lifetime online course access?", answer: "Yes! Purchasing this kit includes a coupon code for 100% free access to all 15 JR Learners courses." }
     ]
   }
 ];

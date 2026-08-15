@@ -64,7 +64,7 @@ export default function SupportPage() {
           <Mail className="w-8 h-8 text-blue-400 mx-auto" />
           <h3 className="text-sm font-bold text-white uppercase tracking-wide">Email Support</h3>
           <p className="text-slate-400 text-xs">Send schema drawings, log scripts, or order invoice requests directly.</p>
-          <a href="mailto:support@electronlearners.com" className="inline-block px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition-all">Email Us</a>
+          <a href="mailto:support@JR Learners.com" className="inline-block px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition-all">Email Us</a>
         </div>
 
         <div className="p-6 rounded-2xl glass-card border border-slate-800 text-center space-y-3 shadow-lg">

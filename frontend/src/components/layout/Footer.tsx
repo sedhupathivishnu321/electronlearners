@@ -30,7 +30,7 @@ export const Footer: React.FC = () => {
               <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 flex items-center justify-center transition-all">
                 <Github className="w-5 h-5" />
               </a>
-              <a href="mailto:support@electronlearners.com" className="w-9 h-9 rounded-lg bg-blue-600/10 text-blue-500 hover:bg-blue-600 hover:text-white flex items-center justify-center transition-all">
+              <a href="mailto:support@JR Learners.com" className="w-9 h-9 rounded-lg bg-blue-600/10 text-blue-500 hover:bg-blue-600 hover:text-white flex items-center justify-center transition-all">
                 <Mail className="w-5 h-5" />
               </a>
             </div>
@@ -74,7 +74,7 @@ export const Footer: React.FC = () => {
         </div>
 
         <div className="mt-12 pt-8 border-t border-slate-800/80 flex flex-col md:flex-row items-center justify-between text-xs text-slate-500">
-          <p>© 2026 ElectronLearners. All rights reserved.</p>
+          <p>© 2026 JR Learners. All rights reserved.</p>
           <p className="mt-2 md:mt-0 flex items-center gap-1">
             Built for STEM Makers & Engineers.
           </p>
