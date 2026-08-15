@@ -75,3 +75,32 @@ code, pre {
 ::-webkit-scrollbar-thumb:hover {
   background: #2563EB;
 }
+
+/* Floating animations */
+@keyframes floatAnimation {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(10deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
+.animate-float {
+  animation: floatAnimation 8s ease-in-out infinite;
+}
+
+@keyframes bubbleFloat {
+  0% { transform: translateY(0) scale(1); opacity: 0.5; }
+  50% { transform: translateY(-35px) scale(1.15); opacity: 0.85; }
+  100% { transform: translateY(0) scale(1); opacity: 0.5; }
+}
+
+.animate-bubble-1 {
+  animation: bubbleFloat 6s ease-in-out infinite;
+}
+
+.animate-bubble-2 {
+  animation: bubbleFloat 9s ease-in-out infinite;
+}
+
+.animate-bubble-3 {
+  animation: bubbleFloat 12s ease-in-out infinite;
+}
