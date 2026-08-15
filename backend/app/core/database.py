@@ -7,7 +7,7 @@ from app.core.config import settings
 try:
     engine = create_engine(settings.DATABASE_URL)
 except Exception:
-    engine = create_engine("sqlite:///./electronlearners.db", connect_args={"check_same_thread": False})
+    engine = create_engine("sqlite:///./JR Learners.db", connect_args={"check_same_thread": False})
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
@@ -18,3 +18,4 @@ def get_db():
         yield db
     finally:
         db.close()
+

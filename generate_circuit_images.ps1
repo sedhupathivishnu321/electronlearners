@@ -46,7 +46,7 @@ function Create-CircuitSVG($expNum, $title, $details) {
   </g>
   
   <!-- Footer Status -->
-  <text x="30" y="335" fill="#64748b" font-size="10">ElectronLearners STEM Kit • Experiment #$expNum Schematic</text>
+  <text x="30" y="335" fill="#64748b" font-size="10">JR Learners STEM Kit • Experiment #$expNum Schematic</text>
 </svg>
 "@
     $pubPath = Join-Path $PublicDir "exp$expNum.svg"
@@ -73,3 +73,4 @@ Create-CircuitSVG 14 "PASSWORD LOCK" '<text x="15" y="45" fill="#f8fafc" font-si
 Create-CircuitSVG 15 "MINI QUIZ GAME" '<text x="15" y="45" fill="#f8fafc" font-size="11">• Pins 2,3,4,5 ---> Answer Keys A, B, C, D</text><text x="15" y="75" fill="#22c55e" font-size="11">• Pin 10 (Green) &amp; Pin 11 (Red) Feedback</text><text x="15" y="105" fill="#67e8f9" font-size="11">• USB Serial Prompt UI &amp; Score Counter</text>'
 
 Write-Host "✅ Created 15 SVG Circuit Diagrams in public/circuits and Desktop/circuits!"
+

@@ -7,7 +7,7 @@ $HTML = @"
 <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
 <head>
   <meta charset='utf-8'>
-  <title>Arduino 15 Experiments STEM Manual - ElectronLearners</title>
+  <title>Arduino 15 Experiments STEM Manual - JR Learners</title>
   <!--[if gte mso 9]>
   <xml>
     <w:WordDocument>
@@ -30,7 +30,7 @@ $HTML = @"
   <div className="bg-wrapper">
     <div style="text-align: center; margin-bottom: 30px;">
       <img src="manual_background.png" alt="STEM Background" style="max-width: 100%; height: auto; border-radius: 16px; margin-bottom: 15px;" />
-      <h1 style="color: #60a5fa; font-size: 28px; margin-bottom: 5px;">⚡ ElectronLearners STEM Platform</h1>
+      <h1 style="color: #60a5fa; font-size: 28px; margin-bottom: 5px;">⚡ JR Learners STEM Platform</h1>
       <h2 style="color: #f8fafc; font-size: 22px; margin-top: 0;">Arduino Starter Kit 15-Experiment Laboratory Manual</h2>
       <p style="color: #94a3b8; font-size: 14px;">Learn. Build. Innovate. • Official Lab Guide with Circuit Images</p>
     </div>
@@ -48,7 +48,7 @@ $HTML = @"
               <h2 style="margin: 0; color: #ef4444; font-size: 20px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase;">LED BLINK</h2>
             </div>
           </td>
-          <td width="20%" align="right"><span style="font-size: 14px; font-weight: bold; color: #06b6d4;">ElectronLearners</span></td>
+          <td width="20%" align="right"><span style="font-size: 14px; font-weight: bold; color: #06b6d4;">JR Learners</span></td>
         </tr>
       </table>
 
@@ -93,7 +93,7 @@ void loop() { digitalWrite(LED_PIN, HIGH); delay(1000); digitalWrite(LED_PIN, LO
               <h2 style="margin: 0; color: #ef4444; font-size: 20px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase;">TRAFFIC LIGHT CONTROLLER</h2>
             </div>
           </td>
-          <td width="20%" align="right"><span style="font-size: 14px; font-weight: bold; color: #06b6d4;">ElectronLearners</span></td>
+          <td width="20%" align="right"><span style="font-size: 14px; font-weight: bold; color: #06b6d4;">JR Learners</span></td>
         </tr>
       </table>
       <table width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -129,3 +129,4 @@ Set-Content -Path $DocFile -Value $HTML -Encoding UTF8
 Set-Content -Path $HtmlFile -Value $HTML -Encoding UTF8
 
 Write-Host "✅ Created Desktop Word & HTML Manual with Background & Circuit Images!"
+

@@ -2,9 +2,9 @@ import json
 from app.core.security import get_password_hash
 
 def seed_database():
-    print("⚡ Seeding ElectronLearners Database...")
+    print("⚡ Seeding JR Learners Database...")
     admin_account = {
-        "email": "admin@electronlearners.com",
+        "email": "admin@JR Learners.com",
         "hashed_password": get_password_hash("admin123"),
         "role": "admin",
         "name": "Super Administrator"
@@ -18,3 +18,4 @@ def seed_database():
 
 if __name__ == "__main__":
     seed_database()
+

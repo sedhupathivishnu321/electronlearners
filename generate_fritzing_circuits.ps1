@@ -22,7 +22,7 @@ function Get-FritzingHeader($expNum, $title) {
   <!-- Top Title Bar -->
   <rect x="20" y="15" width="910" height="40" rx="8" fill="#0f172a" filter="url(#shadow)"/>
   <text x="35" y="41" fill="#38bdf8" font-size="15" font-weight="bold">FRITZING HARDWARE SCHEMATIC — EXP #${expNum}: ${title}</text>
-  <text x="910" y="41" fill="#94a3b8" font-size="12" text-anchor="end">ElectronLearners STEM Kit</text>
+  <text x="910" y="41" fill="#94a3b8" font-size="12" text-anchor="end">JR Learners STEM Kit</text>
 
   <!-- ARDUINO UNO BOARD (PHOTOREALISTIC FRITZING BLUE) -->
   <g transform="translate(30, 80)" filter="url(#shadow)">
@@ -199,3 +199,4 @@ for ($i = 1; $i -le 15; $i++) {
 }
 
 Write-Host "✅ Created 15 Fritzing-Style SVG Circuit Diagrams matching reference screenshot!"
+

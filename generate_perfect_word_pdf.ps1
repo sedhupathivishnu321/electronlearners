@@ -12,7 +12,7 @@ $HTML = @"
 <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
 <head>
   <meta charset='utf-8'>
-  <title>Arduino 15 Experiments STEM Manual - ElectronLearners</title>
+  <title>Arduino 15 Experiments STEM Manual - JR Learners</title>
   <!--[if gte mso 9]>
   <xml>
     <w:WordDocument>
@@ -36,7 +36,7 @@ $HTML = @"
 </head>
 <body>
   <div style="text-align: center; margin-bottom: 25px;">
-    <h1 style="color: #60a5fa; font-size: 24pt; margin-bottom: 2px;">⚡ ElectronLearners STEM Platform</h1>
+    <h1 style="color: #60a5fa; font-size: 24pt; margin-bottom: 2px;">⚡ JR Learners STEM Platform</h1>
     <h2 style="color: #ffffff; font-size: 18pt; margin-top: 0;">Arduino Starter Kit 15-Experiment Laboratory Manual</h2>
     <p style="color: #94a3b8; font-size: 11pt;">Learn. Build. Innovate. • Official STEM Education Lab Guide</p>
   </div>
@@ -55,7 +55,7 @@ $HTML = @"
           <div class="title-box">LED BLINK</div>
         </td>
         <td width="20%" align="right">
-          <span style="font-size: 12pt; font-weight: bold; color: #06b6d4;">ElectronLearners</span>
+          <span style="font-size: 12pt; font-weight: bold; color: #06b6d4;">JR Learners</span>
         </td>
       </tr>
     </table>
@@ -180,3 +180,4 @@ $word.Quit()
 
 Write-Host "✅ Successfully Generated Word (.docx) Document: $DocxPath"
 Write-Host "✅ Successfully Generated High-Res PDF Document: $PdfPath"
+

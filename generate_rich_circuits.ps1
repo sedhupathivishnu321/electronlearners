@@ -134,7 +134,7 @@ function Get-SvgHeader($expNum, $title) {
 
     <!-- Center Divider Trench -->
     <rect x="15" y="170" width="460" height="10" fill="#cbd5e1"/>
-    <text x="245" y="178" fill="#64748b" font-size="9" font-weight="bold" text-anchor="middle">ELECTRONLEARNERS BREADBOARD TRENCH</text>
+    <text x="245" y="178" fill="#64748b" font-size="9" font-weight="bold" text-anchor="middle">JR Learners BREADBOARD TRENCH</text>
     
     <!-- Breadboard Pin Grid Holes -->
     <g fill="#475569">
@@ -148,7 +148,7 @@ function Get-SvgFooter() {
   
   <!-- Info Banner -->
   <rect x="25" y="455" width="850" height="30" rx="8" fill="#0f172a" stroke="#1e293b"/>
-  <text x="45" y="475" fill="#94a3b8" font-size="11">ElectronLearners STEM Platform • Official Hardware Wiring Schematic</text>
+  <text x="45" y="475" fill="#94a3b8" font-size="11">JR Learners STEM Platform • Official Hardware Wiring Schematic</text>
 </svg>
 "@
 }
@@ -268,3 +268,4 @@ for ($i = 4; $i -le 15; $i++) {
 }
 
 Write-Host "✅ Generated 15 High-Quality SVG Circuit Schematics with Arduino & Breadboard graphics!"
+

@@ -8,7 +8,7 @@ from app.core.security import create_access_token, verify_password, get_password
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
-    description="Official REST API for ElectronLearners STEM Platform - Products, Courses, YouTube Tutorials, 100 Projects, 100 Blogs, Portals, and Enterprise Admin Panel.",
+    description="Official REST API for JR Learners STEM Platform - Products, Courses, YouTube Tutorials, 100 Projects, 100 Blogs, Portals, and Enterprise Admin Panel.",
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
     docs_url="/docs",
     redoc_url="/redoc"
@@ -47,7 +47,7 @@ class ProductItem(BaseModel):
 @app.get("/")
 def root():
     return {
-        "message": "Welcome to ElectronLearners REST API Gateway",
+        "message": "Welcome to JR Learners REST API Gateway",
         "version": settings.VERSION,
         "docs_url": "/docs",
         "tagline": "Learn. Build. Innovate.",
@@ -100,7 +100,7 @@ def verify_certificate_record(cert_id: str):
         "status": "VERIFIED_AUTHENTIC",
         "student_name": "Alex Learner",
         "course": "Arduino C++ Programming & Hardware Interfacing",
-        "issuer": "ElectronLearners STEM Education"
+        "issuer": "JR Learners STEM Education"
     }
 
 @app.get(f"{settings.API_V1_STR}/admin/analytics")
@@ -112,3 +112,4 @@ def get_admin_analytics():
         "issued_certificates": 3850,
         "system_status": "HEALTHY"
     }
+

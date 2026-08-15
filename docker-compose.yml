@@ -3,11 +3,11 @@ version: '3.8'
 services:
   postgres:
     image: postgres:15-alpine
-    container_name: electronlearners-postgres
+    container_name: JR Learners-postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgrespassword
-      POSTGRES_DB: electronlearners_db
+      POSTGRES_DB: JR Learners_db
     ports:
       - "5432:5432"
     volumes:
@@ -18,12 +18,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.backend
-    container_name: electronlearners-api
+    container_name: JR Learners-api
     environment:
       - POSTGRES_SERVER=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgrespassword
-      - POSTGRES_DB=electronlearners_db
+      - POSTGRES_DB=JR Learners_db
     ports:
       - "8000:8000"
     depends_on:
@@ -33,7 +33,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.frontend
-    container_name: electronlearners-web
+    container_name: JR Learners-web
     ports:
       - "80:80"
     depends_on:
@@ -41,3 +41,4 @@ services:
 
 volumes:
   postgres_data:
+

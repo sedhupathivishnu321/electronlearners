@@ -7,7 +7,7 @@ $HTML = @"
 <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
 <head>
   <meta charset='utf-8'>
-  <title>Arduino 15 Experiments STEM Manual - ElectronLearners</title>
+  <title>Arduino 15 Experiments STEM Manual - JR Learners</title>
   <!--[if gte mso 9]>
   <xml>
     <w:WordDocument>
@@ -27,7 +27,7 @@ $HTML = @"
 </head>
 <body>
   <div style="text-align: center; margin-bottom: 30px;">
-    <h1 style="color: #60a5fa; font-size: 28px; margin-bottom: 5px;">⚡ ElectronLearners STEM Platform</h1>
+    <h1 style="color: #60a5fa; font-size: 28px; margin-bottom: 5px;">⚡ JR Learners STEM Platform</h1>
     <h2 style="color: #f8fafc; font-size: 22px; margin-top: 0;">Arduino Starter Kit 15-Experiment Laboratory Manual</h2>
     <p style="color: #94a3b8; font-size: 14px;">Learn. Build. Innovate. • Official Lab Guide</p>
   </div>
@@ -46,7 +46,7 @@ $HTML = @"
           </div>
         </td>
         <td width="20%" align="right">
-          <span style="font-size: 14px; font-weight: bold; color: #06b6d4;">ElectronLearners</span><br/>
+          <span style="font-size: 14px; font-weight: bold; color: #06b6d4;">JR Learners</span><br/>
           <span style="font-size: 9px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px;">STEM Education</span>
         </td>
       </tr>
@@ -144,7 +144,7 @@ void loop() {
           </div>
         </td>
         <td width="20%" align="right">
-          <span style="font-size: 14px; font-weight: bold; color: #06b6d4;">ElectronLearners</span>
+          <span style="font-size: 14px; font-weight: bold; color: #06b6d4;">JR Learners</span>
         </td>
       </tr>
     </table>
@@ -202,3 +202,4 @@ Set-Content -Path $HtmlFile -Value $HTML -Encoding UTF8
 
 Write-Host "✅ Created Word Document (.doc): $DocFile"
 Write-Host "✅ Created HTML Document (.html): $HtmlFile"
+

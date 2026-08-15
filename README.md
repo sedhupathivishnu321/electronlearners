@@ -25,7 +25,7 @@
 ## 📁 Repository Structure
 
 ```
-electronlearners/
+JR Learners/
 ├── backend/                  # Python FastAPI Backend
 │   ├── app/
 │   │   ├── api/v1/          # REST API Routes (Auth, Products, Courses, YouTube, Orders, Admin)
@@ -128,3 +128,4 @@ docker-compose up --build -d
 
 ## 📜 License
 Licensed under the MIT License. Developed for **JR Learners** — *Learn. Build. Innovate.*
+
