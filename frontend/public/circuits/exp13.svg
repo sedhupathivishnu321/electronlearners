@@ -1,0 +1,151 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 480" width="100%" height="100%" style="background-color: #ffffff; font-family: 'Consolas', 'Segoe UI', sans-serif;">
+  <!-- Grid background like Fritzing editor -->
+  <defs>
+    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+    </pattern>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="2" dy="4" stdDeviation="3" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  <rect width="950" height="480" fill="url(#grid)"/>
+
+  <!-- Top Title Bar -->
+  <rect x="20" y="15" width="910" height="40" rx="8" fill="#0f172a" filter="url(#shadow)"/>
+  <text x="35" y="41" fill="#38bdf8" font-size="15" font-weight="bold">FRITZING HARDWARE SCHEMATIC — EXP #13: REACTION TIME GAME</text>
+  <text x="910" y="41" fill="#94a3b8" font-size="12" text-anchor="end">ElectronLearners STEM Kit</text>
+
+  <!-- ARDUINO UNO BOARD (PHOTOREALISTIC FRITZING BLUE) -->
+  <g transform="translate(30, 80)" filter="url(#shadow)">
+    <!-- Main PCB Body -->
+    <path d="M 0,20 Q 0,0 20,0 L 260,0 Q 280,0 280,20 L 280,310 Q 280,330 260,330 L 20,330 Q 0,330 0,310 Z" fill="#0081a7" stroke="#005f73" stroke-width="3"/>
+    
+    <!-- USB Connector (Metal silver on left) -->
+    <rect x="-30" y="30" width="45" height="50" fill="#94a3b8" stroke="#64748b" stroke-width="2" rx="4"/>
+    <rect x="-30" y="40" width="15" height="30" fill="#475569"/>
+    
+    <!-- DC Barrel Power Jack -->
+    <rect x="-20" y="240" width="55" height="55" fill="#1e293b" rx="4"/>
+    <circle cx="5" cy="267" r="12" fill="#0f172a"/>
+    <circle cx="5" cy="267" r="5" fill="#475569"/>
+
+    <!-- Red Reset Button -->
+    <circle cx="45" cy="35" r="12" fill="#ef4444" stroke="#991b1b" stroke-width="2"/>
+    <circle cx="45" cy="35" r="7" fill="#dc2626"/>
+    <text x="45" y="62" fill="#ffffff" font-size="9" font-weight="bold" text-anchor="middle">RESET</text>
+
+    <!-- Arduino White Circle Logo & Text -->
+    <circle cx="175" cy="115" r="22" fill="none" stroke="#ffffff" stroke-width="3"/>
+    <text x="164" y="121" fill="#ffffff" font-size="18" font-weight="bold">-</text>
+    <text x="178" y="121" fill="#ffffff" font-size="16" font-weight="bold">+</text>
+    <text x="175" y="150" fill="#ffffff" font-size="18" font-weight="bold" text-anchor="middle">UNO</text>
+    <text x="175" y="170" fill="#ffffff" font-size="13" font-weight="bold" text-anchor="middle">Arduino™</text>
+
+    <!-- ICSP Headers -->
+    <rect x="210" y="190" width="25" height="38" fill="#1e293b"/>
+    <circle cx="218" cy="198" r="3" fill="#fbbf24"/> <circle cx="227" cy="198" r="3" fill="#fbbf24"/>
+    <circle cx="218" cy="209" r="3" fill="#fbbf24"/> <circle cx="227" cy="209" r="3" fill="#fbbf24"/>
+    <circle cx="218" cy="220" r="3" fill="#fbbf24"/> <circle cx="227" cy="220" r="3" fill="#fbbf24"/>
+    <text x="222" y="240" fill="#ffffff" font-size="8" text-anchor="middle">ICSP</text>
+
+    <!-- Top Digital Pin Header Strip (Pins 0 to 13) -->
+    <rect x="70" y="5" width="200" height="22" fill="#1e293b" rx="2"/>
+    <text x="170" y="-5" fill="#1e293b" font-size="10" font-weight="bold" text-anchor="middle">DIGITAL (PWM~)</text>
+    <!-- Pin Socket Holes -->
+    <circle cx="80" cy="16" r="3" fill="#000000"/><text x="80" y="36" fill="#ffffff" font-size="8">13</text>
+    <circle cx="93" cy="16" r="3" fill="#000000"/><text x="93" y="36" fill="#ffffff" font-size="8">12</text>
+    <circle cx="106" cy="16" r="3" fill="#000000"/><text x="106" y="36" fill="#ffffff" font-size="8">~11</text>
+    <circle cx="119" cy="16" r="3" fill="#000000"/><text x="119" y="36" fill="#ffffff" font-size="8">~10</text>
+    <circle cx="132" cy="16" r="3" fill="#000000"/><text x="132" y="36" fill="#ffffff" font-size="8">~9</text>
+    <circle cx="145" cy="16" r="3" fill="#000000"/><text x="145" y="36" fill="#ffffff" font-size="8">8</text>
+    <circle cx="165" cy="16" r="3" fill="#000000"/><text x="165" y="36" fill="#ffffff" font-size="8">7</text>
+    <circle cx="178" cy="16" r="3" fill="#000000"/><text x="178" y="36" fill="#ffffff" font-size="8">~6</text>
+    <circle cx="191" cy="16" r="3" fill="#000000"/><text x="191" y="36" fill="#ffffff" font-size="8">~5</text>
+    <circle cx="204" cy="16" r="3" fill="#000000"/><text x="204" y="36" fill="#ffffff" font-size="8">4</text>
+    <circle cx="217" cy="16" r="3" fill="#000000"/><text x="217" y="36" fill="#ffffff" font-size="8">~3</text>
+    <circle cx="230" cy="16" r="3" fill="#000000"/><text x="230" y="36" fill="#ffffff" font-size="8">2</text>
+
+    <!-- Bottom Power & Analog Pin Header Strip -->
+    <rect x="90" y="303" width="180" height="22" fill="#1e293b" rx="2"/>
+    <text x="130" y="298" fill="#1e293b" font-size="9" font-weight="bold">POWER</text>
+    <text x="220" y="298" fill="#1e293b" font-size="9" font-weight="bold">ANALOG IN</text>
+    <circle cx="120" cy="314" r="3" fill="#000000"/><text x="120" y="292" fill="#ffffff" font-size="8">5V</text>
+    <circle cx="135" cy="314" r="3" fill="#000000"/><text x="135" y="292" fill="#ffffff" font-size="8">GND</text>
+    <circle cx="150" cy="314" r="3" fill="#000000"/><text x="150" y="292" fill="#ffffff" font-size="8">GND</text>
+    <circle cx="185" cy="314" r="3" fill="#000000"/><text x="185" y="292" fill="#ffffff" font-size="8">A0</text>
+    <circle cx="200" cy="314" r="3" fill="#000000"/><text x="200" y="292" fill="#ffffff" font-size="8">A1</text>
+    <circle cx="215" cy="314" r="3" fill="#000000"/><text x="215" y="292" fill="#ffffff" font-size="8">A2</text>
+  </g>
+
+  <!-- FRITZING WHITE BREADBOARD GRAPHIC -->
+  <g transform="translate(420, 80)" filter="url(#shadow)">
+    <!-- Breadboard Body -->
+    <rect x="0" y="0" width="490" height="330" rx="6" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="2"/>
+    
+    <!-- Top & Bottom Power Rails (+ Red & - Blue) -->
+    <line x1="20" y1="20" x2="470" y2="20" stroke="#ef4444" stroke-width="2"/>
+    <line x1="20" y1="310" x2="470" y2="310" stroke="#ef4444" stroke-width="2"/>
+    <line x1="20" y1="35" x2="470" y2="35" stroke="#3b82f6" stroke-width="2"/>
+    <line x1="20" y1="295" x2="470" y2="295" stroke="#3b82f6" stroke-width="2"/>
+
+    <!-- Center Divider Trench -->
+    <rect x="15" y="155" width="460" height="20" fill="#cbd5e1"/>
+    
+    <!-- Column Numbers (1 to 30) -->
+    <text x="50" y="12" fill="#64748b" font-size="9">1</text>
+    <text x="120" y="12" fill="#64748b" font-size="9">5</text>
+    <text x="190" y="12" fill="#64748b" font-size="9">10</text>
+    <text x="260" y="12" fill="#64748b" font-size="9">15</text>
+    <text x="330" y="12" fill="#64748b" font-size="9">20</text>
+    <text x="400" y="12" fill="#64748b" font-size="9">25</text>
+    <text x="460" y="12" fill="#64748b" font-size="9">30</text>
+
+    <!-- Row Letters (a..e, f..j) -->
+    <text x="5" y="55" fill="#64748b" font-size="9">j</text>
+    <text x="5" y="75" fill="#64748b" font-size="9">i</text>
+    <text x="5" y="95" fill="#64748b" font-size="9">h</text>
+    <text x="5" y="115" fill="#64748b" font-size="9">g</text>
+    <text x="5" y="135" fill="#64748b" font-size="9">f</text>
+
+    <text x="5" y="195" fill="#64748b" font-size="9">e</text>
+    <text x="5" y="215" fill="#64748b" font-size="9">d</text>
+    <text x="5" y="235" fill="#64748b" font-size="9">c</text>
+    <text x="5" y="255" fill="#64748b" font-size="9">b</text>
+    <text x="5" y="275" fill="#64748b" font-size="9">a</text>
+
+    <!-- Breadboard Pin Holes (Rows of tiny square sockets) -->
+    <g fill="#475569">      <!-- ORTHOGONAL 90-DEGREE BENT WIRES LIKE USER FRITZING REFERENCE IMAGE -->
+      <!-- Red Signal Wire from Arduino Pin to Breadboard -->
+      <path d="M -225 16 L -225 -30 L 150 -30 L 150 95" stroke="#dc2626" stroke-width="4" fill="none" stroke-linejoin="round"/>
+      <circle cx="-225" cy="16" r="4" fill="#dc2626"/>
+      <circle cx="150" cy="95" r="4" fill="#dc2626"/>
+
+      <!-- Black Ground Wire from Arduino GND to Breadboard Power Rail -->
+      <path d="M -270 314 L -270 345 L 200 345 L 200 295" stroke="#000000" stroke-width="4" fill="none" stroke-linejoin="round"/>
+      <circle cx="-270" cy="314" r="4" fill="#000000"/>
+      <circle cx="200" cy="295" r="4" fill="#000000"/>
+
+      <!-- Real Fritzing Resistor Component Across Breadboard Holes -->
+      <g transform="translate(110, 115)">
+        <line x1="0" y1="0" x2="40" y2="0" stroke="#64748b" stroke-width="2"/>
+        <rect x="10" y="-5" width="20" height="10" fill="#fef08a" rx="2" stroke="#d97706"/>
+        <line x1="14" y1="-5" x2="14" y2="5" stroke="#dc2626" stroke-width="2"/>
+        <line x1="19" y1="-5" x2="19" y2="5" stroke="#dc2626" stroke-width="2"/>
+        <line x1="24" y1="-5" x2="24" y2="5" stroke="#78350f" stroke-width="2"/>
+      </g>
+
+      <!-- Real Fritzing LED Component with Translucent Dome and Legs -->
+      <g transform="translate(150, 60)">
+        <line x1="-5" y1="35" x2="-5" y2="0" stroke="#94a3b8" stroke-width="2"/>
+        <line x1="5" y1="35" x2="5" y2="0" stroke="#94a3b8" stroke-width="2"/>
+        <circle cx="0" cy="-10" r="14" fill="#22c55e" opacity="0.85" stroke="#ffffff" stroke-width="1.5"/>
+        <rect x="-10" y="-5" width="20" height="10" fill="#22c55e" rx="2"/>
+      </g>
+
+      <!-- Component Label Badge -->
+      <rect x="250" y="240" width="210" height="60" rx="8" fill="#ffffff" stroke="#94a3b8" stroke-width="1"/>
+      <text x="260" y="260" fill="#0f172a" font-size="11" font-weight="bold">HARDWARE WIRING:</text>
+      <text x="260" y="278" fill="#475569" font-size="10">• Pin Wire -> 220Ω Resistor</text>
+      <text x="260" y="292" fill="#475569" font-size="10">• LED Leg -> Breadboard GND</text>    </g>
+  </g>
+</svg>
