@@ -29,263 +29,191 @@ export interface STEMCourse {
   description: string;
   whatYouWillLearn: string[];
   modules: CourseModule[];
+  recommendedHardwareId: string;
 }
 
 export const COURSES_DATA: STEMCourse[] = [
   {
     id: "course-1",
-    title: "Complete Electronics & Circuit Design Masterclass",
-    slug: "electronics-circuit-design-masterclass",
+    title: "Basic Electronics Mastery",
+    slug: "basic-electronics-mastery",
     category: "Electronics",
     level: "Beginner",
-    durationHours: 18,
-    lessonsCount: 32,
+    durationHours: 12,
+    lessonsCount: 15,
     rating: 4.9,
-    studentsEnrolled: 1420,
-    instructor: "Eng. Sedhu (JR Learners Lead)",
-    price: 0,
-    originalPrice: 2499,
+    studentsEnrolled: 1840,
+    instructor: "LetsGetEngagedin Team",
+    price: 999,
+    originalPrice: 1999,
     image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&auto=format&fit=crop&q=80",
-    description: "Master analog and digital circuit design from zero! Learn components, schematics, Breadboard prototyping, 555 timers, op-amps, and transistor switching.",
+    description: "Understand Ohm's law, resistors, capacitors, transistors, and passive components. Learn circuit troubleshooting and breadboard prototyping from the ground up without coding.",
     whatYouWillLearn: [
-      "Understand Voltage, Current, Resistance, and Power calculations",
-      "Design active transistor amplifiers & switches",
-      "Master Op-Amp operational amplifier circuits",
-      "Build power supply voltage regulators"
+      "Calculate resistance, voltage drop, and electrical current flow",
+      "Understand transistor switching and voltage dividers",
+      "Build astable multi-vibrators using NE555 Timer ICs",
+      "Read circuit diagrams and configure multi-meters safely"
     ],
+    recommendedHardwareId: "prod-2",
     modules: [
       {
         id: "mod-1",
-        title: "Module 1: Electrical Principles & Resistors",
+        title: "Module 1: Principles of Electricity",
         lessons: [
-          { id: "les-1", title: "1. Welcome & Fundamentals of Electricity", duration: "14:20", videoUrl: "https://www.youtube.com/watch?v=8q-p09yI6bM", isFreePreview: true },
-          { id: "les-2", title: "2. Ohm's Law & Breadboard Prototyping", duration: "22:15", videoUrl: "https://www.youtube.com/watch?v=8q-p09yI6bM" }
+          { id: "les-1", title: "1. Current, Voltage, and Ohm's Law Basics", duration: "12:45", videoUrl: "https://www.youtube.com/watch?v=8q-p09yI6bM", isFreePreview: true },
+          { id: "les-2", title: "2. Setting Up Solderless Breadboards", duration: "10:15", videoUrl: "https://www.youtube.com/watch?v=8q-p09yI6bM" }
         ]
       },
       {
         id: "mod-2",
-        title: "Module 2: Capacitors, Diodes & Transistors",
+        title: "Module 2: Key Active Components",
         lessons: [
-          { id: "les-3", title: "3. Capacitor Charging & RC Filters", duration: "18:40", videoUrl: "https://www.youtube.com/watch?v=8q-p09yI6bM" },
-          { id: "les-4", title: "4. NPN vs PNP Transistor Switches", duration: "25:10", videoUrl: "https://www.youtube.com/watch?v=8q-p09yI6bM" }
+          { id: "les-3", title: "3. Capacitor Charging Curves & Filters", duration: "14:30", videoUrl: "https://www.youtube.com/watch?v=8q-p09yI6bM" },
+          { id: "les-4", title: "4. NPN & PNP BJT Transistor Switching", duration: "16:20", videoUrl: "https://www.youtube.com/watch?v=8q-p09yI6bM" }
         ]
       }
     ]
   },
   {
     id: "course-2",
-    title: "Arduino C++ Programming & Hardware Interfacing",
-    slug: "arduino-programming-hardware-interfacing",
+    title: "Arduino Fundamentals",
+    slug: "arduino-fundamentals",
     category: "Arduino",
     level: "Beginner",
-    durationHours: 24,
-    lessonsCount: 45,
+    durationHours: 18,
+    lessonsCount: 24,
     rating: 4.9,
-    studentsEnrolled: 2890,
+    studentsEnrolled: 3420,
     instructor: "LetsGetEngagedin Team",
-    price: 0,
-    originalPrice: 2999,
+    price: 1499,
+    originalPrice: 2499,
     image: "https://images.unsplash.com/photo-1553406830-ef2513450d76?w=600&auto=format&fit=crop&q=80",
-    description: "Learn Arduino microcontrollers from scratch! Interface 20+ sensors, LCD screens, motors, ultrasonic rangefinders, and build real-world automation projects.",
+    description: "Write C++ programs in the Arduino IDE and build projects. Learn GPIO control, analog/digital sensor reading, motor driving, and serial port communication.",
     whatYouWillLearn: [
-      "Write clean modular C++ code for Arduino IDE 2.x",
-      "Control DC Motors, Servos, and Stepper Motors",
-      "Interface I2C and SPI sensors",
-      "Build automated sensor dataloggers"
+      "Program microcontrollers in Arduino IDE using basic C++ functions",
+      "Interface analog inputs, registers, and digital relays",
+      "Control DC Motors, SG90 servo turrets, and standard I2C LCD screens",
+      "Construct complete sensory systems with custom libraries"
     ],
+    recommendedHardwareId: "prod-1",
     modules: [
       {
         id: "mod-1",
-        title: "Module 1: Arduino Environment & I/O",
+        title: "Module 1: Getting Started with Arduino IDE",
         lessons: [
-          { id: "les-1", title: "1. Hardware Overview & IDE Setup", duration: "15:00", videoUrl: "https://www.youtube.com/watch?v=nL34zDTPkcs", isFreePreview: true },
-          { id: "les-2", title: "2. Digital Output: Blinking LEDs & Traffic Lights", duration: "19:30", videoUrl: "https://www.youtube.com/watch?v=nL34zDTPkcs" }
+          { id: "les-1", title: "1. Arduino IDE Installation & USB CH340 Driver setup", duration: "14:02", videoUrl: "https://www.youtube.com/watch?v=nL34zDTPkcs", isFreePreview: true },
+          { id: "les-2", title: "2. Coding Structure: Setup vs Loop functions", duration: "18:22", videoUrl: "https://www.youtube.com/watch?v=nL34zDTPkcs" }
+        ]
+      },
+      {
+        id: "mod-2",
+        title: "Module 2: Interfacing Outputs",
+        lessons: [
+          { id: "les-3", title: "3. Driving Servos and DC H-Bridge Shields", duration: "19:15", videoUrl: "https://www.youtube.com/watch?v=nL34zDTPkcs" },
+          { id: "les-4", title: "4. Printing data on 16x2 Liquid Crystal Displays", duration: "15:40", videoUrl: "https://www.youtube.com/watch?v=nL34zDTPkcs" }
         ]
       }
     ]
   },
   {
     id: "course-3",
-    title: "Embedded C & Bare-Metal Microcontroller Architecture",
-    slug: "embedded-c-baremetal-microcontrollers",
-    category: "Embedded",
-    level: "Advanced",
-    durationHours: 30,
-    lessonsCount: 52,
+    title: "Sensors & Modules",
+    slug: "sensors-modules",
+    category: "Sensors",
+    level: "Beginner",
+    durationHours: 10,
+    lessonsCount: 18,
     rating: 4.8,
-    studentsEnrolled: 890,
-    instructor: "Dr. K. Ramanathan",
-    price: 0,
-    originalPrice: 3999,
-    image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=600&auto=format&fit=crop&q=80",
-    description: "Program microcontrollers at the register level without libraries. Master memory maps, interrupts, PWM timers, UART communication, and USB logic analyzer debugging.",
+    studentsEnrolled: 1540,
+    instructor: "LetsGetEngagedin Team",
+    price: 999,
+    originalPrice: 1999,
+    image: "https://images.unsplash.com/photo-1581092335397-9583fe92d232?w=600&auto=format&fit=crop&q=80",
+    description: "Learn how to read signals from 37+ modules. Master ADC readings, temperature, motion, distance sensors, rain monitoring, and gas detectors.",
     whatYouWillLearn: [
-      "Direct register manipulation in C (PORT, DDR, PIN registers)",
-      "Hardware Interrupt ISR routines",
-      "Hardware Timers CTC & Fast PWM modes",
-      "Bare-metal UART & SPI drivers"
+      "Understand ADC (Analog-to-Digital Converter) resolution thresholds",
+      "Calibrate sensor data ranges in software scripts",
+      "Read distance using Ultrasonic HC-SR04 sound timing",
+      "Design alert systems utilizing active sensors and buzzers"
     ],
+    recommendedHardwareId: "prod-5",
     modules: [
       {
         id: "mod-1",
-        title: "Module 1: Memory Architecture & Pointers",
+        title: "Module 1: Analog Sensor Principles",
         lessons: [
-          { id: "les-1", title: "1. AVR Core Memory Architecture", duration: "25:00", videoUrl: "https://www.youtube.com/watch?v=J_7_s_v4_8k", isFreePreview: true }
+          { id: "les-1", title: "1. ADC Read Resolution & Voltage Dividers", duration: "12:50", videoUrl: "https://www.youtube.com/watch?v=k_jHw7b-J3s", isFreePreview: true }
+        ]
+      },
+      {
+        id: "mod-2",
+        title: "Module 2: Motion & Distance Arrays",
+        lessons: [
+          { id: "les-2", title: "2. Sound Speed Calibration with Ultrasonic Transceivers", duration: "16:10", videoUrl: "https://www.youtube.com/watch?v=k_jHw7b-J3s" }
         ]
       }
     ]
   },
   {
     id: "course-4",
-    title: "ESP32 IoT Cloud Systems & Blynk 2.0 Integration",
-    slug: "esp32-iot-cloud-systems",
-    category: "ESP32",
-    level: "Intermediate",
-    durationHours: 20,
-    lessonsCount: 38,
+    title: "Embedded Systems Fundamentals",
+    slug: "embedded-systems-fundamentals",
+    category: "Embedded",
+    level: "Advanced",
+    durationHours: 22,
+    lessonsCount: 30,
     rating: 4.9,
-    studentsEnrolled: 1750,
+    studentsEnrolled: 980,
     instructor: "LetsGetEngagedin Team",
-    price: 0,
-    originalPrice: 3299,
-    image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&auto=format&fit=crop&q=80",
-    description: "Build Wi-Fi & Bluetooth IoT devices with ESP32! Learn HTTP Web Servers, MQTT messaging protocol, Blynk mobile apps, and AWS IoT Core.",
+    price: 2499,
+    originalPrice: 3999,
+    image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=600&auto=format&fit=crop&q=80",
+    description: "Write bare-metal register programs, configure UART, SPI, and I2C buses, and handle hardware interrupts. Perfect for university electrical engineering students.",
     whatYouWillLearn: [
-      "Host responsive web applications on dual-core ESP32",
-      "Publish telemetry data over MQTT protocol",
-      "Build mobile dashboards on Blynk 2.0 app",
-      "Implement OTA (Over-The-Air) Wi-Fi firmware updates"
+      "Read memory mappings and write direct register masks",
+      "Manage ISR hardware interrupts and watchdog timers",
+      "Implement PWM configurations for high-speed motor steering",
+      "Analyze signals using logic analyzers and serial debuggers"
     ],
+    recommendedHardwareId: "prod-7",
     modules: [
       {
         id: "mod-1",
-        title: "Module 1: ESP32 Wi-Fi & Web Servers",
+        title: "Module 1: Register Maps & Direct Memory",
         lessons: [
-          { id: "les-1", title: "1. ESP32 Wi-Fi Modes & Connection", duration: "18:00", videoUrl: "https://www.youtube.com/watch?v=3q-v_q3rXqY", isFreePreview: true }
+          { id: "les-1", title: "1. Microcontroller Internals & DDR/PORT Registers", duration: "22:10", videoUrl: "https://www.youtube.com/watch?v=J_7_s_v4_8k", isFreePreview: true }
         ]
       }
     ]
   },
   {
     id: "course-5",
-    title: "STM32 ARM Cortex-M3/M4 Embedded Programming",
-    slug: "stm32-arm-cortex-programming",
-    category: "STM32",
-    level: "Advanced",
-    durationHours: 35,
-    lessonsCount: 60,
-    rating: 4.9,
-    studentsEnrolled: 640,
-    instructor: "Eng. Sedhu",
-    price: 0,
-    originalPrice: 4499,
-    image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&auto=format&fit=crop&q=80",
-    description: "Master 32-bit ARM Cortex architecture using STM32CubeIDE, HAL drivers, DMA memory transfers, and FreeRTOS real-time operating system kernel.",
-    whatYouWillLearn: [
-      "Configure STM32 pinouts in STM32CubeMX",
-      "Debug ARM code step-by-step with ST-Link V2 SWD",
-      "Direct Memory Access (DMA) for ultra-fast sampling",
-      "FreeRTOS tasks, semaphores, and message queues"
-    ],
-    modules: [
-      {
-        id: "mod-1",
-        title: "Module 1: STM32 Architecture & ST-Link",
-        lessons: [
-          { id: "les-1", title: "1. ARM Cortex-M Core Overview", duration: "28:10", videoUrl: "https://www.youtube.com/watch?v=u1j_7v8k_0w", isFreePreview: true }
-        ]
-      }
-    ]
-  },
-  {
-    id: "course-6",
-    title: "KiCad 8 PCB Design & High-Speed Layout",
-    slug: "kicad-pcb-design-high-speed-layout",
-    category: "PCB Design",
+    title: "IoT with ESP32",
+    slug: "iot-with-esp32",
+    category: "IoT",
     level: "Intermediate",
-    durationHours: 16,
-    lessonsCount: 28,
+    durationHours: 15,
+    lessonsCount: 20,
     rating: 4.9,
-    studentsEnrolled: 1120,
+    studentsEnrolled: 2110,
     instructor: "LetsGetEngagedin Team",
-    price: 0,
-    originalPrice: 2799,
-    image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&auto=format&fit=crop&q=80",
-    description: "Design custom circuit boards like a pro! Learn schematic capture, symbol creation, footprint matching, 2-layer routing, thermal reliefs, and Gerber manufacturing.",
-    whatYouWillLearn: [
-      "Master KiCad 8 EDA interface and shortcut keys",
-      "Create custom schematic symbols and 3D step models",
-      "Route differential pairs and high-current power traces",
-      "Order custom PCBs from overseas & local fabs"
-    ],
-    modules: [
-      {
-        id: "mod-1",
-        title: "Module 1: KiCad Schematic Capture",
-        lessons: [
-          { id: "les-1", title: "1. Drawing Schematics in KiCad 8", duration: "22:00", videoUrl: "https://www.youtube.com/watch?v=vaCVh2PtWE4", isFreePreview: true }
-        ]
-      }
-    ]
-  },
-  {
-    id: "course-7",
-    title: "Robotics Kinematics, PID & Autonomous Navigation",
-    slug: "robotics-kinematics-pid-navigation",
-    category: "Robotics",
-    level: "Intermediate",
-    durationHours: 28,
-    lessonsCount: 48,
-    rating: 4.9,
-    studentsEnrolled: 1310,
-    instructor: "Eng. Sedhu",
-    price: 0,
-    originalPrice: 3499,
-    image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=600&auto=format&fit=crop&q=80",
-    description: "Build intelligent mobile robots! Learn differential drive kinematics, PID feedback tuning, optical motor encoders, ultrasonic obstacle radar, and maze solving.",
-    whatYouWillLearn: [
-      "Calculate wheel speed RPM and robot velocity vector",
-      "Tune PID position & velocity feedback control loops",
-      "Read quadrature encoder interrupt signals",
-      "Implement Floodfill maze navigation algorithm"
-    ],
-    modules: [
-      {
-        id: "mod-1",
-        title: "Module 1: Robot Chassis Dynamics & Motor Drivers",
-        lessons: [
-          { id: "les-1", title: "1. Motor Driver H-Bridge Physics", duration: "20:00", videoUrl: "https://www.youtube.com/watch?v=v_k4_v5v9yM", isFreePreview: true }
-        ]
-      }
-    ]
-  },
-  {
-    id: "course-8",
-    title: "Python for Hardware Engineers & OpenCV Computer Vision",
-    slug: "python-hardware-engineers-opencv",
-    category: "Python",
-    level: "Beginner",
-    durationHours: 22,
-    lessonsCount: 40,
-    rating: 4.8,
-    studentsEnrolled: 2100,
-    instructor: "LetsGetEngagedin Team",
-    price: 0,
+    price: 1899,
     originalPrice: 2999,
-    image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=600&auto=format&fit=crop&q=80",
-    description: "Learn Python 3 for serial communication (PySerial), automated hardware testing, data plot visualization (Matplotlib), and real-time computer vision (OpenCV).",
+    image: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&auto=format&fit=crop&q=80",
+    description: "Build Wi-Fi connected telemetry systems. Host web servers on the ESP32 chip, connect sensors to Blynk, MQTT databases, and configure Alexa/Google assistant.",
     whatYouWillLearn: [
-      "Master Python object-oriented syntax for hardware automation",
-      "Read USB serial data streams with PySerial",
-      "Process camera frames with OpenCV for face detection",
-      "Build GUI dashboards with PyQt / CustomTkinter"
+      "Manage dual-core ESP32 chip settings in Arduino environment",
+      "Deploy responsive web-servers inside Wi-Fi Access Points",
+      "Publish sensor logs to thingspeak over MQTT telemetry client",
+      "Integrate voice alarms with Sinric Pro & Google Home"
     ],
+    recommendedHardwareId: "prod-6",
     modules: [
       {
         id: "mod-1",
-        title: "Module 1: Python Hardware Fundamentals",
+        title: "Module 1: WiFi Networks & Web Servers",
         lessons: [
-          { id: "les-1", title: "1. Setting up Python 3.11 & PySerial", duration: "16:40", videoUrl: "https://www.youtube.com/watch?v=JmC-q39k8r8", isFreePreview: true }
+          { id: "les-1", title: "1. ESP32 Wi-Fi Station Modes & Host Local Pages", duration: "16:40", videoUrl: "https://www.youtube.com/watch?v=3q-v_q3rXqY", isFreePreview: true }
         ]
       }
     ]
