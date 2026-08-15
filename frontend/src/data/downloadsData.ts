@@ -62,12 +62,12 @@ export const DOWNLOADS_DATA: ResourceDownload[] = [
   },
   {
     id: "dl-6",
-    title: "JR Learners Master Code Repository Bundle",
+    title: "ElectronLearners Master Code Repository Bundle",
     category: "Arduino Code",
     fileType: "ZIP",
     size: "24.1 MB",
     downloadsCount: 6100,
-    url: "/downloads/code/JR Learners_All_Projects_Code.zip",
+    url: "/downloads/code/ElectronLearners_All_Projects_Code.zip",
     description: "Includes source code for all 20 STEM Kits, 100 Projects, and YouTube tutorials."
   }
 ];

@@ -105,7 +105,7 @@ export default function LocalEditableManual() {
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(experiments, null, 2));
     const downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", "JR Learners_STEM_Manual.json");
+    downloadAnchor.setAttribute("download", "ElectronLearners_STEM_Manual.json");
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();

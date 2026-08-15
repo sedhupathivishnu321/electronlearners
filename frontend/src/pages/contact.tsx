@@ -7,7 +7,7 @@ export default function ContactPage() {
       
       <div className="border-b border-slate-800 pb-6">
         <span className="text-xs font-bold text-blue-400 uppercase tracking-widest">Get In Touch</span>
-        <h1 className="text-3xl font-heading font-extrabold text-white mt-1">Contact JR Learners</h1>
+        <h1 className="text-3xl font-heading font-extrabold text-white mt-1">Contact ElectronLearners</h1>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -18,7 +18,7 @@ export default function ContactPage() {
           <div className="space-y-3 text-xs text-slate-300">
             <div className="flex items-center space-x-3">
               <MapPin className="w-5 h-5 text-blue-400 shrink-0" />
-              <span>JR Learners STEM Towers, Phase III, Tech Park, New Delhi, 110001, India</span>
+              <span>ElectronLearners STEM Towers, Phase III, Tech Park, New Delhi, 110001, India</span>
             </div>
             <div className="flex items-center space-x-3">
               <Phone className="w-5 h-5 text-cyan-400 shrink-0" />

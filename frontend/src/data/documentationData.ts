@@ -28,7 +28,7 @@ export const DOCUMENTATION_DATA: DocSection[] = [
 ### CH340 / CH341 Driver Setup for Windows & macOS
 
 If your computer fails to assign a COM port (Windows) or \`/dev/cu.usbserial\` (Mac):
-1. Download the CH340 Driver package from JR Learners Downloads page.
+1. Download the CH340 Driver package from ElectronLearners Downloads page.
 2. Run \`SETUP.EXE\` on Windows and click **INSTALL**.
 3. Re-plug your Arduino clone or ESP32 board.
 4. Verify port assignment in Windows Device Manager under **Ports (COM & LPT)**.

@@ -115,7 +115,7 @@ export const BLOGS_DATA: STEMBlog[] = Array.from({ length: 100 }, (_, index) => 
       "How to Read Microcontroller Datasheets Like a Senior Engineer",
       "Noise Reduction Strategies in High-Gain Analog Circuits",
       "Building a Career in Embedded Systems & Robotics Engineering",
-      "JR Learners STEM Education Ecosystem Roadmap 2026"
+      "ElectronLearners STEM Education Ecosystem Roadmap 2026"
     ]
   };
 
@@ -128,16 +128,16 @@ export const BLOGS_DATA: STEMBlog[] = Array.from({ length: 100 }, (_, index) => 
     title: `${idNum}. ${title}`,
     slug: slug,
     category: cat,
-    author: index % 2 === 0 ? "Eng. Sedhu" : "JR Learners STEM Editorial",
+    author: index % 2 === 0 ? "Eng. Sedhu" : "ElectronLearners STEM Editorial",
     date: `2026-0${(index % 6) + 1}-15`,
     readTime: `${4 + (index % 6)} min read`,
     image: `https://images.unsplash.com/photo-${1518770660439 + (index * 80)}?w=600&auto=format&fit=crop&q=80`,
-    summary: `Discover expert insights on ${title}. Step-by-step engineering tutorial, schematics, and practical recommendations from JR Learners.`,
+    summary: `Discover expert insights on ${title}. Step-by-step engineering tutorial, schematics, and practical recommendations from ElectronLearners.`,
     tags: [cat, "Tutorial", "Engineering", "STEM", "HandsOn"],
     contentMarkdown: `
 # ${title}
 
-*Published by JR Learners Engineering Team*
+*Published by ElectronLearners Engineering Team*
 
 In this comprehensive guide, we explore the core fundamentals of **${title}**. Whether you are a STEM student, educator, or maker, mastering these engineering principles will elevate your technical capabilities.
 
@@ -160,7 +160,7 @@ When working with microcontrollers and analog circuits, proper power distributio
 // Example Initialization Code Snippet
 void setup() {
   Serial.begin(115200);
-  Serial.println("JR Learners STEM Article #${idNum}");
+  Serial.println("ElectronLearners STEM Article #${idNum}");
 }
 \`\`\`
 

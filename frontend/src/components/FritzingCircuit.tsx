@@ -41,7 +41,7 @@ export default function FritzingCircuit({ expNum, title }: FritzingCircuitProps)
         <text x="35" y="38" fill="#38bdf8" fontSize="13" fontWeight="bold">
           FRITZING WIRING SCHEMATIC — EXP #{expNum}: {title.toUpperCase()}
         </text>
-        <text x="910" y="38" fill="#94a3b8" fontSize="11" textAnchor="end">JR Learners STEM Platform</text>
+        <text x="910" y="38" fill="#94a3b8" fontSize="11" textAnchor="end">ElectronLearners STEM Platform</text>
 
         {/* ARDUINO UNO BOARD GRAPHIC */}
         <g transform="translate(30, 65)">

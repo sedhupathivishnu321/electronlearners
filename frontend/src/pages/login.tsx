@@ -30,7 +30,7 @@ export default function LoginPage() {
         <div className="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center text-white mx-auto shadow-lg shadow-blue-600/30">
           <Cpu className="w-6 h-6" />
         </div>
-        <h1 className="text-2xl font-bold text-white font-heading">Sign In to JR Learners</h1>
+        <h1 className="text-2xl font-bold text-white font-heading">Sign In to ElectronLearners</h1>
         <p className="text-slate-400 text-xs">Access your courses, kit orders, and STEM certificates.</p>
       </div>
 
