@@ -246,30 +246,48 @@ footer a, footer span, footer p {
 }
 
 /* Cards and layout containers */
-.glass-card, 
-.bg-slate-900, 
-.bg-slate-950, 
-.bg-\[\#0F172A\], 
-.bg-slate-900\/60, 
-.bg-slate-900\/50,
-.bg-slate-900\/10,
-.bg-slate-950\/60,
-.bg-slate-950\/40,
-.bg-\[\#000B1C\],
-.bg-slate-950\/20,
-.bg-slate-900\/80,
-.bg-slate-950\/85,
-.bg-\[\#081329\],
-.bg-\[\#0f203c\],
-.bg-\[\#040810\],
-.bg-\[\#0b0f19\],
-.bg-\[\#000d21\],
-.bg-\[\#0A122C\] {
+.glass-card {
   background: rgba(255, 255, 255, 0.9) !important;
   backdrop-filter: blur(12px) !important;
   -webkit-backdrop-filter: blur(12px) !important;
   border: 1px solid rgba(15, 23, 42, 0.1) !important;
   color: #0F172A !important;
+}
+
+/* Wherever the dark blue background is present, make all the text white */
+.bg-\[\#000B1C\] *, 
+.bg-\[\#000d21\] *, 
+.bg-\[\#0A122C\] *, 
+.bg-\[\#081329\] *, 
+.bg-\[\#0f203c\] *, 
+.bg-\[\#040810\] *, 
+.bg-\[\#0b0f19\] *, 
+.bg-\[\#081229\] *,
+.bg-slate-900 *, 
+.bg-slate-950 *, 
+.bg-slate-900\/60 *, 
+.bg-slate-900\/50 *,
+.bg-slate-900\/80 *,
+.bg-slate-950\/85 *,
+.bg-\[\#000B1C\] h1, .bg-\[\#000B1C\] h2, .bg-\[\#000B1C\] h3, .bg-\[\#000B1C\] h4, .bg-\[\#000B1C\] p, .bg-\[\#000B1C\] span, .bg-\[\#000B1C\] a,
+.bg-\[\#000d21\] h1, .bg-\[\#000d21\] h2, .bg-\[\#000d21\] h3, .bg-\[\#000d21\] h4, .bg-\[\#000d21\] p, .bg-\[\#000d21\] span, .bg-\[\#000d21\] a,
+.bg-\[\#0A122C\] h1, .bg-\[\#0A122C\] h2, .bg-\[\#0A122C\] h3, .bg-\[\#0A122C\] h4, .bg-\[\#0A122C\] p, .bg-\[\#0A122C\] span, .bg-\[\#0A122C\] a,
+.bg-\[\#081329\] h1, .bg-\[\#081329\] h2, .bg-\[\#081329\] h3, .bg-\[\#081329\] h4, .bg-\[\#081329\] p, .bg-\[\#081329\] span, .bg-\[\#081329\] a,
+.bg-\[\#0f203c\] h1, .bg-\[\#0f203c\] h2, .bg-\[\#0f203c\] h3, .bg-\[\#0f203c\] h4, .bg-\[\#0f203c\] p, .bg-\[\#0f203c\] span, .bg-\[\#0f203c\] a,
+.bg-\[\#040810\] h1, .bg-\[\#040810\] h2, .bg-\[\#040810\] h3, .bg-\[\#040810\] h4, .bg-\[\#040810\] p, .bg-\[\#040810\] span, .bg-\[\#040810\] a,
+.bg-\[\#0b0f19\] h1, .bg-\[\#0b0f19\] h2, .bg-\[\#0b0f19\] h3, .bg-\[\#0b0f19\] h4, .bg-\[\#0b0f19\] p, .bg-\[\#0b0f19\] span, .bg-\[\#0b0f19\] a,
+.bg-slate-900 h1, .bg-slate-900 h2, .bg-slate-900 h3, .bg-slate-900 h4, .bg-slate-900 p, .bg-slate-900 span, .bg-slate-900 a,
+.bg-slate-950 h1, .bg-slate-950 h2, .bg-slate-950 h3, .bg-slate-950 h4, .bg-slate-950 p, .bg-slate-950 span, .bg-slate-950 a,
+.bg-\[\#000B1C\] .text-white, .bg-\[\#000B1C\] .text-slate-50, .bg-\[\#000B1C\] .text-slate-100, .bg-\[\#000B1C\] .text-slate-200, .bg-\[\#000B1C\] .text-slate-300, .bg-\[\#000B1C\] .text-slate-350, .bg-\[\#000B1C\] .text-slate-400, .bg-\[\#000B1C\] .text-slate-450,
+.bg-\[\#000d21\] .text-white, .bg-\[\#000d21\] .text-slate-50, .bg-\[\#000d21\] .text-slate-100, .bg-\[\#000d21\] .text-slate-200, .bg-\[\#000d21\] .text-slate-300, .bg-\[\#000d21\] .text-slate-350, .bg-\[\#000d21\] .text-slate-400, .bg-\[\#000d21\] .text-slate-450,
+.bg-\[\#0A122C\] .text-white, .bg-\[\#0A122C\] .text-slate-50, .bg-\[\#0A122C\] .text-slate-100, .bg-\[\#0A122C\] .text-slate-200, .bg-\[\#0A122C\] .text-slate-300, .bg-\[\#0A122C\] .text-slate-350, .bg-\[\#0A122C\] .text-slate-400, .bg-\[\#0A122C\] .text-slate-450,
+.bg-\[\#081329\] .text-white, .bg-\[\#081329\] .text-slate-50, .bg-\[\#081329\] .text-slate-100, .bg-\[\#081329\] .text-slate-200, .bg-\[\#081329\] .text-slate-300, .bg-\[\#081329\] .text-slate-350, .bg-\[\#081329\] .text-slate-400, .bg-\[\#081329\] .text-slate-450,
+.bg-\[\#0f203c\] .text-white, .bg-\[\#0f203c\] .text-slate-50, .bg-\[\#0f203c\] .text-slate-100, .bg-\[\#0f203c\] .text-slate-200, .bg-\[\#0f203c\] .text-slate-300, .bg-\[\#0f203c\] .text-slate-350, .bg-\[\#0f203c\] .text-slate-400, .bg-\[\#0f203c\] .text-slate-450,
+.bg-\[\#040810\] .text-white, .bg-\[\#040810\] .text-slate-50, .bg-\[\#040810\] .text-slate-100, .bg-\[\#040810\] .text-slate-200, .bg-\[\#040810\] .text-slate-300, .bg-\[\#040810\] .text-slate-350, .bg-\[\#040810\] .text-slate-400, .bg-\[\#040810\] .text-slate-450,
+.bg-\[\#0b0f19\] .text-white, .bg-\[\#0b0f19\] .text-slate-50, .bg-\[\#0b0f19\] .text-slate-100, .bg-\[\#0b0f19\] .text-slate-200, .bg-\[\#0b0f19\] .text-slate-300, .bg-\[\#0b0f19\] .text-slate-350, .bg-\[\#0b0f19\] .text-slate-400, .bg-\[\#0b0f19\] .text-slate-450,
+.bg-slate-900 .text-white, .bg-slate-900 .text-slate-50, .bg-slate-900 .text-slate-100, .bg-slate-900 .text-slate-200, .bg-slate-900 .text-slate-300, .bg-slate-900 .text-slate-350, .bg-slate-900 .text-slate-400, .bg-slate-900 .text-slate-450,
+.bg-slate-950 .text-white, .bg-slate-950 .text-slate-50, .bg-slate-950 .text-slate-100, .bg-slate-950 .text-slate-200, .bg-slate-950 .text-slate-300, .bg-slate-950 .text-slate-350, .bg-slate-950 .text-slate-400, .bg-slate-950 .text-slate-450 {
+  color: #FFFFFF !important;
 }
 
 /* Input Fields and Selects */
