@@ -1,1 +1,7 @@
-{"/_error":"pages/_error.js","/_app":"pages/_app.js","/about":"pages/about.html","/admin":"pages/admin.html","/blog/[id]":"pages/blog/[id].html","/blog":"pages/blog.html","/certificates":"pages/certificates.html","/contact":"pages/contact.html","/cart":"pages/cart.html","/checkout":"pages/checkout.html","/cookie":"pages/cookie.html","/courses":"pages/courses.html","/dashboard":"pages/dashboard.html","/courses/[id]":"pages/courses/[id].html","/documentation":"pages/documentation.html","/downloads":"pages/downloads.html","/":"pages/index.html","/login":"pages/login.html","/manual-editor":"pages/manual-editor.html","/order-tracking":"pages/order-tracking.html","/manual":"pages/manual.html","/privacy":"pages/privacy.html","/products/[id]":"pages/products/[id].html","/products":"pages/products.html","/projects":"pages/projects.html","/projects/[id]":"pages/projects/[id].html","/refund":"pages/refund.html","/register":"pages/register.html","/resources":"pages/resources.html","/schools":"pages/schools.html","/shipping":"pages/shipping.html","/support":"pages/support.html","/teachers":"pages/teachers.html","/terms":"pages/terms.html","/tutorials":"pages/tutorials.html","/verify-certificate/[id]":"pages/verify-certificate/[id].html","/wishlist":"pages/wishlist.html","/simulator":"pages/simulator.html","/_document":"pages/_document.js","/404":"pages/404.html"}
+{
+  "/_app": "pages/_app.js",
+  "/_error": "pages/_error.js",
+  "/_document": "pages/_document.js",
+  "/": "pages/index.js",
+  "/courses": "pages/courses.js"
+}

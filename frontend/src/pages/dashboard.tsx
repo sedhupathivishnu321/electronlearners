@@ -48,7 +48,7 @@ export default function StudentDashboard() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10 bg-[#0F172A] text-slate-100">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10 bg-transparent text-slate-100">
       
       {/* Profile Header */}
       <div className="p-8 rounded-3xl bg-slate-900 border border-slate-800 flex flex-col md:flex-row items-center justify-between gap-6">
@@ -394,3 +394,4 @@ export default function StudentDashboard() {
     </div>
   );
 }
+

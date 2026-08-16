@@ -17,35 +17,7 @@ export default function Home() {
     .slice(0, 4);
 
   return (
-    <div className="space-y-24 pb-20 bg-[#0F172A] text-slate-100 relative min-h-screen overflow-hidden">
-      
-      {/* Yellow, White, and Blue grading background */}
-      <div className="absolute inset-0 pointer-events-none z-0">
-        {/* Mesh Gradients */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(234,179,8,0.18)_0%,transparent_40%),radial-gradient(circle_at_85%_75%,rgba(37,99,235,0.18)_0%,transparent_45%),radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.08)_0%,transparent_35%)]"></div>
-        
-        {/* Square Checked Grid Overlay */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] bg-[size:48px_48px]"></div>
-
-        {/* Abstract Floating Shapes (Rectangles, Circles, Bubbles) */}
-        <div className="absolute inset-0 overflow-hidden">
-          {/* Floating Rectangles */}
-          <div className="absolute top-[12%] left-[8%] w-16 h-28 border border-yellow-500/10 rounded-lg rotate-12 animate-float"></div>
-          <div className="absolute top-[65%] right-[6%] w-24 h-12 border border-blue-500/10 rounded-lg -rotate-45 animate-float" style={{ animationDelay: '2s' }}></div>
-          <div className="absolute top-[35%] right-[12%] w-10 h-20 border border-white/5 rounded-md rotate-45 animate-float" style={{ animationDelay: '4s' }}></div>
-
-          {/* Floating Circles */}
-          <div className="absolute top-[25%] left-[75%] w-24 h-24 rounded-full border border-blue-500/10 animate-bubble-1"></div>
-          <div className="absolute top-[80%] left-[15%] w-36 h-36 rounded-full border border-yellow-500/5 animate-bubble-2"></div>
-
-          {/* Glowing Bubbles */}
-          <div className="absolute top-[18%] left-[20%] w-6 h-6 rounded-full bg-yellow-500/10 blur-[2px] animate-bubble-3"></div>
-          <div className="absolute top-[50%] left-[45%] w-10 h-10 rounded-full bg-blue-500/10 blur-[3px] animate-bubble-1"></div>
-          <div className="absolute top-[70%] left-[80%] w-8 h-8 rounded-full bg-white/10 blur-[2px] animate-bubble-2"></div>
-          <div className="absolute top-[40%] left-[85%] w-5 h-5 rounded-full bg-yellow-500/15 blur-[1px] animate-bubble-3"></div>
-          <div className="absolute top-[85%] left-[60%] w-12 h-12 rounded-full bg-blue-500/10 blur-[4px] animate-bubble-1"></div>
-        </div>
-      </div>
+    <div className="space-y-24 pb-20 bg-transparent text-slate-100 relative min-h-screen overflow-hidden">
 
       {/* 1. HERO SECTION */}
       <section className="relative overflow-hidden pt-20 pb-24 border-b border-slate-800/50">
@@ -345,3 +317,4 @@ export default function Home() {
     </div>
   );
 }
+

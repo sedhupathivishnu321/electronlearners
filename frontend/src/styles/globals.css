@@ -13,7 +13,7 @@
 
 body {
   font-family: 'Inter', sans-serif;
-  background-color: #0F172A;
+  background-color: #070A13;
   color: #F8FAFC;
   overflow-x: hidden;
 }
@@ -104,3 +104,55 @@ code, pre {
 .animate-bubble-3 {
   animation: bubbleFloat 12s ease-in-out infinite;
 }
+
+/* 3D and Glow animations */
+@keyframes spin3D {
+  0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+  100% { transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg); }
+}
+
+@keyframes spin3DReverse {
+  0% { transform: rotateX(360deg) rotateY(0deg) rotateZ(360deg); }
+  100% { transform: rotateX(0deg) rotateY(360deg) rotateZ(0deg); }
+}
+
+.animate-spin-3d {
+  animation: spin3D 18s linear infinite;
+}
+
+.animate-spin-3d-slow {
+  animation: spin3D 28s linear infinite;
+}
+
+.animate-spin-3d-reverse {
+  animation: spin3DReverse 22s linear infinite;
+}
+
+.animate-float-slow {
+  animation: floatAnimation 14s ease-in-out infinite;
+}
+
+/* 3D Cube Elements */
+.cube-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(7, 10, 19, 0.45);
+  backdrop-filter: blur(4px);
+  border-width: 1.5px;
+}
+
+.cube-front  { transform: rotateY(  0deg) translateZ(32px); }
+.cube-back   { transform: rotateY(180deg) translateZ(32px); }
+.cube-right  { transform: rotateY( 90deg) translateZ(32px); }
+.cube-left   { transform: rotateY(-90deg) translateZ(32px); }
+.cube-top    { transform: rotateX( 90deg) translateZ(32px); }
+.cube-bottom { transform: rotateX(-90deg) translateZ(32px); }
+
+/* Adjust translateZ for the larger blue cube */
+.animate-spin-3d-slow .cube-front  { transform: rotateY(  0deg) translateZ(40px); }
+.animate-spin-3d-slow .cube-back   { transform: rotateY(180deg) translateZ(40px); }
+.animate-spin-3d-slow .cube-right  { transform: rotateY( 90deg) translateZ(40px); }
+.animate-spin-3d-slow .cube-left   { transform: rotateY(-90deg) translateZ(40px); }
+.animate-spin-3d-slow .cube-top    { transform: rotateX( 90deg) translateZ(40px); }
+.animate-spin-3d-slow .cube-bottom { transform: rotateX(-90deg) translateZ(40px); }

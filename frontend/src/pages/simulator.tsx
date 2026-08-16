@@ -942,7 +942,7 @@ export default function Simulator() {
   };
 
   return (
-    <div className="bg-[#0F172A] text-slate-100 min-h-screen pb-12">
+    <div className="bg-transparent text-slate-100 min-h-screen pb-12">
       <Head>
         <title>⚡ JR Learners IDE & Circuit Simulator (ArduinoForge)</title>
         <meta name="description" content="Simulate Arduino, ESP32 and electronic circuits in real-time. Drag components, wire them on a breadboard, write C/C++ code, and verify circuits offline." />
@@ -1985,3 +1985,4 @@ export default function Simulator() {
     </div>
   );
 }
+

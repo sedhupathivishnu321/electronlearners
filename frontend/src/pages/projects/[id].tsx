@@ -77,7 +77,7 @@ export default function ProjectDetail() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10 bg-[#0F172A] text-slate-100">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10 bg-transparent text-slate-100">
       
       {/* Back Link */}
       <Link href="/projects" className="inline-flex items-center space-x-2 text-xs font-semibold text-slate-400 hover:text-white transition-colors">
@@ -300,3 +300,4 @@ export default function ProjectDetail() {
     </div>
   );
 }
+

@@ -33,7 +33,7 @@ export default function ProjectsLibrary() {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10 bg-[#0F172A] text-slate-100">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10 bg-transparent text-slate-100">
       
       {/* Page Header */}
       <div className="border-b border-slate-800 pb-6 flex flex-col lg:flex-row lg:items-end justify-between gap-6">
@@ -170,3 +170,4 @@ export default function ProjectsLibrary() {
     </div>
   );
 }
+
