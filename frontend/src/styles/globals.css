@@ -318,3 +318,41 @@ input:focus, select:focus, textarea:focus {
 .bg-blue-600 *, .bg-blue-500 *, .bg-cyan-600 *, .bg-cyan-500 *, .bg-purple-600 *, .bg-purple-500 * {
   color: #FFFFFF !important;
 }
+
+/* Wherever the white/light background is present, make all the text black */
+.bg-white, 
+.bg-white *, 
+.bg-slate-50, 
+.bg-slate-50 *, 
+.bg-slate-100, 
+.bg-slate-100 *, 
+.bg-slate-200, 
+.bg-slate-200 *, 
+.bg-slate-100\/40,
+.bg-slate-100\/40 *,
+.glass-card, 
+.glass-card * {
+  color: #000000 !important;
+}
+
+/* Exception: Keep text white on buttons and badges inside white/light containers */
+.bg-blue-600, .bg-blue-600 *,
+.bg-blue-500, .bg-blue-500 *,
+.bg-cyan-600, .bg-cyan-600 *,
+.bg-cyan-500, .bg-cyan-500 *,
+.bg-purple-600, .bg-purple-600 *,
+.bg-emerald-600, .bg-emerald-600 *,
+.bg-emerald-550, .bg-emerald-550 *,
+.bg-red-600, .bg-red-600 *,
+.bg-amber-500, .bg-amber-500 * {
+  color: #FFFFFF !important;
+}
+
+/* Exception: Keep color accents visible inside white/light containers */
+.text-blue-600, .text-blue-600 * { color: #2563EB !important; }
+.text-blue-500, .text-blue-500 * { color: #3B82F6 !important; }
+.text-cyan-600, .text-cyan-600 * { color: #0891B2 !important; }
+.text-cyan-500, .text-cyan-500 * { color: #06B6D4 !important; }
+.text-amber-500, .text-amber-500 * { color: #D97706 !important; }
+.text-emerald-500, .text-emerald-500 * { color: #10B981 !important; }
+.text-red-500, .text-red-500 * { color: #EF4444 !important; }
