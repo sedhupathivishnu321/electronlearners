@@ -17,7 +17,7 @@ export default function Home() {
     .slice(0, 4);
 
   return (
-    <div className="min-h-screen text-slate-100 bg-[#000B1C] flex flex-col w-full">
+    <div className="min-h-screen text-slate-900 bg-transparent flex flex-col w-full">
 
       {/* 1. HERO SECTION (Dark Panel) */}
       <section className="relative overflow-hidden pt-24 pb-28 border-b border-slate-900 w-full z-10">
