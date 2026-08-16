@@ -13,7 +13,7 @@
 
 body {
   font-family: 'Inter', sans-serif;
-  background-color: #070A13;
+  background-color: #000B1C;
   color: #F8FAFC;
   overflow-x: hidden;
 }
@@ -44,6 +44,33 @@ code, pre {
   box-shadow: 0 12px 30px -10px rgba(37, 99, 235, 0.3);
 }
 
+/* High Contrast Solid Cards (Siemens Aesthetic) */
+.high-contrast-dark-card {
+  background-color: #0A122C;
+  border: 1px solid #1E293B;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.high-contrast-dark-card:hover {
+  transform: translateY(-4px);
+  border-color: #FBBF24;
+  box-shadow: 0 12px 30px -10px rgba(251, 191, 36, 0.25);
+}
+
+.high-contrast-light-card {
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.high-contrast-light-card:hover {
+  transform: translateY(-4px);
+  border-color: #FBBF24;
+  box-shadow: 0 12px 25px -10px rgba(251, 191, 36, 0.15);
+}
+
 /* Gradient Text */
 .gradient-text-blue {
   background: linear-gradient(135deg, #60A5FA 0%, #2563EB 50%, #06B6D4 100%);
@@ -64,7 +91,7 @@ code, pre {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0F172A;
+  background: #000B1C;
 }
 
 ::-webkit-scrollbar-thumb {

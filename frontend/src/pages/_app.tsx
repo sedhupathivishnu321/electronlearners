@@ -16,12 +16,12 @@ export default function App({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="min-h-screen flex flex-col bg-[#070A13] text-slate-100 selection:bg-blue-600 selection:text-white relative overflow-hidden">
+      <div className="min-h-screen flex flex-col bg-[#000B1C] text-slate-100 selection:bg-blue-600 selection:text-white relative overflow-hidden">
         
         {/* Global Background Layer with Tech Design & Mesh Gradients */}
         <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
           {/* Base Deep Navy Background */}
-          <div className="absolute inset-0 bg-[#070A13]"></div>
+          <div className="absolute inset-0 bg-[#000B1C]"></div>
           
           {/* Yellow, White, Navy Blue Mesh Gradients */}
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_15%,rgba(251,191,36,0.75)_0%,rgba(251,191,36,0.35)_30%,transparent_70%),radial-gradient(circle_at_90%_90%,rgba(30,58,138,0.95)_0%,rgba(7,10,19,0.95)_55%,transparent_80%),radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.45)_0%,rgba(255,255,255,0.15)_25%,transparent_60%),radial-gradient(circle_at_80%_20%,rgba(251,191,36,0.45)_0%,transparent_60%),radial-gradient(circle_at_20%_80%,rgba(255,255,255,0.25)_0%,transparent_55%)]"></div>
