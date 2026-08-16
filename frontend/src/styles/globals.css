@@ -249,16 +249,22 @@ footer a, footer span, footer p {
 .glass-card, 
 .bg-slate-900, 
 .bg-slate-950, 
-.bg-[#0F172A], 
+.bg-\[\#0F172A\], 
 .bg-slate-900\/60, 
 .bg-slate-900\/50,
 .bg-slate-900\/10,
 .bg-slate-950\/60,
 .bg-slate-950\/40,
-.bg-[#000B1C],
+.bg-\[\#000B1C\],
 .bg-slate-950\/20,
 .bg-slate-900\/80,
-.bg-slate-950\/85 {
+.bg-slate-950\/85,
+.bg-\[\#081329\],
+.bg-\[\#0f203c\],
+.bg-\[\#040810\],
+.bg-\[\#0b0f19\],
+.bg-\[\#000d21\],
+.bg-\[\#0A122C\] {
   background: rgba(255, 255, 255, 0.9) !important;
   backdrop-filter: blur(12px) !important;
   -webkit-backdrop-filter: blur(12px) !important;

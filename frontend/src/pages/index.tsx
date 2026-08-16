@@ -17,7 +17,7 @@ export default function Home() {
     .slice(0, 4);
 
   return (
-    <div className="min-h-screen text-slate-100 bg-[#000B1C] flex flex-col w-full">
+    <div className="min-h-screen text-slate-900 bg-transparent flex flex-col w-full">
 
       {/* 1. HERO SECTION (Dark Panel) */}
       <section className="relative overflow-hidden pt-24 pb-28 border-b border-slate-900 w-full z-10">
@@ -108,7 +108,7 @@ export default function Home() {
       </section>
 
       {/* 3. BEST SELLING (Dark Contrast Section) */}
-      <section className="w-full bg-[#000d21] text-white py-20 relative z-10 border-b border-slate-900">
+      <section className="w-full bg-transparent text-white py-20 relative z-10 border-b border-slate-900/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between mb-10 border-b border-slate-800 pb-6">
             <div>
@@ -233,7 +233,7 @@ export default function Home() {
       </section>
 
       {/* 5. LEARN SECTION (Dark Contrast Section) */}
-      <section className="w-full bg-[#000B1C] text-white py-20 relative z-10 border-b border-slate-900">
+      <section className="w-full bg-transparent text-white py-20 relative z-10 border-b border-slate-900/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-10">
           <div className="max-w-xl mx-auto space-y-2">
             <span className="text-xs font-bold text-[#FBBF24] uppercase tracking-widest">Knowledge Hub</span>
@@ -289,9 +289,9 @@ export default function Home() {
       </section>
 
       {/* 8. SCHOOLS & COLLEGES (Dark Contrast Section) */}
-      <section className="w-full bg-[#000d21] text-white py-20 relative z-10 border-t border-slate-900">
+      <section className="w-full bg-transparent text-white py-20 relative z-10 border-t border-slate-900/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="p-8 md:p-12 rounded-3xl bg-[#0A122C] border border-[#1E293B] flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl relative overflow-hidden">
+          <div className="p-8 md:p-12 rounded-3xl bg-white/80 backdrop-blur border border-slate-200/80 flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl relative overflow-hidden">
             <div className="absolute top-0 right-0 w-80 h-80 bg-yellow-500/5 blur-[100px] rounded-full pointer-events-none"></div>
             <div className="space-y-4 max-w-2xl text-center md:text-left relative z-10">
               <span className="px-3 py-1 rounded bg-yellow-500/10 text-[#FBBF24] border border-yellow-500/20 text-xs font-bold uppercase tracking-wider">
