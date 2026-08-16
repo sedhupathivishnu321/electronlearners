@@ -64,14 +64,14 @@ export default function SupportPage() {
           <Mail className="w-8 h-8 text-blue-400 mx-auto" />
           <h3 className="text-sm font-bold text-white uppercase tracking-wide">Email Support</h3>
           <p className="text-slate-400 text-xs">Send schema drawings, log scripts, or order invoice requests directly.</p>
-          <a href="mailto:support@JR Learners.com" className="inline-block px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition-all">Email Us</a>
+          <a href="mailto:learnersground2@gmail.com" className="inline-block px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition-all">Email Us</a>
         </div>
 
         <div className="p-6 rounded-2xl glass-card border border-slate-800 text-center space-y-3 shadow-lg">
           <Phone className="w-8 h-8 text-emerald-400 mx-auto" />
-          <h3 className="text-sm font-bold text-white uppercase tracking-wide">Educator Hotline</h3>
-          <p className="text-slate-400 text-xs">Speak with our academic team for institutional custom setups.</p>
-          <a href="tel:+919876543210" className="inline-block px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-550 text-white text-xs font-semibold transition-all">+91 98765 43210</a>
+          <h3 className="text-sm font-bold text-white uppercase tracking-wide">Educator Support</h3>
+          <p className="text-slate-400 text-xs">Reach out for academic support on custom institutional setups.</p>
+          <a href="mailto:learnersground2@gmail.com" className="inline-block px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-550 text-white text-xs font-semibold transition-all">Contact Academic Team</a>
         </div>
       </div>
 

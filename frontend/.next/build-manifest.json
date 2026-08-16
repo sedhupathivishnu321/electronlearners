@@ -5,8 +5,8 @@
   "devFiles": [],
   "ampDevFiles": [],
   "lowPriorityFiles": [
-    "static/IHQpHC-XidAwqQLkKB3wd/_buildManifest.js",
-    "static/IHQpHC-XidAwqQLkKB3wd/_ssgManifest.js"
+    "static/wpINNTIhfdGb3IF8JG_eg/_buildManifest.js",
+    "static/wpINNTIhfdGb3IF8JG_eg/_ssgManifest.js"
   ],
   "rootMainFiles": [],
   "pages": {
@@ -20,8 +20,8 @@
       "static/chunks/webpack-8fa1640cc84ba8fe.js",
       "static/chunks/framework-64ad27b21261a9ce.js",
       "static/chunks/main-f4701d23e362eb77.js",
-      "static/css/d1bb831795b10ed3.css",
-      "static/chunks/pages/_app-3f0dc2f81968b5f0.js"
+      "static/css/df14dbac2b5ee62f.css",
+      "static/chunks/pages/_app-bd31986cb437f51b.js"
     ],
     "/_error": [
       "static/chunks/webpack-8fa1640cc84ba8fe.js",
@@ -75,7 +75,7 @@
       "static/chunks/webpack-8fa1640cc84ba8fe.js",
       "static/chunks/framework-64ad27b21261a9ce.js",
       "static/chunks/main-f4701d23e362eb77.js",
-      "static/chunks/pages/contact-18c2b4ee604021fe.js"
+      "static/chunks/pages/contact-2f4e6947ac99e949.js"
     ],
     "/cookie": [
       "static/chunks/webpack-8fa1640cc84ba8fe.js",
@@ -209,7 +209,7 @@
       "static/chunks/webpack-8fa1640cc84ba8fe.js",
       "static/chunks/framework-64ad27b21261a9ce.js",
       "static/chunks/main-f4701d23e362eb77.js",
-      "static/chunks/pages/support-1e42da70789c7871.js"
+      "static/chunks/pages/support-aa003ed151d24a0c.js"
     ],
     "/teachers": [
       "static/chunks/webpack-8fa1640cc84ba8fe.js",

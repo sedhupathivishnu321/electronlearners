@@ -288,3 +288,9 @@ input:focus, select:focus, textarea:focus {
   background: rgba(253, 224, 71, 0.15) !important;
   border-color: rgba(245, 158, 11, 0.4) !important;
 }
+
+/* Text on blue, purple, and cyan button/badge backgrounds should remain white */
+.bg-blue-600, .bg-blue-500, .bg-cyan-600, .bg-cyan-500, .bg-purple-600, .bg-purple-500,
+.bg-blue-600 *, .bg-blue-500 *, .bg-cyan-600 *, .bg-cyan-500 *, .bg-purple-600 *, .bg-purple-500 * {
+  color: #FFFFFF !important;
+}

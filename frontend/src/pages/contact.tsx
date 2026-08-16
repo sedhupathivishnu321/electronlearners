@@ -16,17 +16,13 @@ export default function ContactPage() {
           <h2 className="text-xl font-bold text-white font-heading">Head Office & Innovation Lab</h2>
           
           <div className="space-y-3 text-xs text-slate-300">
-            <div className="flex items-center space-x-3">
+             <div className="flex items-center space-x-3">
               <MapPin className="w-5 h-5 text-blue-400 shrink-0" />
-              <span>JR Learners STEM Towers, Phase III, Tech Park, New Delhi, 110001, India</span>
-            </div>
-            <div className="flex items-center space-x-3">
-              <Phone className="w-5 h-5 text-cyan-400 shrink-0" />
-              <span>+91 98765 43210 / +91 11 2345 6789</span>
+              <span>JR Learners Headquarters, New Delhi, India</span>
             </div>
             <div className="flex items-center space-x-3">
               <Mail className="w-5 h-5 text-orange-400 shrink-0" />
-              <span>support@jrlearners.com</span>
+              <span>learnersground2@gmail.com</span>
             </div>
             <div className="flex items-center space-x-3">
               <Clock className="w-5 h-5 text-emerald-400 shrink-0" />
