@@ -64,6 +64,10 @@ export default function StudentDashboard() {
               </span>
             </div>
             <p className="text-slate-400 text-xs">{user.email} • {user.institution || "Independent Maker"}</p>
+            <div className="flex items-center gap-1.5 mt-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-2.5 py-1 rounded-lg w-fit text-[10px] font-bold">
+              <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping"></span>
+              <span>🔗 REGISTERED & LINKED TO GOOGLE DRIVE DATABASE SPREADSHEET</span>
+            </div>
           </div>
         </div>
 

@@ -1,9 +1,1 @@
-{
-  "/_app": "pages/_app.js",
-  "/_error": "pages/_error.js",
-  "/_document": "pages/_document.js",
-  "/courses": "pages/courses.js",
-  "/": "pages/index.js",
-  "/products": "pages/products.js",
-  "/products/[id]": "pages/products/[id].js"
-}
+{"/_app":"pages/_app.js","/about":"pages/about.html","/blog/[id]":"pages/blog/[id].html","/admin":"pages/admin.html","/blog":"pages/blog.html","/cart":"pages/cart.html","/certificates":"pages/certificates.html","/checkout":"pages/checkout.html","/contact":"pages/contact.html","/cookie":"pages/cookie.html","/courses":"pages/courses.html","/courses/[id]":"pages/courses/[id].html","/documentation":"pages/documentation.html","/dashboard":"pages/dashboard.html","/":"pages/index.html","/login":"pages/login.html","/manual-editor":"pages/manual-editor.html","/manual":"pages/manual.html","/order-tracking":"pages/order-tracking.html","/privacy":"pages/privacy.html","/products/[id]":"pages/products/[id].html","/products":"pages/products.html","/projects/[id]":"pages/projects/[id].html","/projects":"pages/projects.html","/refund":"pages/refund.html","/register":"pages/register.html","/resources":"pages/resources.html","/schools":"pages/schools.html","/shipping":"pages/shipping.html","/simulator":"pages/simulator.html","/support":"pages/support.html","/teachers":"pages/teachers.html","/terms":"pages/terms.html","/tutorials":"pages/tutorials.html","/verify-certificate/[id]":"pages/verify-certificate/[id].html","/wishlist":"pages/wishlist.html","/downloads":"pages/downloads.html","/_error":"pages/_error.js","/_document":"pages/_document.js","/404":"pages/404.html"}

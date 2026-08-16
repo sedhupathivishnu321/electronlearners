@@ -481,18 +481,21 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     // Support custom administrative roles and Super Admin
     const emailLower = email.toLowerCase();
     if (role === 'admin' || role === 'store_manager' || role === 'support_agent' || role === 'content_manager') {
-      if (emailLower === 'sedhupathivishnu321@gmail.com' && password === 'JRLearners2026!') {
+      if (
+        (emailLower === 'sedhupathivishnu321@gmail.com' && password === 'JRLearners2026!') ||
+        (emailLower === 'learnersground2@gmail.com' && password === 'Vishnu@12354')
+      ) {
         const newUser: UserProfile = {
-          name: role === 'admin' ? "SEDHU SUPER ADMIN" : `SEDHU ${role.toUpperCase()}`,
+          name: emailLower === 'learnersground2@gmail.com' ? "Vishnu Administrator" : (role === 'admin' ? "SEDHU SUPER ADMIN" : `SEDHU ${role.toUpperCase()}`),
           email,
-          role: role as any,
+          role: 'admin',
           institution: "JR Learners Commerce Platform",
           enrolledCourseIds: [],
           purchasedProductIds: [],
           certificates: []
         };
         setUser(newUser);
-        addAuditLog(emailLower, "ADMIN_LOGIN", `Logged in with role: ${role}`);
+        addAuditLog(emailLower, "ADMIN_LOGIN", `Logged in with role: admin`);
         showNotification(`Welcome back, ${newUser.name}!`);
         return true;
       }
@@ -561,7 +564,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         certificates: []
       };
       setUser(newUserProfile);
-      showNotification(`Registered and Logged in as ${name}!`);
+      showNotification(`Registered and Logged in as ${name}! Profile linked to Google Drive Database: (${email})`);
       return true;
     } catch (e) {
       console.error(e);

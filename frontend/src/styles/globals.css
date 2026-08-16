@@ -183,3 +183,108 @@ code, pre {
 .animate-spin-3d-slow .cube-left   { transform: rotateY(-90deg) translateZ(40px); }
 .animate-spin-3d-slow .cube-top    { transform: rotateX( 90deg) translateZ(40px); }
 .animate-spin-3d-slow .cube-bottom { transform: rotateX(-90deg) translateZ(40px); }
+
+/* Global Light Theme Overrides (Yellow & White) */
+body {
+  background: linear-gradient(135deg, #FCD34D 0%, #FFFFFF 100%) fixed !important;
+  color: #0F172A !important;
+}
+
+/* Override text colors to dark */
+.text-white, 
+.text-slate-50, 
+.text-slate-100, 
+.text-slate-200, 
+.text-slate-300, 
+.text-slate-350, 
+.text-slate-400, 
+.text-slate-450, 
+.text-blue-100, 
+.text-cyan-100,
+.text-indigo-100 {
+  color: #0F172A !important;
+}
+
+/* Force specific titles and text segments to be dark */
+h1, h2, h3, h4, h5, h6, p, span, li, label, th, td {
+  color: #0F172A;
+}
+
+/* Keep accent colors colored */
+.text-blue-400, .text-blue-500, .text-blue-600, .gradient-text-blue {
+  color: #1D4ED8 !important;
+  background: none !important;
+  -webkit-text-fill-color: #1D4ED8 !important;
+}
+.text-cyan-400, .text-cyan-500, .text-cyan-600 {
+  color: #0891B2 !important;
+}
+.text-emerald-400, .text-emerald-500 {
+  color: #047857 !important;
+}
+.text-amber-400, .text-amber-500 {
+  color: #B45309 !important;
+}
+
+/* Header and Footer styles */
+header {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+header a, header button, header span {
+  color: #0F172A !important;
+}
+
+footer {
+  background-color: rgba(255, 255, 255, 0.6) !important;
+  border-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+footer a, footer span, footer p {
+  color: #0F172A !important;
+}
+
+/* Cards and layout containers */
+.glass-card, 
+.bg-slate-900, 
+.bg-slate-950, 
+.bg-[#0F172A], 
+.bg-slate-900\/60, 
+.bg-slate-900\/50,
+.bg-slate-900\/10,
+.bg-slate-950\/60,
+.bg-slate-950\/40,
+.bg-[#000B1C],
+.bg-slate-950\/20,
+.bg-slate-900\/80,
+.bg-slate-950\/85 {
+  background: rgba(255, 255, 255, 0.9) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(15, 23, 42, 0.1) !important;
+  color: #0F172A !important;
+}
+
+/* Input Fields and Selects */
+input, select, textarea {
+  background-color: #FFFFFF !important;
+  border: 1px solid rgba(15, 23, 42, 0.15) !important;
+  color: #0F172A !important;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: #2563EB !important;
+  outline: none !important;
+}
+
+/* Icons styling overlay */
+.text-slate-500, .text-slate-600, .text-slate-450 {
+  color: #475569 !important;
+}
+
+/* Clean up 3D cube colors for light theme */
+.cube-face {
+  background: rgba(253, 224, 71, 0.15) !important;
+  border-color: rgba(245, 158, 11, 0.4) !important;
+}
