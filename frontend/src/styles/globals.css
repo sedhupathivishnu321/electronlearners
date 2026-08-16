@@ -356,3 +356,29 @@ input:focus, select:focus, textarea:focus {
 .text-amber-500, .text-amber-500 * { color: #D97706 !important; }
 .text-emerald-500, .text-emerald-500 * { color: #10B981 !important; }
 .text-red-500, .text-red-500 * { color: #EF4444 !important; }
+
+/* Direct text overrides on the dark background containers themselves (not just descendants) */
+.bg-\[\#000B1C\], 
+.bg-\[\#000d21\], 
+.bg-\[\#0A122C\], 
+.bg-\[\#081329\], 
+.bg-\[\#0f203c\], 
+.bg-\[\#040810\], 
+.bg-\[\#0b0f19\], 
+.bg-\[\#081229\],
+.bg-slate-900, 
+.bg-slate-950,
+.bg-slate-900\/60,
+.bg-slate-900\/50,
+.bg-slate-900\/80,
+.bg-slate-950\/85 {
+  color: #FFFFFF !important;
+}
+
+/* Ensure code block syntax is bright green and readable inside dark backgrounds */
+pre code, 
+pre span, 
+.text-emerald-400, 
+.text-emerald-400 * {
+  color: #34D399 !important;
+}
