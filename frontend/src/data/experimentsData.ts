@@ -12,457 +12,620 @@ export interface ExperimentData {
   circuitDiagram?: string;
 }
 
-export const EXPERIMENTS_15: ExperimentData[] = [
+// Full 50-experiment JR Learners Basic Embedded Systems Laboratory Manual dataset.
+// Condensed from the complete print manual (JR_Learners_Embedded_Systems_Lab_Manual.pdf,
+// see /downloads/manuals/) for interactive on-site display.
+export const EXPERIMENTS_50: ExperimentData[] = [
   {
     num: 1,
-    title: "LED BLINK",
-    concept: "Digital Output Control",
-    components: ["Arduino Uno Board", "1x Red LED (5mm)", "1x 220Ω Resistor", "Breadboard & Jumpers"],
-    learning: ["pinMode() pin direction setup", "digitalWrite() HIGH / LOW states", "delay() millisecond pause"],
-    code: `// Experiment 1: LED Blink
-const int LED_PIN = 13;
-
-void setup() {
-  pinMode(LED_PIN, OUTPUT);
-}
-
-void loop() {
-  digitalWrite(LED_PIN, HIGH);
-  delay(1000);
-  digitalWrite(LED_PIN, LOW);
-  delay(1000);
-}`,
-    explanation: "The setup() function initializes digital pin 13 as an OUTPUT pin. In loop(), digitalWrite(13, HIGH) applies 5V to light up the LED. After 1000ms, digitalWrite(13, LOW) turns off the voltage. This loop repeats infinitely.",
-    working: "When digital pin 13 outputs HIGH (5V), current flows through the 220Ω resistor, through the LED anode to cathode, and into GND, making the LED illuminate. Setting pin 13 LOW stops current flow.",
-    result: "The LED blinks ON and OFF repeatedly at 1-second intervals.",
-    tip: "Always connect a 220Ω resistor in series with an LED to prevent excessive current from damaging the LED or Arduino GPIO pin!",
-    circuitDiagram: `[ Arduino Pin 13 ] ---> [ 220Ω Resistor ] ---> [ LED Anode (+) | LED Cathode (-) ] ---> [ Arduino GND ]`
+    title: "LED ON/OFF Control",
+    concept: "To control a single LED using an Arduino UNO digital output pin, demonstrating the most basic form of digital output: driving a pin permanently HIGH (or LOW) under program control.",
+    components: ["Arduino UNO R3 + USB cable - 1", "Breadboard - 1", "LED (red, 5 mm) - 1", "Resistor, 220 Ω - 1", "Male-to-male jumper wires - 2"],
+    learning: ["State the function of pinMode() and digitalWrite().", "Calculate a safe current-limiting resistor value for an LED using Ohm's law.", "Correctly identify LED anode/cathode polarity on a breadboard.", "Wire a single-LED circuit that stays within the Arduino UNO's GPIO current limit.", "Modify a running sketch to change the LED's default state from ON to OFF."],
+    code: "const int LED_PIN = 8;   // digital pin driving the LED through a 220-ohm resistor\n\nvoid setup() {\n  pinMode(LED_PIN, OUTPUT);   // configure D8 as a digital output\n  digitalWrite(LED_PIN, HIGH); // turn the LED ON (approx. 5 V on D8)\n}\n\nvoid loop() {\n  // Intentionally empty: the LED simply stays ON.\n  // To turn it OFF instead, change HIGH to LOW above and re-upload.\n}",
+    explanation: "const int LED_PIN = 8; names the pin so the rest of the program never uses a bare magic number. pinMode(LED_PIN, OUTPUT) configures D8's internal driver so it can source/sink current rather than float as a high-impedance input. digitalWrite(LED_PIN, HIGH) sets D8 to logic HIGH ( 5 V) exactly once, in setup(), so the LED lights immediately at power-up and needs no further instructions - loop() runs forever but has nothing to do.",
+    working: "D8 (HIGH) -> current flows through the 220 Ω resistor -> through the LED (anode to cathode) -> back to Arduino GND, completing the circuit and lighting the LED. Setting D8 LOW removes the potential difference across the LED, stopping current flow and turning it off.",
+    result: "The LED lights immediately and stays lit continuously after upload; the Arduino's onboard L LED (D13) is unaffected since this circuit does not use D13. No Serial Monitor output is produced by this sketch.",
+    tip: "Swap LED orientation (long leg to resistor side)",
   },
   {
     num: 2,
-    title: "TRAFFIC LIGHT CONTROLLER",
-    concept: "Sequential LED State Timing",
-    components: ["Arduino Uno Board", "1x Red LED, 1x Yellow LED, 1x Green LED", "3x 220Ω Resistors", "Breadboard & Jumpers"],
-    learning: ["State sequencing logic", "Multi-pin control", "Adjustable timing parameters"],
-    code: `// Experiment 2: Traffic Light Controller
-const int RED = 12, YELLOW = 11, GREEN = 10;
-
-void setup() {
-  pinMode(RED, OUTPUT);
-  pinMode(YELLOW, OUTPUT);
-  pinMode(GREEN, OUTPUT);
-}
-
-void loop() {
-  digitalWrite(RED, HIGH); digitalWrite(YELLOW, LOW); digitalWrite(GREEN, LOW);
-  delay(5000);
-  digitalWrite(RED, LOW); digitalWrite(YELLOW, HIGH);
-  delay(2000);
-  digitalWrite(YELLOW, LOW); digitalWrite(GREEN, HIGH);
-  delay(5000);
-}`,
-    explanation: "Three digital pins (12, 11, 10) drive Red, Yellow, and Green LEDs. By turning one pin HIGH and others LOW in a timed sequence using delay(), we simulate a realistic traffic light cycle.",
-    working: "The program cycles through 3 states: Red ON (5000ms), Yellow ON (2000ms), and Green ON (5000ms).",
-    result: "The LEDs illuminate sequentially in a Red -> Yellow -> Green traffic control cycle.",
-    tip: "You can change the delay values at the top to customize traffic light intervals!",
-    circuitDiagram: `[ Pin 12 ] -> [ 220Ω ] -> [ Red LED ] -> [ GND ]\n[ Pin 11 ] -> [ 220Ω ] -> [ Yellow LED ] -> [ GND ]\n[ Pin 10 ] -> [ 220Ω ] -> [ Green LED ] -> [ GND ]`
+    title: "LED Blinking",
+    concept: "To make the Experiment 1 LED blink continuously using delay(), introducing repetitive (blocking) timing inside loop().",
+    components: ["Identical to Experiment 1: Arduino UNO, breadboard, 1 red LED, 1x220 Ω resistor, 2 male-to-male jumpers."],
+    learning: ["Explain how loop() executes repeatedly after setup().", "Use delay() to create a fixed-period ON/OFF blink.", "Predict the blink period and frequency from the two delay() values.", "Explain why delay() blocks all other processing for its duration."],
+    code: "const int LED_PIN = 8;\n\nvoid setup() {\n  pinMode(LED_PIN, OUTPUT);\n}\n\nvoid loop() {\n  digitalWrite(LED_PIN, HIGH);  // LED ON\n  delay(1000);                  // wait 1 second\n  digitalWrite(LED_PIN, LOW);   // LED OFF\n  delay(1000);                  // wait 1 second\n}",
+    explanation: "Unlike Experiment 1, loop() now actively toggles the LED every pass. Because loop() itself is called repeatedly by the Arduino core forever, the four lines inside it are enough to produce an indefinite blink without any explicit while(true) - loop() is that infinite loop.",
+    working: "D8 HIGH (LED ON) for 1000 ms -> D8 LOW (LED OFF) for 1000 ms -> loop() restarts automatically -> repeats forever.",
+    result: "The LED turns ON and OFF every 1 second indefinitely (illustrative target; your own timing will match within the accuracy of the ATmega328P's clock, typically better than 1%).",
+    tip: "Confirm sketch that; force re-upload",
   },
   {
     num: 3,
-    title: "PUSH BUTTON LED CONTROL",
-    concept: "Digital Input Sensing",
-    components: ["Arduino Uno Board", "1x Push Button Switch", "1x LED", "1x 10kΩ Pull-down Resistor", "1x 220Ω Resistor"],
-    learning: ["digitalRead() input state", "INPUT pin mode configuration", "Hardware switch debouncing"],
-    code: `// Experiment 3: Push Button LED Control
-const int BTN_PIN = 2, LED_PIN = 13;
-
-void setup() {
-  pinMode(BTN_PIN, INPUT);
-  pinMode(LED_PIN, OUTPUT);
-}
-
-void loop() {
-  int buttonState = digitalRead(BTN_PIN);
-  if (buttonState == HIGH) {
-    digitalWrite(LED_PIN, HIGH);
-  } else {
-    digitalWrite(LED_PIN, LOW);
-  }
-}`,
-    explanation: "digitalRead(2) checks whether 5V (HIGH) or 0V (LOW) is present on pin 2. Pressing the button connects 5V to pin 2, causing digitalRead to return HIGH and lighting the LED.",
-    working: "A 10kΩ pull-down resistor pulls Pin 2 to GND (LOW) when the button is open. Pressing the button connects 5V directly to Pin 2 (HIGH), activating the LED.",
-    result: "The LED lights up immediately whenever the tactile push button is held down.",
-    tip: "Without a pull-down resistor, an open input pin floats randomly. Always use pull-down or INPUT_PULLUP!",
-    circuitDiagram: `[ 5V ] ---> [ Push Button ] ---> [ Pin 2 ] ---> [ 10kΩ Resistor ] ---> [ GND ]\n[ Pin 13 ] ---> [ 220Ω Resistor ] ---> [ LED ] ---> [ GND ]`
+    title: "Multiple LED Control",
+    concept: "To independently control three LEDs (red, yellow, green) using an array of pin numbers, introducing arrays and for loops for scalable digital output.",
+    components: ["Arduino UNO R3, breadboard", "LEDs: 1 red, 1 yellow, 1 green", "Resistors: 3 x 220 Ω", "Male-to-male jumper wires: 6"],
+    learning: ["Declare and index an array of pin numbers.", "Configure multiple pins as OUTPUT using a for loop.", "Control several LEDs independently from one sketch.", "Explain why arrays scale better than repeating near-identical code per LED."],
+    code: "const int ledPins[] = {8, 9, 10};      // red, yellow, green\nconst int NUM_LEDS = 3;\n\nvoid setup() {\n  for (int i = 0; i < NUM_LEDS; i++) {\n    pinMode(ledPins[i], OUTPUT);\n  }\n}\n\nvoid loop() {\n  for (int i = 0; i < NUM_LEDS; i++) {\n    digitalWrite(ledPins[i], HIGH);\n    delay(300);\n  }\n  for (int i = 0; i < NUM_LEDS; i++) {\n    digitalWrite(ledPins[i], LOW);\n  }\n  delay(300);\n}",
+    explanation: "ledPins[] holds the three pin numbers; NUM_LEDS avoids a hard-coded \"3\" scattered through the code. The first for loop in setup() configures all three pins in three lines regardless of how many LEDs are added later. In loop(), the first loop turns LEDs on one after another (300 ms apart), the second loop turns them all off together, then a pause repeats the cycle.",
+    working: "Each of D8/D9/D10 independently sources current through its own resistor and LED to the shared GND rail; setting any one pin HIGH/LOW affects only its own LED, since the three branches share no signal path, only the ground return.",
+    result: "Red, then yellow, then green light in sequence (300 ms apart), then all three turn off together and the pattern repeats every 1.2 s.",
+    tip: "Re-check ledPins[] against the connection table",
   },
   {
     num: 4,
-    title: "TOGGLE LED SWITCH",
-    concept: "Memory State & Edge Detection",
-    components: ["Arduino Uno Board", "1x Push Button Switch", "1x LED", "1x 10kΩ Resistor", "1x 220Ω Resistor"],
-    learning: ["State variables & memory", "Edge detection (Low to High transition)", "Software debouncing"],
-    code: `// Experiment 4: Toggle LED Switch
-const int BTN_PIN = 2, LED_PIN = 13;
-int ledState = LOW, lastBtnState = LOW;
-
-void setup() {
-  pinMode(BTN_PIN, INPUT);
-  pinMode(LED_PIN, OUTPUT);
-}
-
-void loop() {
-  int currentBtnState = digitalRead(BTN_PIN);
-  if (currentBtnState == HIGH && lastBtnState == LOW) {
-    ledState = !ledState;
-    digitalWrite(LED_PIN, ledState);
-    delay(50);
-  }
-  lastBtnState = currentBtnState;
-}`,
-    explanation: "Detects a rising edge (button transition from LOW to HIGH). When a new press occurs, it flips ledState using logical NOT (!ledState).",
-    working: "First press flips ledState to HIGH (LED stays ON). Second press flips ledState to LOW (LED turns OFF).",
-    result: "Pressing the button once toggles the LED ON. Pressing it again toggles the LED OFF.",
-    tip: "The 50ms delay eliminates mechanical button contact bounce noise.",
-    circuitDiagram: `[ 5V ] -> [ Push Button ] -> [ Pin 2 ] -> [ 10kΩ ] -> [ GND ]\n[ Pin 13 ] -> [ 220Ω ] -> [ LED ] -> [ GND ]`
+    title: "LED Chaser",
+    concept: "To create a \"chaser\" (Larson-scanner-style) light pattern across four LEDs, where exactly one LED is lit at a time and lighting moves along the row, reinforcing array indexing with the modulo operator.",
+    components: ["Arduino UNO R3, breadboard, 4 LEDs (red, yellow, green, blue), 4 x 220 Ω resistors, 8 male-to-male jumpers."],
+    learning: ["Use the modulo operator (%) to wrap an index around an array's length.", "Turn exactly one LED on and all others off on each step.", "Explain the difference between \"all LEDs in sequence stay on\" (Experiment 3) and \"only one LED on at a time, moving\" (this experiment)."],
+    code: "const int ledPins[] = {8, 9, 10, 11};\nconst int NUM_LEDS = 4;\nint current = 0;\n\nvoid setup() {\n  for (int i = 0; i < NUM_LEDS; i++) pinMode(ledPins[i], OUTPUT);\n}\n\nvoid loop() {\n  for (int i = 0; i < NUM_LEDS; i++) {\n    digitalWrite(ledPins[i], (i == current) ? HIGH : LOW);\n  }\n  delay(150);\n  current = (current + 1) % NUM_LEDS;   // wrap back to 0 after the last LED\n}",
+    explanation: "The ternary expression (i == current) ? HIGH : LOW drives exactly the LED at index current HIGH and every other index LOW, all within one loop pass, so there is never a moment with two LEDs simultaneously lit. current = (current + 1) % NUM_LEDS is the modulo wrap-around described in the theory section.",
+    working: "Index i selects exactly one pin to drive HIGH; all other pins in the array are driven LOW in the same pass, so only one LED is ever lit; after a short delay i advances (mod 4) and the \"lit\" position visibly moves along the row.",
+    result: "A single LED appears to \"move\" along the row of four LEDs every 150 ms, continuously cycling.",
+    tip: "Re-check code against listing",
   },
   {
     num: 5,
-    title: "ELECTRONIC DICE",
-    concept: "Random Number Generator & Arrays",
-    components: ["Arduino Uno Board", "6x LEDs", "6x 220Ω Resistors", "1x Push Button Switch", "1x 10kΩ Resistor"],
-    learning: ["random() & randomSeed() functions", "C++ Arrays for pin management", "Electronic game logic"],
-    code: `// Experiment 5: Electronic Dice
-const int leds[6] = {2, 3, 4, 5, 6, 7};
-const int BTN_PIN = 8;
-
-void setup() {
-  for (int i = 0; i < 6; i++) pinMode(leds[i], OUTPUT);
-  pinMode(BTN_PIN, INPUT);
-  randomSeed(analogRead(A0));
-}
-
-void loop() {
-  if (digitalRead(BTN_PIN) == HIGH) {
-    int diceRoll = random(1, 7);
-    for (int i = 0; i < 6; i++) digitalWrite(leds[i], LOW);
-    for (int i = 0; i < diceRoll; i++) digitalWrite(leds[i], HIGH);
-    delay(1000);
-  }
-}`,
-    explanation: "Uses floating analog noise on pin A0 to seed pseudo-randomness. When pressed, random(1, 7) picks a dice number and lights up that count of LEDs.",
-    working: "Generates a random integer 1 to 6 and turns on that exact number of LEDs on the breadboard.",
-    result: "Each button press displays a random dice outcome from 1 to 6.",
-    tip: "Unconnected analog pins like A0 pick up atmospheric noise, ideal for random seeds!",
-    circuitDiagram: `[ Pin 2..7 ] -> [ 220Ω ] -> [ 6x LEDs ] -> [ GND ]\n[ Pin 8 ] -> [ Push Button ] -> [ 5V ] & [ 10kΩ to GND ]`
+    title: "Traffic Light System",
+    concept: "To implement a realistic red-yellow-green traffic-light sequence with unequal, purposefully chosen timing for each phase, introducing timed state sequencing as an engineering design problem rather than an arbitrary pattern.",
+    components: ["Arduino UNO R3, breadboard, 3 LEDs (red, yellow, green), 3 x 220 Ω resistors, 6 male-to-male jumpers."],
+    learning: ["Design a fixed timing sequence matching a real-world specification (typical road traffic-light durations).", "Implement a sequence where more than one output can be active at once (red+yellow).", "Justify each phase's duration from a road-safety perspective."],
+    code: "const int RED = 8, YELLOW = 9, GREEN = 10;\n\nvoid setup() {\n  pinMode(RED, OUTPUT);\n  pinMode(YELLOW, OUTPUT);\n  pinMode(GREEN, OUTPUT);\n}\n\nvoid allOff() {\n  digitalWrite(RED, LOW);\n  digitalWrite(YELLOW, LOW);\n  digitalWrite(GREEN, LOW);\n}\n\nvoid loop() {\n  allOff(); digitalWrite(GREEN, HIGH);   delay(4000);  // go\n  allOff(); digitalWrite(YELLOW, HIGH);  delay(1000);  // caution\n  allOff(); digitalWrite(RED, HIGH);     delay(5000);  // stop\n  digitalWrite(YELLOW, HIGH);            delay(1000);  // red+yellow: get ready\n}",
+    explanation: "allOff() is a small helper function that avoids repeating three digitalWrite(...,LOW) lines before every phase. The final phase deliberately does not call allOff() first, since RED must remain lit while YELLOW is added - this is the one place the sequence intentionally leaves a previous output HIGH.",
+    working: "Each phase drives a specific combination of the three pins HIGH/LOW for a specific duration, then advances to the next phase; the RED+YELLOW phase is the only one driving two pins HIGH simultaneously.",
+    result: "GREEN for 4 s -> YELLOW for 1 s -> RED for 5 s -> RED+YELLOW together for 1 s -> repeats, total cycle 11 s.",
+    tip: "Re-check each phase calls it (except the last)",
   },
   {
     num: 6,
-    title: "LED BRIGHTNESS CONTROLLER",
-    concept: "Pulse Width Modulation (PWM) & ADC",
-    components: ["Arduino Uno Board", "1x LED", "1x 10kΩ Potentiometer", "1x 220Ω Resistor"],
-    learning: ["analogRead() 10-bit ADC (0 to 1023)", "analogWrite() 8-bit PWM (0 to 255)", "map() value scaling"],
-    code: `// Experiment 6: LED Brightness Controller
-const int POT_PIN = A0, LED_PIN = 9;
-
-void setup() {
-  pinMode(LED_PIN, OUTPUT);
-}
-
-void loop() {
-  int potValue = analogRead(POT_PIN);
-  int brightness = map(potValue, 0, 1023, 0, 255);
-  analogWrite(LED_PIN, brightness);
-}`,
-    explanation: "analogRead(A0) reads potentiometer voltage (0 to 1023). map() scales it to 0-255 for analogWrite() on PWM pin 9.",
-    working: "Varying potentiometer position changes PWM duty cycle on Pin 9, modulating average voltage delivered to the LED.",
-    result: "Rotating the potentiometer knob smoothly adjusts LED brightness.",
-    tip: "PWM pins on Arduino UNO are marked with a tilde (~): Pins 3, 5, 6, 9, 10, 11.",
-    circuitDiagram: `[ Potentiometer Wiper ] -> [ Pin A0 ] | [ 5V / GND ]\n[ Pin 9 PWM ] -> [ 220Ω ] -> [ LED ] -> [ GND ]`
+    title: "Push Button LED Control",
+    concept: "To light an LED only while a push button is held pressed, introducing digital input with the internal pull-up resistor.",
+    components: ["Arduino UNO R3, breadboard, 1 push button (4-leg tactile), 1 red LED, 1x220 Ω resistor, 4 male-to-male jumpers."],
+    learning: ["Configure a pin as INPUT_PULLUP and explain the resulting idle logic level.", "Read a button state with digitalRead().", "Explain active-LOW button logic.", "Drive an LED directly from a button's live state (no memory/toggle yet)."],
+    code: "const int BUTTON_PIN = 2;\nconst int LED_PIN = 8;\n\nvoid setup() {\n  pinMode(BUTTON_PIN, INPUT_PULLUP);  // idles HIGH, LOW when pressed\n  pinMode(LED_PIN, OUTPUT);\n}\n\nvoid loop() {\n  int buttonState = digitalRead(BUTTON_PIN);\n  if (buttonState == LOW) {           // pressed (active-LOW)\n    digitalWrite(LED_PIN, HIGH);\n  } else {\n    digitalWrite(LED_PIN, LOW);\n  }\n}",
+    explanation: "digitalRead(BUTTON_PIN) returns HIGH or LOW as an int. The if/else directly mirrors the button's live state onto the LED every pass of loop() (hundreds of thousands of times per second), so the LED responds within microseconds of a press or release, with no perceptible lag.",
+    working: "Button released: D2 reads HIGH (internal pull-up) -> LED forced OFF. Button pressed: D2 pulled to GND, reads LOW -> LED driven ON. The LED tracks the button live, with no memory of past presses.",
+    result: "LED OFF while the button is released; LED ON only while the button is physically held down; releases immediately turn it back OFF.",
+    tip: "Rewire using legs from opposite pairs",
   },
   {
     num: 7,
-    title: "RGB MOOD LAMP",
-    concept: "RGB Color Mixing & PWM Channels",
-    components: ["Arduino Uno Board", "1x Common Cathode RGB LED", "3x 220Ω Resistors", "3x Potentiometers"],
-    learning: ["Multi-channel PWM control", "Additive RGB color theory", "Interfacing tri-color LEDs"],
-    code: `// Experiment 7: RGB Mood Lamp
-const int R = 9, G = 10, B = 11;
-const int POT_R = A0, POT_G = A1, POT_B = A2;
-
-void setup() {
-  pinMode(R, OUTPUT); pinMode(G, OUTPUT); pinMode(B, OUTPUT);
-}
-
-void loop() {
-  analogWrite(R, map(analogRead(POT_R), 0, 1023, 0, 255));
-  analogWrite(G, map(analogRead(POT_G), 0, 1023, 0, 255));
-  analogWrite(B, map(analogRead(POT_B), 0, 1023, 0, 255));
-}`,
-    explanation: "Independent PWM control of Red (Pin 9), Green (Pin 10), and Blue (Pin 11) pins produces millions of custom RGB color combinations.",
-    working: "Potentiometers A0, A1, A2 continuously adjust Red, Green, and Blue intensity channels.",
-    result: "Turning the 3 potentiometer knobs mixes custom colors on the RGB LED.",
-    tip: "Ensure your RGB LED common pin is connected to GND for Common Cathode type!",
-    circuitDiagram: `[ Pins 9, 10, 11 PWM ] -> [ 220Ω x3 ] -> [ RGB Red, Green, Blue ]\n[ Common Pin ] -> [ GND ]`
+    title: "Push Button Toggle Switch",
+    concept: "To make a push button toggle an LED's state on each press (one press = ON, next press = OFF), introducing edge detection and software debouncing.",
+    components: ["Identical to Experiment 6: 1 push button, 1 LED, 1x220 Ω resistor."],
+    learning: ["Distinguish a button level (Experiment 6) from a button edge (this experiment).", "Implement software debouncing using millis().", "Maintain and toggle a persistent boolean state variable across loop iterations."],
+    code: "const int BUTTON_PIN = 2;\nconst int LED_PIN = 8;\nconst unsigned long DEBOUNCE_MS = 30;\n\nint lastReading = HIGH;\nint stableState = HIGH;\nunsigned long lastChangeTime = 0;\nbool ledState = false;\n\nvoid setup() {\n  pinMode(BUTTON_PIN, INPUT_PULLUP);\n  pinMode(LED_PIN, OUTPUT);\n}\n\nvoid loop() {\n  int reading = digitalRead(BUTTON_PIN);\n\n  if (reading != lastReading) {\n    lastChangeTime = millis();          // reading changed: restart debounce timer\n  }\n\n  if ((millis() - lastChangeTime) > DEBOUNCE_MS && reading != stableState) {\n    stableState = reading;              // accept the new, now-stable, reading\n    if (stableState == LOW) {           // a genuine press edge\n      ledState = !ledState;\n      digitalWrite(LED_PIN, ledState);\n    }\n  }\n  lastReading = reading;\n}",
+    explanation: "lastReading tracks the raw, possibly-bouncing signal; stableState tracks what has actually been accepted after the debounce window. The edge is detected exactly once, in the single line if (stableState == LOW), immediately after stableState changes - this fires once per press, not repeatedly while held, which is what makes it a toggle rather than a hold-to-light control.",
+    working: "Raw button reading -> debounce filter (ignore changes lasting under 30 ms) -> edge detector (fires only at the moment of a stable HIGH -> LOW transition) -> toggle stored LED state -> write LED state to D8.",
+    result: "LED starts OFF; first press turns it ON and it stays ON after release; second press turns it OFF; and so on, one clean toggle per press with no double-triggering.",
+    tip: "Increase DEBOUNCE_MS to 50",
   },
   {
     num: 8,
-    title: "LIGHT ACTIVATED LAMP",
-    concept: "Automatic Night Lighting & Sensor Thresholds",
-    components: ["Arduino Uno Board", "1x LDR Photocell", "1x 10kΩ Resistor", "1x LED", "1x 220Ω Resistor"],
-    learning: ["LDR photocell characteristics", "Analog voltage divider calculation", "Software threshold decision making"],
-    code: `// Experiment 8: Light Activated Lamp
-const int LDR_PIN = A0, LED_PIN = 13, THRESHOLD = 400;
-
-void setup() {
-  pinMode(LED_PIN, OUTPUT);
-}
-
-void loop() {
-  int lightLevel = analogRead(LDR_PIN);
-  if (lightLevel < THRESHOLD) {
-    digitalWrite(LED_PIN, HIGH);
-  } else {
-    digitalWrite(LED_PIN, LOW);
-  }
-  delay(200);
-}`,
-    explanation: "In low light, LDR resistance surges, causing voltage at pin A0 to drop below THRESHOLD, turning the lamp ON automatically.",
-    working: "A voltage divider circuit measures light levels. Falling light levels trigger the IF logic to activate the LED.",
-    result: "Covering the LDR sensor turns ON the LED lamp. Exposing it to light turns OFF the lamp.",
-    tip: "Open Serial Monitor (9600 baud) to view real-time LDR readings and adjust your THRESHOLD!",
-    circuitDiagram: `[ 5V ] -> [ LDR Photocell ] -> [ Pin A0 ] -> [ 10kΩ ] -> [ GND ]\n[ Pin 13 ] -> [ 220Ω ] -> [ LED ] -> [ GND ]`
+    title: "Five-Button LED Controller",
+    concept: "To independently debounce and read all 5 push buttons in the kit simultaneously, each directly controlling its own LED, generalising the single-button debounce pattern to arrays.",
+    components: ["Arduino UNO R3, breadboard, 5 push buttons, 5 LEDs (any colours), 5x220 Ω resistors, 10 male-to-male jumpers. This is the maximum number of raw push buttons the kit provides (Chapter )."],
+    learning: ["Generalise a single-button debounce routine to N independent buttons using parallel arrays.", "Manage per-button state (last reading, stable state, debounce timer) without variable name collisions.", "Recognise the practical limit this places on kit stock (exactly 5 buttons available)."],
+    code: "const int NUM_BTN = 5;\nconst int buttonPins[NUM_BTN] = {2, 3, 4, 5, 6};\nconst int ledPins[NUM_BTN]    = {8, 9, 10, 11, 12};\n\nvoid setup() {\n  for (int i = 0; i < NUM_BTN; i++) {\n    pinMode(buttonPins[i], INPUT_PULLUP);\n    pinMode(ledPins[i], OUTPUT);\n  }\n}\n\nvoid loop() {\n  for (int i = 0; i < NUM_BTN; i++) {\n    int reading = digitalRead(buttonPins[i]);\n    digitalWrite(ledPins[i], (reading == LOW) ? HIGH : LOW);\n  }\n}",
+    explanation: "The two parallel arrays buttonPins[] and ledPins[] keep button-to-LED pairing implicit in shared index i: button i always controls LED i. The single for loop in loop() replaces what would otherwise be five copies of Experiment 6's if/else, and adding a sixth pair (if the kit ever had one) would need only one more array entry, not new logic.",
+    working: "Each button independently follows the Experiment 6 level-control logic (LED ON only while its own button is held), read on every pass through a single shared for loop over index 0...4 instead of five duplicated blocks of code.",
+    result: "Each of the 5 LEDs lights only while its corresponding button is held, independently of the other four - pressing two or more buttons at once lights exactly those LEDs, with no cross-talk.",
+    tip: "Re-check buttonPins[i]/ledPins[i] ordering",
   },
   {
     num: 9,
-    title: "DIGITAL LIGHT METER",
-    concept: "Sensor Measurement & Data Calibration",
-    components: ["Arduino Uno Board", "1x LDR Photocell", "1x 10kΩ Resistor", "Serial Monitor Interface"],
-    learning: ["Analog-to-Digital voltage conversion", "Serial.print() data formatting", "Sensor calibration curves"],
-    code: `// Experiment 9: Digital Light Meter
-const int LDR_PIN = A0;
-
-void setup() {
-  Serial.begin(9600);
-}
-
-void loop() {
-  int raw = analogRead(LDR_PIN);
-  float volts = raw * (5.0 / 1023.0);
-  float percent = map(raw, 0, 1023, 0, 100);
-  
-  Serial.print("Raw ADC: "); Serial.print(raw);
-  Serial.print(" | Volts: "); Serial.print(volts);
-  Serial.print("V | Light: "); Serial.print(percent); Serial.println("%");
-  delay(500);
-}`,
-    explanation: "Converts raw 10-bit ADC integer (0-1023) into actual voltage and light intensity percentage.",
-    working: "Calculates voltage = raw * (5.0 / 1023.0) every 500ms and logs data over USB Serial.",
-    result: "Live light measurements update continuously on the Arduino Serial Monitor.",
-    tip: "Use Serial Plotter (Ctrl+Shift+L) in Arduino IDE to graph ambient light in real time!",
-    circuitDiagram: `[ 5V ] -> [ LDR Photocell ] -> [ Pin A0 ] -> [ 10kΩ ] -> [ GND ]\n[ USB ] -> [ Computer Serial Monitor ]`
+    title: "Potentiometer LED Dimmer",
+    concept: "To continuously vary an LED's brightness using a potentiometer, introducing analog input (analogRead) and PWM analog output (analogWrite).",
+    components: ["Arduino UNO R3, breadboard, 1 potentiometer (10 kΩ), 1 LED, 1x220 Ω resistor, jumper wires."],
+    learning: ["Explain the potentiometer as a voltage divider with a movable wiper.", "Read a 10-bit ADC value with analogRead().", "Explain PWM and use analogWrite() on a (PWM-capable) pin.", "Use map() to rescale a 0-1023 range to 0-255."],
+    code: "const int POT_PIN = A0;\nconst int LED_PIN = 9;   // must be a PWM (~) pin\n\nvoid setup() {\n  pinMode(LED_PIN, OUTPUT);\n  // A0 needs no pinMode() call to be used with analogRead().\n}\n\nvoid loop() {\n  int raw = analogRead(POT_PIN);              // 0-1023\n  int duty = map(raw, 0, 1023, 0, 255);       // rescale to 0-255\n  analogWrite(LED_PIN, duty);\n}",
+    explanation: "analogRead(POT_PIN) triggers the ADC and returns a 10-bit code proportional to the wiper voltage. map() performs the linear rescale from Equation form out = (in-inMin) x outMax-outMininMax-inMin + outMin. analogWrite(LED_PIN, duty) then sets the PWM duty cycle for D9's hardware timer, which continues generating that duty cycle in the background until the next analogWrite() call.",
+    working: "Knob position -> wiper voltage (0-5 V) -> analogRead(A0) (0-1023) -> map() to (0-255) -> analogWrite(D9, duty) -> LED brightness proportional to duty cycle.",
+    result: "LED brightness varies smoothly from fully off (knob at one extreme) to fully bright (knob at the other extreme), with no visible flicker or stepping at normal turning speed.",
+    tip: "Confirm D9 (marked ) is used",
   },
   {
     num: 10,
-    title: "INTRUDER ALARM",
-    concept: "Light-Beam Security & Audio Alarm",
-    components: ["Arduino Uno Board", "1x LDR Photocell", "1x 10kΩ Resistor", "1x Piezo Buzzer", "1x Red LED"],
-    learning: ["Light beam break detection", "tone() frequency generation", "Security system latch logic"],
-    code: `// Experiment 10: Intruder Alarm
-const int LDR_PIN = A0, BUZZER = 8, LED = 13, THRESHOLD = 300;
-
-void setup() {
-  pinMode(BUZZER, OUTPUT); pinMode(LED, OUTPUT);
-}
-
-void loop() {
-  if (analogRead(LDR_PIN) < THRESHOLD) {
-    digitalWrite(LED, HIGH);
-    tone(BUZZER, 1000);
-  } else {
-    digitalWrite(LED, LOW);
-    noTone(BUZZER);
-  }
-  delay(100);
-}`,
-    explanation: "A continuous light beam hits the LDR. When an intruder interrupts the beam, A0 voltage drops, sounding the buzzer and lighting the alarm LED.",
-    working: "Dropping below THRESHOLD triggers tone(8, 1000) siren and Red LED warning pin.",
-    result: "Blocking the light sensor immediately trips the alarm sound and red warning light.",
-    tip: "Point a small laser diode at the LDR to create a long-range tripwire across a room!",
-    circuitDiagram: `[ 5V ] -> [ LDR Photocell ] -> [ Pin A0 ] -> [ 10kΩ ] -> [ GND ]\n[ Pin 8 ] -> [ Buzzer ] -> [ GND ] | [ Pin 13 ] -> [ 220Ω ] -> [ LED ] -> [ GND ]`
+    title: "LDR-Based Automatic Light",
+    concept: "To automatically switch an LED \"lamp\" ON in darkness and OFF in light, using an LDR voltage divider and a fixed analog threshold.",
+    components: ["Arduino UNO R3, breadboard, 1 LDR, 1x10 kΩ resistor (fixed divider resistor), 1 white LED, 1x220 Ω resistor, jumper wires."],
+    learning: ["Build an LDR voltage divider and explain its non-linear resistance-vs-light behaviour.", "Choose a threshold ADC value experimentally.", "Implement threshold-based digital decision-making from an analog reading."],
+    code: "const int LDR_PIN = A0;\nconst int LED_PIN = 8;\nconst int DARK_THRESHOLD = 400;   // determine this experimentally for your room; see Procedure\n\nvoid setup() {\n  pinMode(LED_PIN, OUTPUT);\n  Serial.begin(9600);             // used during threshold calibration\n}\n\nvoid loop() {\n  int level = analogRead(LDR_PIN);\n  Serial.println(level);          // watch this while covering/uncovering the LDR\n\n  if (level < DARK_THRESHOLD) {\n    digitalWrite(LED_PIN, HIGH);  // dark: lamp ON\n  } else {\n    digitalWrite(LED_PIN, LOW);   // bright: lamp OFF\n  }\n  delay(200);\n}",
+    explanation: "Serial.println(level) is included specifically so the threshold can be tuned to the learner's actual room lighting - an LDR's absolute readings vary with the specific LDR unit, ambient light source, and divider resistor tolerance, so a single \"correct\" DARK_THRESHOLD does not exist across all setups. The if/else implements a simple one-sided decision with no hysteresis (addressed formally in Experiment 44).",
+    working: "Ambient light level -> LDR resistance (inverse relationship) -> divider voltage at A0 -> ADC code -> compared against DARK_THRESHOLD -> D8 driven HIGH (lamp ON) if darker than threshold, else LOW.",
+    result: "Illustrative Serial Monitor values: 700-900 in bright room light, dropping to 150-300 when the LDR is covered; the lamp switches ON as the reading crosses below DARK_THRESHOLD.",
+    tip: "Re-check LDR/resistor order and threshold value",
   },
   {
     num: 11,
-    title: "DOORBELL SYSTEM",
-    concept: "Input Triggered Audio Tones",
-    components: ["Arduino Uno Board", "1x Push Button Switch", "1x 10kΩ Resistor", "1x Piezo Buzzer"],
-    learning: ["tone() frequency and duration parameters", "noTone() silencer", "Chime melody timing"],
-    code: `// Experiment 11: Doorbell System
-const int BTN = 2, BUZZER = 8;
-
-void setup() {
-  pinMode(BTN, INPUT); pinMode(BUZZER, OUTPUT);
-}
-
-void loop() {
-  if (digitalRead(BTN) == HIGH) {
-    tone(BUZZER, 659, 300); delay(350);
-    tone(BUZZER, 523, 500); delay(600);
-    noTone(BUZZER);
-  }
-}`,
-    explanation: "Outputs audio frequencies via tone(pin, Hz, duration) to play a classic two-tone Ding-Dong doorbell chime.",
-    working: "Pressing the button triggers Pin 2 HIGH, playing 659Hz (E5 'Ding') followed by 523Hz (C5 'Dong').",
-    result: "Pressing the button plays a pleasant two-tone 'Ding-Dong' doorbell sound.",
-    tip: "The second parameter in tone() is Hertz frequency (e.g. 262Hz for Middle C)!",
-    circuitDiagram: `[ 5V ] -> [ Push Button ] -> [ Pin 2 ] -> [ 10kΩ ] -> [ GND ]\n[ Pin 8 ] -> [ Piezo Buzzer ] -> [ GND ]`
+    title: "LDR Light-Level Indicator",
+    concept: "To display ambient light level as a 3-LED bar (low/medium/high), extending the single-threshold decision of Experiment 10 to multiple thresholds.",
+    components: ["Arduino UNO R3, breadboard, 1 LDR, 1x10 kΩ resistor, 3 LEDs (green, yellow, red), 3x220 Ω resistors."],
+    learning: ["Partition a continuous analog range into discrete \"buckets\" using multiple thresholds.", "Implement mutually-exclusive multi-level output from one analog input.", "Explain why bucket boundaries, not exact values, define behaviour."],
+    code: "const int LDR_PIN = A0;\nconst int GREEN = 8, YELLOW = 9, RED = 10;\nconst int T1 = 300, T2 = 650;   // tune to your room; see Experiment 10 procedure\n\nvoid setup() {\n  pinMode(GREEN, OUTPUT); pinMode(YELLOW, OUTPUT); pinMode(RED, OUTPUT);\n  Serial.begin(9600);\n}\n\nvoid loop() {\n  int level = analogRead(LDR_PIN);\n  Serial.println(level);\n\n  digitalWrite(RED,    level < T1 ? HIGH : LOW);\n  digitalWrite(YELLOW, (level >= T1 && level < T2) ? HIGH : LOW);\n  digitalWrite(GREEN,  level >= T2 ? HIGH : LOW);\n  delay(200);\n}",
+    explanation: "Each digitalWrite() independently evaluates its own bucket condition, so all three are always assigned an explicit state every pass - there is no \"leftover ON\" state from a previous reading, avoiding the bug class seen in Experiment 5 if allOff() were forgotten.",
+    working: "A0 reading -> compared against T_1, T_2 -> exactly one of green/yellow/red driven HIGH, the other two forced LOW.",
+    result: "Red lit in darkness, yellow in dim/moderate light, green in bright light, with clean single-LED transitions at the tuned thresholds.",
+    tip: "Re-check the three conditions are mutually exclusive",
   },
   {
     num: 12,
-    title: "MUSICAL PIANO",
-    concept: "Digital Music & Multi-Input Mapping",
-    components: ["Arduino Uno Board", "5x Push Buttons", "5x 10kΩ Resistors", "1x Piezo Buzzer"],
-    learning: ["Musical note Hz frequencies", "Parallel digital input scanning", "Array index mapping"],
-    code: `// Experiment 12: Musical Piano
-const int btns[5] = {2, 3, 4, 5, 6};
-const int notes[5] = {262, 294, 330, 349, 392}; // C4, D4, E4, F4, G4
-const int BUZZER = 8;
-
-void setup() {
-  for (int i = 0; i < 5; i++) pinMode(btns[i], INPUT);
-  pinMode(BUZZER, OUTPUT);
-}
-
-void loop() {
-  bool pressed = false;
-  for (int i = 0; i < 5; i++) {
-    if (digitalRead(btns[i]) == HIGH) {
-      tone(BUZZER, notes[i]); pressed = true; break;
-    }
-  }
-  if (!pressed) noTone(BUZZER);
-}`,
-    explanation: "Five push buttons map to an array of musical pitch frequencies: C4 (262Hz), D4 (294Hz), E4 (330Hz), F4 (349Hz), G4 (392Hz).",
-    working: "Loops through button inputs and plays matching note frequency when a key is pressed.",
-    result: "Pressing different buttons plays distinct musical notes like a mini piano keyboard.",
-    tip: "Add a 6th button with frequency 440Hz (A4 note) to play simple songs!",
-    circuitDiagram: `[ Pins 2..6 ] -> [ 5x Push Buttons to 5V & 10kΩ to GND ]\n[ Pin 8 ] -> [ Piezo Buzzer ] -> [ GND ]`
+    title: "Buzzer ON/OFF Control",
+    concept: "To drive the kit's active buzzer directly from a digital output pin, introducing audio-frequency actuation as a new output type alongside LEDs.",
+    components: ["Arduino UNO R3, breadboard, 1 active buzzer (see Chapter note on identifying active vs. passive), 2 jumper wires."],
+    learning: ["Distinguish an active buzzer (has its own oscillator) from a passive buzzer (Experiment 14).", "Drive a buzzer directly from a GPIO pin within its safe current rating.", "Recognise datasheet current draw as a per-component check, not a fixed assumption."],
+    code: "const int BUZZER_PIN = 8;\n\nvoid setup() {\n  pinMode(BUZZER_PIN, OUTPUT);\n  digitalWrite(BUZZER_PIN, HIGH);  // buzzer ON continuously\n}\n\nvoid loop() {\n  // Empty: buzzer stays ON. Change HIGH to LOW above to test OFF.\n}",
+    explanation: "This sketch deliberately mirrors Experiment 1's structure exactly (static setup()-only control), to highlight that an active buzzer is, electrically, \"just another digital output load\" from the Arduino's point of view - the interesting engineering content is the buzzer's internal oscillator, not the Arduino code.",
+    working: "D8 HIGH -> 5 V applied across the buzzer's internal oscillator -> buzzer sounds continuously at its fixed internal tone; D8 LOW -> 0 V -> silent.",
+    result: "Continuous audible tone immediately after upload; silence if the sketch is changed to drive D8 LOW.",
+    tip: "Test with Experiment 14's tone() sketch instead",
   },
   {
     num: 13,
-    title: "REACTION TIME GAME",
-    concept: "Human Response Measurement & millis()",
-    components: ["Arduino Uno Board", "1x LED", "1x Push Button", "1x Piezo Buzzer", "Serial Monitor"],
-    learning: ["millis() microsecond timer counter", "Randomized delay intervals", "Human reflex benchmarking"],
-    code: `// Experiment 13: Reaction Time Game
-const int LED = 13, BTN = 2, BUZZER = 8;
-
-void setup() {
-  pinMode(LED, OUTPUT); pinMode(BTN, INPUT); pinMode(BUZZER, OUTPUT);
-  Serial.begin(9600);
-}
-
-void loop() {
-  Serial.println("Get Ready...");
-  delay(random(2000, 6000));
-  digitalWrite(LED, HIGH);
-  unsigned long start = millis();
-  while (digitalRead(BTN) == LOW);
-  unsigned long reaction = millis() - start;
-  digitalWrite(LED, LOW); tone(BUZZER, 1000, 150);
-  Serial.print("Reaction Time: "); Serial.print(reaction); Serial.println(" ms");
-  delay(4000);
-}`,
-    explanation: "Uses millis() time stamps to calculate exact elapsed time between LED light-up and button press.",
-    working: "Waits a random delay, flashes LED ON, and computes reaction time in milliseconds when pressed.",
-    result: "Your exact human reaction speed (e.g. 235ms) displays on the Serial Monitor.",
-    tip: "Average human visual reaction time is 200ms - 250ms!",
-    circuitDiagram: `[ Pin 13 ] -> [ 220Ω ] -> [ LED ] -> [ GND ]\n[ Pin 2 ] -> [ Push Button ] -> [ 5V & 10kΩ to GND ]\n[ Pin 8 ] -> [ Buzzer ] -> [ GND ]`
+    title: "Electronic Doorbell",
+    concept: "To build a doorbell that sounds the active buzzer only while a push button is held, combining debounced-free level-based button input (Experiment 6) with buzzer output (Experiment 12).",
+    components: ["Arduino UNO R3, breadboard, 1 push button, 1 active buzzer, jumper wires."],
+    learning: ["Combine a previously learned input pattern with a previously learned output pattern.", "Recognise when debouncing is unnecessary (level control, not counting/toggling).", "Read and reuse code patterns across experiments confidently."],
+    code: "const int BUTTON_PIN = 2;\nconst int BUZZER_PIN = 8;\n\nvoid setup() {\n  pinMode(BUTTON_PIN, INPUT_PULLUP);\n  pinMode(BUZZER_PIN, OUTPUT);\n}\n\nvoid loop() {\n  bool pressed = (digitalRead(BUTTON_PIN) == LOW);\n  digitalWrite(BUZZER_PIN, pressed ? HIGH : LOW);\n}",
+    explanation: "This is Experiment 6's exact logic, with the boolean made explicit (pressed) for readability and the LED pin renamed BUZZER_PIN. No debouncing is used because, as in Experiment 6, the output simply tracks the live button level rather than counting discrete presses.",
+    working: "Button pressed (D2 LOW) -> D8 driven HIGH -> buzzer sounds; button released (D2 HIGH) -> D8 LOW -> silent.",
+    result: "Buzzer silent at rest; sounds immediately and continuously while the button is held; stops the instant it is released.",
+    tip: "Rewire per Experiment 6 notes",
   },
   {
     num: 14,
-    title: "PASSWORD LOCK SIMULATION",
-    concept: "Embedded Security Sequence Matching",
-    components: ["Arduino Uno Board", "4x Push Buttons", "1x Green LED, 1x Red LED", "1x Piezo Buzzer"],
-    learning: ["C++ Array sequence comparison", "Password entry state machine", "Security access control logic"],
-    code: `// Experiment 14: Password Lock Simulation
-const int secret[4] = {1, 3, 2, 4};
-int userEntry[4], stepIndex = 0;
-const int GREEN = 10, RED = 11, BUZZER = 8;
-const int keys[4] = {2, 3, 4, 5};
-
-void setup() {
-  pinMode(GREEN, OUTPUT); pinMode(RED, OUTPUT); pinMode(BUZZER, OUTPUT);
-  for (int i = 0; i < 4; i++) pinMode(keys[i], INPUT);
-}
-
-void loop() {
-  for (int i = 0; i < 4; i++) {
-    if (digitalRead(keys[i]) == HIGH) {
-      userEntry[stepIndex++] = i + 1;
-      tone(BUZZER, 800, 50); delay(300);
-      if (stepIndex == 4) { verify(); stepIndex = 0; }
-    }
-  }
-}
-
-void verify() {
-  bool match = true;
-  for (int i = 0; i < 4; i++) if (userEntry[i] != secret[i]) match = false;
-  if (match) {
-    digitalWrite(GREEN, HIGH); tone(BUZZER, 1200, 500); delay(2000); digitalWrite(GREEN, LOW);
-  } else {
-    digitalWrite(RED, HIGH); tone(BUZZER, 300, 800); delay(2000); digitalWrite(RED, LOW);
-  }
-}`,
-    explanation: "Records button press sequence and compares userEntry[] array with predefined secret[4] passcode.",
-    working: "Entering 1-3-2-4 triggers Green LED & success tone. Incorrect keys trigger Red LED & alarm tone.",
-    result: "Correct button sequence unlocks green access. Wrong sequence triggers red alarm.",
-    tip: "You can change secret[4] in code to set any custom 4-button password!",
-    circuitDiagram: `[ Pins 2,3,4,5 ] -> [ 4x Push Buttons ]\n[ Pin 10 ] -> [ Green LED ] | [ Pin 11 ] -> [ Red LED ] | [ Pin 8 ] -> [ Buzzer ]`
+    title: "Variable-Tone Buzzer",
+    concept: "To continuously vary the passive buzzer's tone frequency using the potentiometer, introducing tone() and the distinction between active and passive buzzers.",
+    components: ["Arduino UNO R3, breadboard, 1 potentiometer, 1 passive buzzer (see Chapter ), jumper wires."],
+    learning: ["Explain why a passive buzzer needs a driven frequency, unlike the active buzzer of Experiment 12.", "Use tone() to generate a specific audio frequency on any digital pin.", "Map an analog reading onto a musically/audibly useful frequency range."],
+    code: "const int POT_PIN = A0;\nconst int BUZZER_PIN = 9;\n\nvoid setup() {\n  // tone() does not require pinMode(); it configures the pin internally.\n}\n\nvoid loop() {\n  int raw = analogRead(POT_PIN);\n  int freq = map(raw, 0, 1023, 200, 2000);\n  tone(BUZZER_PIN, freq);\n  delay(20);   // short pause keeps the tone update rate smooth but responsive\n}",
+    explanation: "Calling tone() again with a new frequency simply updates the ongoing square wave - there is no need to call noTone() between updates. The 20 ms delay is short enough that pitch changes feel continuous to the ear, while still leaving CPU time free (a much shorter delay would offer no perceptible benefit here).",
+    working: "Knob position -> A0 reading (0-1023) -> mapped frequency (200-2000 Hz) -> tone(D9, freq) -> buzzer pitch rises/falls continuously as the knob turns.",
+    result: "A continuously variable audible tone, rising in pitch as the knob turns towards its high-frequency end, falling as it turns back.",
+    tip: "Swap to the other buzzer; confirm with Experiment 12's test",
   },
   {
     num: 15,
-    title: "MINI QUIZ GAME",
-    concept: "Interactive Embedded Application & FSM",
-    components: ["Arduino Uno Board", "4x Answer Push Buttons", "1x Green LED, 1x Red LED", "1x Piezo Buzzer", "Serial Monitor"],
-    learning: ["Finite State Machine (FSM)", "Interactive Serial prompt UI", "Button-based answer checking & score tracking"],
-    code: `// Experiment 15: Mini Quiz Game
-const int BTN_A = 2, BTN_B = 3, BTN_C = 4, BTN_D = 5;
-const int GREEN = 10, RED = 11, BUZZER = 8;
-int score = 0;
-
-void setup() {
-  Serial.begin(9600);
-  pinMode(GREEN, OUTPUT); pinMode(RED, OUTPUT); pinMode(BUZZER, OUTPUT);
-  pinMode(BTN_A, INPUT); pinMode(BTN_B, INPUT); pinMode(BTN_C, INPUT); pinMode(BTN_D, INPUT);
-  delay(1000);
-  runQuiz();
-}
-
-void loop() {}
-
-void runQuiz() {
-  Serial.println("\\nQ1: Which function configures pin direction?");
-  Serial.println("A) digitalWrite()  B) pinMode()  C) delay()  D) analogRead()");
-  int ans = waitForButton();
-  if (ans == 2) { score++; digitalWrite(GREEN, HIGH); tone(BUZZER, 1000, 300); }
-  else { digitalWrite(RED, HIGH); tone(BUZZER, 300, 500); }
-  delay(1500); digitalWrite(GREEN, LOW); digitalWrite(RED, LOW);
-  Serial.print("Score: "); Serial.println(score);
-}
-
-int waitForButton() {
-  while(true) {
-    if (digitalRead(BTN_A) == HIGH) { delay(250); return 1; }
-    if (digitalRead(BTN_B) == HIGH) { delay(250); return 2; }
-    if (digitalRead(BTN_C) == HIGH) { delay(250); return 3; }
-    if (digitalRead(BTN_D) == HIGH) { delay(250); return 4; }
-  }
-}`,
-    explanation: "Combines Serial Monitor prompts with hardware button inputs A, B, C, D to check answers and update score.",
-    working: "Pressing the correct answer button (Button B) lights Green LED with a cheerful tone. Wrong buttons light Red LED.",
-    result: "Interactive STEM quiz arcade machine with hardware LED & audio feedback.",
-    tip: "Add more questions inside runQuiz() to build a 10-question classroom arcade quiz!",
-    circuitDiagram: `[ Pins 2,3,4,5 ] -> [ Buttons A, B, C, D ]\n[ Pin 10 ] -> [ Green LED ] | [ Pin 11 ] -> [ Red LED ] | [ Pin 8 ] -> [ Buzzer ]`
-  }
+    title: "IR Obstacle Detector",
+    concept: "To detect a nearby obstacle using the IR obstacle sensor module and indicate detection with an LED, introducing active-LOW digital sensor modules.",
+    components: ["Arduino UNO R3, breadboard, 1 IR obstacle sensor module, 1 LED, 1x220 Ω resistor, jumper wires (female-to-female or male-to-female for the module)."],
+    learning: ["Wire and power a 3-pin digital sensor breakout module.", "Explain the sensor's active-LOW output convention.", "Adjust the on-board sensitivity trimmer and observe its effect."],
+    code: "const int IR_PIN = 7;\nconst int LED_PIN = 8;\n\nvoid setup() {\n  pinMode(IR_PIN, INPUT);\n  pinMode(LED_PIN, OUTPUT);\n  Serial.begin(9600);\n}\n\nvoid loop() {\n  int reading = digitalRead(IR_PIN);\n  bool obstacleDetected = (reading == LOW);   // active-LOW module output\n  digitalWrite(LED_PIN, obstacleDetected ? HIGH : LOW);\n  Serial.println(obstacleDetected ? \"Obstacle detected\" : \"Clear\");\n  delay(100);\n}",
+    explanation: "The boolean obstacleDetected makes the active-LOW inversion explicit and readable in one place, so the rest of the sketch (and future experiments reusing this sensor, e.g. Experiment 31) can reason in plain \"detected/not detected\" terms rather than re-deriving the LOW/HIGH convention each time.",
+    working: "Obstacle within range -> reflected IR detected by the module's comparator -> OUT driven LOW -> Arduino reads D7 LOW -> LED (D8) driven ON; no obstacle -> OUT HIGH -> LED OFF.",
+    result: "LED OFF and \"Clear\" printed with no obstacle; LED ON and \"Obstacle detected\" printed within the sensor's effective range (illustrative: a few cm up to 20-30 cm, surface- and trimmer-dependent).",
+    tip: "Adjust trimmer; re-check OUT/D7 wiring",
+  },
+  {
+    num: 16,
+    title: "Ultrasonic Distance Measurement",
+    concept: "To measure distance to an object using the HC-SR04 ultrasonic sensor's time-of-flight principle, and report it over Serial in centimetres.",
+    components: ["Arduino UNO R3, breadboard, 1 HC-SR04 ultrasonic sensor, jumper wires."],
+    learning: ["Explain time-of-flight distance measurement using the speed of sound.", "Use pulseIn() to measure a pulse duration in microseconds.", "Convert a round-trip echo time into a one-way distance in cm.", "Handle a sensor timeout (no echo received) without hanging the program."],
+    code: "const int TRIG_PIN = 9;\nconst int ECHO_PIN = 10;\nconst unsigned long TIMEOUT_US = 30000UL;  // ~5 m round trip; avoids hanging on no echo\n\nvoid setup() {\n  pinMode(TRIG_PIN, OUTPUT);\n  pinMode(ECHO_PIN, INPUT);\n  Serial.begin(9600);\n}\n\nfloat measureDistanceCm() {\n  digitalWrite(TRIG_PIN, LOW);\n  delayMicroseconds(2);\n  digitalWrite(TRIG_PIN, HIGH);\n  delayMicroseconds(10);         // HC-SR04 datasheet requires >=10us trigger pulse\n  digitalWrite(TRIG_PIN, LOW);\n\n  unsigned long duration = pulseIn(ECHO_PIN, HIGH, TIMEOUT_US);\n  if (duration == 0) return -1;  // timeout: no echo received\n  return duration / 58.0;\n}\n\nvoid loop() {\n  float distance = measureDistanceCm();\n  if (distance < 0) {\n    Serial.println(\"Out of range / no echo\");\n  } else {\n    Serial.print(\"Distance: \");\n    Serial.print(distance);\n    Serial.println(\" cm\");\n  }\n  delay(300);\n}",
+    explanation: "measureDistanceCm() is factored into its own function returning a sentinel -1 on timeout, so loop() stays simple and this exact function can be reused unchanged in Experiments 17, 21, 22, 33, 39, and 42. delayMicroseconds(2) before the trigger ensures a clean LOW-to-HIGH edge; the datasheet-specified 10 HIGH pulse reliably fires the sensor.",
+    working: "D9 HIGH for 10 (trigger) -> sensor emits 40 kHz ultrasonic burst -> ECHO goes HIGH -> pulse reflects off nearest object -> ECHO goes LOW upon return -> pulseIn() returns the HIGH duration -> converted to distance in cm.",
+    result: "Illustrative Serial output: Distance: 23.45 cm updating roughly 3 times per second; Out of range / no echo if nothing is within range or the surface does not reflect well.",
+    tip: "Re-check wiring; test against a flat hard surface",
+  },
+  {
+    num: 17,
+    title: "Ultrasonic Distance Alarm",
+    concept: "To sound the active buzzer whenever an object comes closer than a safe distance threshold, combining Experiment 16's measurement with Experiment 12's buzzer output, and completing Layer 1's progression from single I/O to a first sensor-driven alarm.",
+    components: ["Arduino UNO R3, breadboard, 1 HC-SR04, 1 active buzzer, jumper wires."],
+    learning: ["Reuse a previously verified measurement function inside a new decision-driven program.", "Implement a distance threshold alarm.", "Reflect on Layer 1's overall progression from static output to sensor-driven decisions."],
+    code: "const int TRIG_PIN = 9, ECHO_PIN = 10, BUZZER_PIN = 8;\nconst unsigned long TIMEOUT_US = 30000UL;\nconst float SAFE_DISTANCE_CM = 15.0;\n\nvoid setup() {\n  pinMode(TRIG_PIN, OUTPUT);\n  pinMode(ECHO_PIN, INPUT);\n  pinMode(BUZZER_PIN, OUTPUT);\n  Serial.begin(9600);\n}\n\nfloat measureDistanceCm() {\n  digitalWrite(TRIG_PIN, LOW);\n  delayMicroseconds(2);\n  digitalWrite(TRIG_PIN, HIGH);\n  delayMicroseconds(10);\n  digitalWrite(TRIG_PIN, LOW);\n  unsigned long duration = pulseIn(ECHO_PIN, HIGH, TIMEOUT_US);\n  if (duration == 0) return -1;\n  return duration / 58.0;\n}\n\nvoid loop() {\n  float distance = measureDistanceCm();\n  bool tooClose = (distance > 0 && distance < SAFE_DISTANCE_CM);\n  digitalWrite(BUZZER_PIN, tooClose ? HIGH : LOW);\n\n  Serial.print(\"Distance: \");\n  if (distance < 0) Serial.println(\"out of range\"); else { Serial.print(distance); Serial.println(\" cm\"); }\n  delay(200);\n}",
+    explanation: "tooClose requires both a valid (positive) reading and a value under the threshold, so an out-of-range -1 sentinel from Experiment 16's timeout path is never misread as \"extremely close\" - a subtle but important correctness check, since -1 < 15 would otherwise be true and incorrectly sound the alarm.",
+    working: "Measured distance -> compared against SAFE_DISTANCE_CM -> buzzer (D8) driven HIGH if closer than the threshold (or out-of-range low readings), else LOW.",
+    result: "Silent while the nearest object is farther than 15 cm; buzzer sounds continuously once an object comes within 15 cm, and stops the instant the object moves back beyond it.",
+    tip: "Re-check the tooClose boolean logic",
+  },
+  {
+    num: 18,
+    title: "LCD I2C Hello World",
+    concept: "To display text on the 16x2 I2C LCD, introducing the I2C bus and the LiquidCrystal_I2C library that every subsequent Layer 2/3 experiment builds on.",
+    components: ["Arduino UNO R3, breadboard, 16x2 I2C LCD module, 4 female-to-male (or male-to-male, depending on header type) jumper wires."],
+    learning: ["Wire an I2C device using only 4 wires (GND, VCC, SDA, SCL).", "Install and use the LiquidCrystal_I2C library.", "Position text using lcd.setCursor(col, row).", "Diagnose and fix a wrong I2C address using the scanner from Chapter."],
+    code: "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\n\nLiquidCrystal_I2C lcd(0x27, 16, 2);  // address, columns, rows\n\nvoid setup() {\n  lcd.init();\n  lcd.backlight();\n  lcd.setCursor(0, 0);\n  lcd.print(\"Hello, JR\");\n  lcd.setCursor(0, 1);\n  lcd.print(\"Learners!\");\n}\n\nvoid loop() {\n  // static text: nothing to repeat\n}",
+    explanation: "LiquidCrystal_I2C lcd(0x27, 16, 2) constructs the driver object bound to address 0x27 for a 16-column, 2-row display. lcd.init() initialises the HD44780 controller over I2C; lcd.backlight() turns on the LED backlight (without it, text is invisible in low light). lcd.setCursor(col, row) is zero-indexed: row 0 is the top line, row 1 the bottom.",
+    working: "Arduino (I2C master) sends addressed commands/data over SDA/SCL -> PCF8574 backpack (I2C slave at 0x27) -> translates to HD44780 parallel signals -> LCD glass updates the requested character cells.",
+    result: "The backlight turns on and the two lines \"Hello, JR\" / \"Learners!\" appear, left-aligned, on the physical LCD.",
+    tip: "Run scanner, update address",
+  },
+  {
+    num: 19,
+    title: "Potentiometer Value Display",
+    concept: "To display the potentiometer's live ADC reading on the LCD, replacing the Serial Monitor with an on-device readout for the first time.",
+    components: ["Arduino UNO R3, breadboard, 16x2 I2C LCD, 1 potentiometer, jumper wires."],
+    learning: ["Update LCD text continuously inside loop().", "Avoid visible flicker/garbage by managing fixed-width fields.", "Combine an analog input experiment with the new LCD output."],
+    code: "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\nLiquidCrystal_I2C lcd(0x27, 16, 2);\nconst int POT_PIN = A0;\n\nvoid setup() {\n  lcd.init();\n  lcd.backlight();\n  lcd.setCursor(0, 0);\n  lcd.print(\"Pot: \");\n}\n\nvoid loop() {\n  int raw = analogRead(POT_PIN);\n  lcd.setCursor(5, 0);\n  lcd.print(raw);\n  lcd.print(\"   \");   // trailing spaces erase leftover digits from a longer previous value\n  delay(200);\n}",
+    explanation: "The label \"Pot: \" is printed once in setup(), not every loop pass, since it never changes - only the numeric field at column 5 is rewritten. The trailing spaces guard against, e.g., \"1023\" being followed later by \"8 \" correctly erasing the stale \"23\".",
+    working: "A0 reading -> formatted as text with trailing spaces -> written to a fixed LCD cursor position every update interval.",
+    result: "LCD row 0 reads \"Pot: \" followed by a live-updating number between 0 and 1023 as the knob turns.",
+    tip: "Add padding spaces",
+  },
+  {
+    num: 20,
+    title: "LDR Light Meter",
+    concept: "To display the LDR's light level on the LCD as a percentage, and explicitly discuss the difference between a raw ADC code and a calibrated physical measurement (lux).",
+    components: ["Arduino UNO R3, breadboard, 16x2 I2C LCD, 1 LDR, 1x10 kΩ resistor, jumper wires."],
+    learning: ["Rescale a raw ADC reading to a 0-100% \"light level\" using map().", "Explain why this percentage is not a calibrated lux value.", "Identify what true lux calibration would additionally require."],
+    code: "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\nLiquidCrystal_I2C lcd(0x27, 16, 2);\nconst int LDR_PIN = A0;\n\nvoid setup() {\n  lcd.init(); lcd.backlight();\n  lcd.setCursor(0, 0);\n  lcd.print(\"Light: \");\n}\n\nvoid loop() {\n  int raw = analogRead(LDR_PIN);\n  int pct = map(raw, 0, 1023, 0, 100);   // NOTE: direction depends on divider wiring; verify vs. Exp.10\n  lcd.setCursor(7, 0);\n  lcd.print(pct);\n  lcd.print(\"%   \");\n  delay(200);\n}",
+    explanation: "The comment flags a common beginner bug: whether higher raw means brighter or darker depends on whether the LDR sits on the 5V side or GND side of the divider (Experiment 10). Always verify direction experimentally by covering the LDR and checking the LCD moves the expected way, rather than assuming.",
+    working: "A0 raw reading -> map() to 0-100% -> displayed on LCD as \"Light: NN%\".",
+    result: "LCD reads \"Light: NN%\" updating smoothly as ambient light changes, higher % in brighter conditions.",
+    tip: "Swap map() output range",
+  },
+  {
+    num: 21,
+    title: "Ultrasonic Distance Display",
+    concept: "To display live HC-SR04 distance readings on the LCD instead of the Serial Monitor, reusing Experiment 16's measurement function unchanged.",
+    components: ["Arduino UNO R3, breadboard, 16x2 I2C LCD, 1 HC-SR04, jumper wires."],
+    learning: ["Reuse a previously written, tested function inside a new experiment.", "Format a floating-point number for fixed-width LCD display.", "Handle the invalid-reading sentinel value on an LCD (rather than Serial)."],
+    code: "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\nLiquidCrystal_I2C lcd(0x27, 16, 2);\nconst int TRIG_PIN = 9, ECHO_PIN = 10;\nconst unsigned long TIMEOUT_US = 30000UL;\n\nfloat measureDistanceCm() {\n  digitalWrite(TRIG_PIN, LOW); delayMicroseconds(2);\n  digitalWrite(TRIG_PIN, HIGH); delayMicroseconds(10);\n  digitalWrite(TRIG_PIN, LOW);\n  unsigned long duration = pulseIn(ECHO_PIN, HIGH, TIMEOUT_US);\n  return (duration == 0) ? -1 : duration / 58.0;\n}\n\nvoid setup() {\n  pinMode(TRIG_PIN, OUTPUT);\n  pinMode(ECHO_PIN, INPUT);\n  lcd.init(); lcd.backlight();\n  lcd.setCursor(0, 0); lcd.print(\"Dist:\");\n}\n\nvoid loop() {\n  float d = measureDistanceCm();\n  lcd.setCursor(6, 0);\n  if (d < 0) {\n    lcd.print(\"out of rng \");\n  } else {\n    lcd.print(d, 1);\n    lcd.print(\" cm   \");\n  }\n  delay(300);\n}",
+    explanation: "lcd.print(d, 1) prints a float with exactly 1 decimal place - the second argument the library-specific overload for fixed-precision float display. Trailing spaces again guard against stale characters, as in Experiment 19.",
+    working: "measureDistanceCm() -> valid or -1 -> formatted and written to a fixed LCD field, replacing whatever was previously displayed there.",
+    result: "LCD shows \"Dist: NN.N cm\" updating roughly 3 times per second, or \"Dist: out of rng\" when nothing is in range.",
+    tip: "Re-check Experiment 16 wiring",
+  },
+  {
+    num: 22,
+    title: "Digital Ruler",
+    concept: "To turn the HC-SR04 into a usable \"digital ruler\" by explicitly validating readings against the sensor's datasheet range and discussing measurement resolution and accuracy.",
+    components: ["Arduino UNO R3, breadboard, 16x2 I2C LCD, 1 HC-SR04, jumper wires (identical hardware to Experiment 21)."],
+    learning: ["Explain measurement resolution versus accuracy.", "Reject readings outside the sensor's valid 2-400 cm datasheet range explicitly (not only relying on the timeout sentinel).", "Quantify the theoretical timing resolution of the pulseIn()-based measurement."],
+    code: "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\nLiquidCrystal_I2C lcd(0x27, 16, 2);\nconst int TRIG_PIN = 9, ECHO_PIN = 10;\nconst unsigned long TIMEOUT_US = 30000UL;\nconst float MIN_CM = 2.0, MAX_CM = 400.0;   // HC-SR04 datasheet-valid range\n\nfloat measureDistanceCm() {\n  digitalWrite(TRIG_PIN, LOW); delayMicroseconds(2);\n  digitalWrite(TRIG_PIN, HIGH); delayMicroseconds(10);\n  digitalWrite(TRIG_PIN, LOW);\n  unsigned long duration = pulseIn(ECHO_PIN, HIGH, TIMEOUT_US);\n  return (duration == 0) ? -1 : duration / 58.0;\n}\n\nvoid setup() {\n  pinMode(TRIG_PIN, OUTPUT);\n  pinMode(ECHO_PIN, INPUT);\n  lcd.init(); lcd.backlight();\n}\n\nvoid loop() {\n  float d = measureDistanceCm();\n  bool valid = (d >= MIN_CM && d <= MAX_CM);\n  lcd.setCursor(0, 0);\n  if (valid) {\n    lcd.print(\"Len: \"); lcd.print(d, 1); lcd.print(\" cm   \");\n  } else {\n    lcd.print(\"Out of range    \");\n  }\n  delay(300);\n}",
+    explanation: "The explicit valid check guards against both the -1 timeout sentinel and any implausible value the timeout alone would miss, making the acceptance window a single, clearly-named boolean rather than scattered numeric comparisons.",
+    working: "Raw pulse duration -> converted to cm -> range-checked against [2, 400] cm -> accepted value displayed, or \"Out of range\" if outside the valid window.",
+    result: "\"Len: NN.N cm\" for valid readings within 2-400 cm; \"Out of range\" otherwise, including at very close range where echoes are unreliable.",
+    tip: "Re-check datasheet range constants",
+  },
+  {
+    num: 23,
+    title: "Temperature Display",
+    concept: "To read and display ambient temperature from the DHT11 sensor, introducing single-wire digital sensor protocols and sensor read-failure handling.",
+    components: ["Arduino UNO R3, breadboard, 16x2 I2C LCD, 1 DHT11 module, jumper wires."],
+    learning: ["Install and use the Adafruit DHT sensor library.", "Explain why the DHT11 needs a minimum interval between reads.", "Detect and handle a failed sensor read using isnan()."],
+    code: "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\n#include <DHT.h>\n\n#define DHT_PIN 7\n#define DHT_TYPE DHT11\n\nLiquidCrystal_I2C lcd(0x27, 16, 2);\nDHT dht(DHT_PIN, DHT_TYPE);\n\nvoid setup() {\n  lcd.init(); lcd.backlight();\n  dht.begin();\n}\n\nvoid loop() {\n  float t = dht.readTemperature();   // degrees Celsius\n  lcd.setCursor(0, 0);\n  if (isnan(t)) {\n    lcd.print(\"Sensor error    \");\n  } else {\n    lcd.print(\"Temp: \"); lcd.print(t, 1); lcd.print(\" C  \");\n  }\n  delay(1000);   // DHT11 minimum interval between reads\n}",
+    explanation: "isnan(t) checks whether the library signalled a failed read (returned as \"Not a Number\"), which happens occasionally due to the DHT11's timing-sensitive protocol picking up noise. The 1000 ms delay is not arbitrary - it directly reflects the sensor's minimum re-read interval from its datasheet.",
+    working: "Arduino requests a reading on D7 -> DHT11 responds with a 40-bit timed pulse train -> library decodes temperature -> checked for validity -> displayed on LCD, or an error message shown if the read failed.",
+    result: "LCD shows \"Temp: NN.N C\", updating roughly once per second, occasionally showing \"Sensor error\" transiently (expected on some reads).",
+    tip: "Re-check wiring and delay",
+  },
+  {
+    num: 24,
+    title: "Humidity Display",
+    concept: "To read and display relative humidity from the same DHT11 sensor, showing that one physical sensor module can provide two independent readings.",
+    components: ["Identical hardware to Experiment 23: Arduino UNO R3, breadboard, LCD, 1 DHT11 module."],
+    learning: ["Use dht.readHumidity() alongside temperature.", "Explain relative humidity as a physical quantity.", "Recognise that both readings share the same underlying protocol transaction timing constraints."],
+    code: "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\n#include <DHT.h>\n\n#define DHT_PIN 7\n#define DHT_TYPE DHT11\nLiquidCrystal_I2C lcd(0x27, 16, 2);\nDHT dht(DHT_PIN, DHT_TYPE);\n\nvoid setup() {\n  lcd.init(); lcd.backlight();\n  dht.begin();\n}\n\nvoid loop() {\n  float h = dht.readHumidity();\n  lcd.setCursor(0, 0);\n  if (isnan(h)) {\n    lcd.print(\"Sensor error    \");\n  } else {\n    lcd.print(\"Humidity: \"); lcd.print(h, 0); lcd.print(\"%  \");\n  }\n  delay(1000);\n}",
+    explanation: "dht.readHumidity() mirrors readTemperature()'s structure exactly, reinforcing that the DHT library exposes a consistent, predictable API across both quantities. lcd.print(h, 0) rounds to whole-percent display, matching the DHT11's coarse 5%RH accuracy (extra decimal places would be false precision).",
+    working: "DATA line request -> DHT11 responds with both temperature and humidity in one 40-bit frame -> library exposes readHumidity() separately -> validity-checked -> displayed.",
+    result: "LCD shows \"Humidity: NN%\", updating roughly once per second, rising noticeably if breathed on directly.",
+    tip: "Test closer (a few cm)",
+  },
+  {
+    num: 25,
+    title: "Temperature Alarm",
+    concept: "To sound a buzzer when temperature exceeds a set threshold, introducing a first, informal look at hysteresis to avoid alarm chatter near the boundary.",
+    components: ["Arduino UNO R3, breadboard, 16x2 I2C LCD, 1 DHT11, 1 active buzzer, jumper wires."],
+    learning: ["Implement a temperature threshold alarm.", "Observe chatter at a hard threshold and understand why it occurs.", "Apply a simple margin (informal hysteresis) to reduce chatter, ahead of Experiment 44's formal treatment."],
+    code: "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\n#include <DHT.h>\n#define DHT_PIN 7\n#define DHT_TYPE DHT11\nconst int BUZZER_PIN = 8;\nconst float T_HIGH = 30.0, T_LOW = 28.0;   // 2C margin band\n\nLiquidCrystal_I2C lcd(0x27, 16, 2);\nDHT dht(DHT_PIN, DHT_TYPE);\nbool alarmOn = false;\n\nvoid setup() {\n  pinMode(BUZZER_PIN, OUTPUT);\n  lcd.init(); lcd.backlight();\n  dht.begin();\n}\n\nvoid loop() {\n  float t = dht.readTemperature();\n  if (!isnan(t)) {\n    if (!alarmOn && t > T_HIGH) alarmOn = true;\n    else if (alarmOn && t < T_LOW) alarmOn = false;\n    digitalWrite(BUZZER_PIN, alarmOn ? HIGH : LOW);\n\n    lcd.setCursor(0, 0);\n    lcd.print(\"T:\"); lcd.print(t, 1);\n    lcd.print(alarmOn ? \" ALARM  \" : \" OK     \");\n  }\n  delay(1000);\n}",
+    explanation: "alarmOn is a persistent boolean, so the two if/else if conditions only ever change state at the correct boundary each is responsible for - this is exactly the margin-band logic described in the theory section, and is a simpler precursor to Experiment 44's reusable hysteresis function.",
+    working: "Temperature reading -> if above T_high and alarm currently OFF, turn ON; if below T_low and alarm currently ON, turn OFF; otherwise keep the alarm in its current state (the margin band).",
+    result: "LCD shows \"T:NN.N OK\" normally, switching to \"T:NN.N ALARM\" once temperature exceeds 30° C, with the buzzer sounding; it does not turn off again until the temperature drops below 28° C.",
+    tip: "Confirm T_low < T_high",
+  },
+  {
+    num: 26,
+    title: "Temperature and Humidity Monitor",
+    concept: "To display temperature and humidity together on the two LCD rows, and introduce a non-blocking millis() scheduler so sensor reads never violate the DHT11's minimum interval, even as more features are added later.",
+    components: ["Arduino UNO R3, breadboard, 16x2 I2C LCD, 1 DHT11, jumper wires."],
+    learning: ["Read both DHT11 values from a single sensor transaction per update.", "Replace a blocking delay(1000) with a millis()-based schedule.", "Design an update interval as an explicit, named engineering parameter."],
+    code: "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\n#include <DHT.h>\n#define DHT_PIN 7\n#define DHT_TYPE DHT11\nconst unsigned long UPDATE_INTERVAL_MS = 2000;\n\nLiquidCrystal_I2C lcd(0x27, 16, 2);\nDHT dht(DHT_PIN, DHT_TYPE);\nunsigned long lastUpdate = 0;\n\nvoid setup() {\n  lcd.init(); lcd.backlight();\n  dht.begin();\n}\n\nvoid loop() {\n  if (millis() - lastUpdate >= UPDATE_INTERVAL_MS) {\n    lastUpdate = millis();\n    float t = dht.readTemperature();\n    float h = dht.readHumidity();\n\n    lcd.setCursor(0, 0);\n    lcd.print(isnan(t) ? \"Temp: err   \" : (\"Temp: \" + String(t, 1) + \" C  \"));\n    lcd.setCursor(0, 1);\n    lcd.print(isnan(h) ? \"Humidity: err \" : (\"Humidity: \" + String(h, 0) + \"%  \"));\n  }\n  // loop() is free to do other work here between updates.\n}",
+    explanation: "millis() - lastUpdate >= UPDATE_INTERVAL_MS is the exact Chapter non-blocking pattern; using unsigned subtraction keeps it correct even across the millis() overflow after 49.7 days. String(t, 1) builds a formatted text string inline for readability here; later, more memory-constrained experiments (Experiment 47 onward) avoid String concatenation in favour of separate print() calls to reduce heap fragmentation risk.",
+    working: "Every UPDATE_INTERVAL_MS (2000 ms here), both temperature and humidity are read once and both LCD rows refreshed together; between updates, loop() is free to do other work (none yet, but this scaffolding is reused from Experiment 36 onward).",
+    result: "LCD row 0 shows \"Temp: NN.N C\", row 1 shows \"Humidity: NN%\", both refreshing together every 2 seconds.",
+    tip: "Re-check the if condition",
+  },
+  {
+    num: 27,
+    title: "Soil Moisture Monitor",
+    concept: "To read the resistive soil moisture sensor's analog output and display moisture level as a calibrated-feeling percentage on the LCD.",
+    components: ["Arduino UNO R3, breadboard, 16x2 I2C LCD, 1 soil moisture sensor (probe + comparator breakout), jumper wires."],
+    learning: ["Wire and read a resistive two-probe soil moisture sensor.", "Perform a simple two-point (wet/dry) calibration.", "Explain why soil type affects absolute readings."],
+    code: "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\nLiquidCrystal_I2C lcd(0x27, 16, 2);\nconst int SOIL_PIN = A0;\nconst int DRY_RAW = 800;   // measured with probes in air; recalibrate for your unit\nconst int WET_RAW = 350;   // measured with probes in a cup of water\n\nvoid setup() {\n  lcd.init(); lcd.backlight();\n}\n\nvoid loop() {\n  int raw = analogRead(SOIL_PIN);\n  int pct = map(raw, DRY_RAW, WET_RAW, 0, 100);\n  pct = constrain(pct, 0, 100);\n\n  lcd.setCursor(0, 0);\n  lcd.print(\"Soil: \"); lcd.print(pct); lcd.print(\"%   \");\n  delay(500);\n}",
+    explanation: "constrain(pct, 0, 100) clamps the mapped value, since a raw reading slightly beyond either calibration point (e.g. soil wetter than the water-cup reference) would otherwise map() to an out-of-range percentage. DRY_RAW/WET_RAW are explicitly commented as needing recalibration per physical unit, matching the theory section.",
+    working: "Soil moisture -> probe resistance (inverse relationship) -> AO voltage -> analogRead() -> mapped between calibrated DRY/WET reference points -> displayed as a percentage.",
+    result: "LCD shows \"Soil: NN%\", near 0% in dry air, near 100% in water, and an intermediate value in moist soil.",
+    tip: "Redo calibration procedure",
+  },
+  {
+    num: 28,
+    title: "Plant Moisture Alarm",
+    concept: "To sound the buzzer when soil moisture falls below a dry threshold, reusing the calibrated percentage from Experiment 27 in a new threshold-alarm pattern.",
+    components: ["Arduino UNO R3, breadboard, 16x2 I2C LCD, 1 soil moisture sensor, 1 active buzzer, jumper wires."],
+    learning: ["Reuse a calibrated sensor reading in a threshold decision.", "Recognise this as the same structural pattern as Experiments 10, 17, and 25.", "Choose a sensible dry-alarm threshold for a plant-care scenario."],
+    code: "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\nLiquidCrystal_I2C lcd(0x27, 16, 2);\nconst int SOIL_PIN = A0, BUZZER_PIN = 8;\nconst int DRY_RAW = 800, WET_RAW = 350;\nconst int DRY_LIMIT = 30;   // % moisture below which the plant needs water\n\nint soilMoisturePercent() {\n  int raw = analogRead(SOIL_PIN);\n  int pct = map(raw, DRY_RAW, WET_RAW, 0, 100);\n  return constrain(pct, 0, 100);\n}\n\nvoid setup() {\n  pinMode(BUZZER_PIN, OUTPUT);\n  lcd.init(); lcd.backlight();\n}\n\nvoid loop() {\n  int pct = soilMoisturePercent();\n  bool tooDry = (pct < DRY_LIMIT);\n  digitalWrite(BUZZER_PIN, tooDry ? HIGH : LOW);\n\n  lcd.setCursor(0, 0);\n  lcd.print(\"Soil:\"); lcd.print(pct); lcd.print(\"%\");\n  lcd.print(tooDry ? \" DRY  \" : \" OK   \");\n  delay(500);\n}",
+    explanation: "soilMoisturePercent() factors Experiment 27's calibration logic into a reusable function, exactly as measureDistanceCm() was factored in Experiment 16 - this same function is reused again unchanged in Experiments 29, 37, and 38.",
+    working: "Calibrated moisture % -> compared against DRY_LIMIT -> buzzer ON if below (soil too dry), else OFF; LCD shows both the percentage and alarm state.",
+    result: "LCD shows \"Soil:NN% DRY\" with the buzzer sounding below 30%, or \"Soil:NN% OK\" silently above it.",
+    tip: "Re-check Experiment 27 calibration",
+  },
+  {
+    num: 29,
+    title: "Automatic Plant-Watering Controller Demonstration",
+    concept: "To drive the 5 V relay module from a soil-moisture threshold as a safe low-voltage demonstration of automatic irrigation control - this experiment explicitly does not include a real water pump (not in the kit); the relay instead switches an indicator LED representing \"pump ON/OFF\".",
+    components: ["Arduino UNO R3, breadboard, 16x2 I2C LCD, 1 soil moisture sensor, 1 relay module, 1 LED (as the \"pump-demo\" indicator), 1x220 Ω resistor, jumper wires."],
+    learning: ["Wire and drive the 5 V relay module from a GPIO pin.", "Explain opto-isolation and why it protects the Arduino.", "Clearly distinguish a hardware demonstration from a claim of a complete real-world irrigation system."],
+    code: "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\nLiquidCrystal_I2C lcd(0x27, 16, 2);\nconst int SOIL_PIN = A0, RELAY_PIN = 10;\nconst int DRY_RAW = 800, WET_RAW = 350, DRY_LIMIT = 30;\n\nint soilMoisturePercent() {\n  int raw = analogRead(SOIL_PIN);\n  return constrain(map(raw, DRY_RAW, WET_RAW, 0, 100), 0, 100);\n}\n\nvoid setup() {\n  pinMode(RELAY_PIN, OUTPUT);\n  lcd.init(); lcd.backlight();\n}\n\nvoid loop() {\n  int pct = soilMoisturePercent();\n  bool pumpOn = (pct < DRY_LIMIT);\n  digitalWrite(RELAY_PIN, pumpOn ? HIGH : LOW);   // energises relay -> lights demo LED\n\n  lcd.setCursor(0, 0);\n  lcd.print(\"Soil:\"); lcd.print(pct); lcd.print(\"%\");\n  lcd.print(pumpOn ? \" PUMP*\" : \" OFF  \");\n  delay(500);\n}",
+    explanation: "The variable name pumpOn and the LCD's asterisked \"PUMP*\" deliberately flag that this is a demonstration signal, not a real pump control line - the control decision (when to water) is identical to what a real system would need, only the actuator differs.",
+    working: "Soil moisture % -> below DRY_LIMIT -> D10 driven HIGH -> relay coil energises -> relay contact closes -> demonstration LED lights, representing \"pump would be running now\"; above the limit, D10 LOW, relay de-energised, LED off.",
+    result: "Relay clicks and the demonstration LED lights when soil moisture drops below 30%; both switch off once moisture is restored above the threshold.",
+    tip: "Re-check VCC/GND/IN wiring",
+  },
+  {
+    num: 30,
+    title: "Smart Night Lamp",
+    concept: "To combine LDR-based auto-on (Experiment 10) with PWM brightness control (Experiment 9), so a lamp not only switches on in darkness but also brightens smoothly as it gets darker.",
+    components: ["Arduino UNO R3, breadboard, 1 LDR, 1x10 kΩ resistor, 1 white LED, 1x220 Ω resistor, jumper wires."],
+    learning: ["Map a continuous analog input directly onto a continuous PWM output (not a binary threshold).", "Combine two previously separate single-purpose experiments into one richer behaviour.", "Explain the practical advantage of proportional control over simple ON/OFF."],
+    code: "const int LDR_PIN = A0;\nconst int LAMP_PIN = 9;   // PWM pin\n\nvoid setup() {\n  pinMode(LAMP_PIN, OUTPUT);\n}\n\nvoid loop() {\n  int raw = analogRead(LDR_PIN);\n  int duty = map(raw, 1023, 0, 0, 255);  // brighter room (higher raw) -> lower duty\n  duty = constrain(duty, 0, 255);\n  analogWrite(LAMP_PIN, duty);\n  delay(50);\n}",
+    explanation: "The map() arguments are deliberately given as (raw, 1023, 0, 0, 255) - swapping the input range's order (1023 before 0) inverts the mapping, so a high raw (bright) produces a low duty (dim lamp), and vice versa, without needing a separate if/else.",
+    working: "Ambient light -> A0 reading -> inversely mapped to a 0-255 duty cycle (darker = higher duty) -> analogWrite(D9, duty) -> lamp brightness rises smoothly as light falls.",
+    result: "The lamp is dim/off in bright light and brightens continuously and smoothly as ambient light decreases, with no visible stepping.",
+    tip: "Re-check argument order",
+  },
+  {
+    num: 31,
+    title: "IR Security Alarm",
+    concept: "To build an arm/disarm security alarm using the IR obstacle sensor as a trip beam, introducing a latching alarm state that persists after the triggering event ends, and a button for arming/disarming.",
+    components: ["Arduino UNO R3, breadboard, 1 IR obstacle sensor, 1 active buzzer, 1 push button, jumper wires."],
+    learning: ["Implement a latching (sticky) alarm state, unlike Experiment 17's live threshold alarm.", "Use a button edge to arm the system, separate from the sensor that triggers it.", "Distinguish \"armed but not triggered\", \"armed and alarming\", and \"disarmed\" states informally, ahead of Experiment 40's formal FSM."],
+    code: "const int IR_PIN = 7, BUZZER_PIN = 8, BUTTON_PIN = 2;\nenum State { DISARMED, ARMED, ALARM };\nState state = DISARMED;\n\nint lastReading = HIGH, stableState = HIGH;\nunsigned long lastChangeTime = 0;\nconst unsigned long DEBOUNCE_MS = 30;\n\nvoid setup() {\n  pinMode(IR_PIN, INPUT);\n  pinMode(BUZZER_PIN, OUTPUT);\n  pinMode(BUTTON_PIN, INPUT_PULLUP);\n}\n\nbool buttonPressedEdge() {\n  int reading = digitalRead(BUTTON_PIN);\n  if (reading != lastReading) lastChangeTime = millis();\n  bool edge = false;\n  if ((millis() - lastChangeTime) > DEBOUNCE_MS && reading != stableState) {\n    stableState = reading;\n    if (stableState == LOW) edge = true;\n  }\n  lastReading = reading;\n  return edge;\n}\n\nvoid loop() {\n  if (buttonPressedEdge()) {\n    state = (state == DISARMED) ? ARMED : DISARMED;\n  }\n  if (state == ARMED && digitalRead(IR_PIN) == LOW) {\n    state = ALARM;\n  }\n  digitalWrite(BUZZER_PIN, (state == ALARM) ? HIGH : LOW);\n}",
+    explanation: "The enum State names the three conditions explicitly, making loop() read almost like the algorithm's prose. Once state becomes ALARM, only the button-press branch (which unconditionally sets DISARMED) can clear it - the sensor branch cannot silence an active alarm, which is exactly the \"latching\" behaviour required.",
+    working: "Button press (edge) -> system becomes ARMED; while ARMED, an obstacle-detected event on D7 -> system becomes ALARM (latched, buzzer sounds continuously); a further button press returns the system to DISARMED, silencing the buzzer, ready to be re-armed.",
+    result: "Buzzer silent while DISARMED or ARMED-but-untriggered; sounds continuously once triggered while ARMED, remaining on even after the obstacle is removed, until the button disarms it.",
+    tip: "Re-check only the button branch changes state to DISARMED",
+  },
+  {
+    num: 32,
+    title: "Object Counter",
+    concept: "To count objects passing the IR obstacle sensor using debounced edge detection, displaying a running total on the LCD.",
+    components: ["Arduino UNO R3, breadboard, 16x2 I2C LCD, 1 IR obstacle sensor, jumper wires."],
+    learning: ["Apply debounced edge detection (Experiment 7's pattern) to a sensor rather than a button.", "Maintain a persistent counter variable across loop iterations.", "Display an incrementing count on the LCD."],
+    code: "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\nLiquidCrystal_I2C lcd(0x27, 16, 2);\nconst int IR_PIN = 7;\nconst unsigned long DEBOUNCE_MS = 30;\n\nint lastReading = HIGH, stableState = HIGH;\nunsigned long lastChangeTime = 0;\nunsigned int count = 0;\n\nbool objectEdge() {\n  int reading = digitalRead(IR_PIN);\n  if (reading != lastReading) lastChangeTime = millis();\n  bool edge = false;\n  if ((millis() - lastChangeTime) > DEBOUNCE_MS && reading != stableState) {\n    stableState = reading;\n    if (stableState == LOW) edge = true;\n  }\n  lastReading = reading;\n  return edge;\n}\n\nvoid setup() {\n  pinMode(IR_PIN, INPUT);\n  lcd.init(); lcd.backlight();\n  lcd.setCursor(0, 0); lcd.print(\"Count: \");\n}\n\nvoid loop() {\n  if (objectEdge()) {\n    count++;\n    lcd.setCursor(7, 0);\n    lcd.print(count);\n    lcd.print(\"   \");\n  }\n}",
+    explanation: "objectEdge() is structurally identical to Experiment 7's buttonPressedEdge(), applied to a sensor pin instead of a button pin - a direct demonstration that the debounce pattern generalises to any noisy digital signal, not just mechanical switches. The LCD is only rewritten inside the if, so it is not needlessly refreshed every idle loop pass.",
+    working: "Object passes the beam -> D7 goes LOW -> debounce filter confirms a stable edge -> counter increments -> LCD updated with the new total.",
+    result: "LCD shows \"Count: N\", incrementing by exactly one for each distinct object/hand pass through the beam.",
+    tip: "Increase debounce interval slightly",
+  },
+  {
+    num: 33,
+    title: "Smart Parking Indicator",
+    concept: "To indicate parking space status (FREE / NEARLY FULL / FULL) using multi-level ultrasonic distance thresholds, with an LED bar, LCD status text, and a relay-driven barrier demonstration when full.",
+    components: ["Arduino UNO R3, breadboard, 16x2 I2C LCD, 1 HC-SR04, 3 LEDs (green/yellow/red), 3x220 Ω resistors, 1 relay module, jumper wires."],
+    learning: ["Extend a 3-level analog threshold pattern (Experiment 11) to a distance sensor.", "Combine LED indication, LCD text, and relay actuation in one system.", "Practice choosing meaningful distance bands for a real-world scenario."],
+    code: "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\nLiquidCrystal_I2C lcd(0x27, 16, 2);\nconst int TRIG_PIN = 11, ECHO_PIN = 12;\nconst int GREEN = 8, YELLOW = 9, RED = 10, RELAY_PIN = 13;\nconst unsigned long TIMEOUT_US = 30000UL;\n\nfloat measureDistanceCm() {\n  digitalWrite(TRIG_PIN, LOW); delayMicroseconds(2);\n  digitalWrite(TRIG_PIN, HIGH); delayMicroseconds(10);\n  digitalWrite(TRIG_PIN, LOW);\n  unsigned long duration = pulseIn(ECHO_PIN, HIGH, TIMEOUT_US);\n  return (duration == 0) ? 999 : duration / 58.0;\n}\n\nvoid setup() {\n  pinMode(TRIG_PIN, OUTPUT); pinMode(ECHO_PIN, INPUT);\n  pinMode(GREEN, OUTPUT); pinMode(YELLOW, OUTPUT); pinMode(RED, OUTPUT);\n  pinMode(RELAY_PIN, OUTPUT);\n  lcd.init(); lcd.backlight();\n}\n\nvoid loop() {\n  float d = measureDistanceCm();\n  digitalWrite(GREEN, LOW); digitalWrite(YELLOW, LOW); digitalWrite(RED, LOW);\n  lcd.setCursor(0, 0);\n\n  if (d > 30) {\n    digitalWrite(GREEN, HIGH);\n    digitalWrite(RELAY_PIN, LOW);\n    lcd.print(\"FREE          \");\n  } else if (d > 10) {\n    digitalWrite(YELLOW, HIGH);\n    digitalWrite(RELAY_PIN, LOW);\n    lcd.print(\"PARKING...    \");\n  } else {\n    digitalWrite(RED, HIGH);\n    digitalWrite(RELAY_PIN, HIGH);\n    lcd.print(\"FULL          \");\n  }\n  delay(300);\n}",
+    explanation: "An out-of-range reading is mapped to a large sentinel (999) rather than -1 here, so it naturally falls into the FAR/\"FREE\" bucket without a separate validity check - a deliberate simplification appropriate because \"no echo\" in a parking bay realistically does mean \"no car detected\".",
+    working: "Distance -> bucketed into FAR/NEAR/FULL -> matching LED lit, LCD status text updated, and (only in the FULL bucket) relay energised as a barrier-closed demonstration.",
+    result: "Green+\"FREE\" beyond 30 cm; yellow+\"PARKING...\" between 10-30 cm; red+\"FULL\"+relay click within 10 cm.",
+    tip: "Re-check the three if/else if thresholds",
+  },
+  {
+    num: 34,
+    title: "IR Remote Controller Demonstration",
+    concept: "To receive and decode signals from an ordinary household infrared remote control (TV, AC, DVD, or set-top box) using the kit's IR receiver module, displaying the received code on the LCD. This is a receive-only demonstration: the kit deliberately contains no IR transmitter, so this experiment requires borrowing any household IR remote as an external signal source.",
+    components: ["Arduino UNO R3, breadboard, 16x2 I2C LCD, 1 IR receiver module, jumper wires, plus any household infrared remote control (not part of the kit; see the note below on alternatives)."],
+    learning: ["Install and use the IRremote library to receive and decode IR signals.", "Explain why an IR receiver alone cannot be demonstrated without an external transmitter.", "Read and interpret a decoded raw hexadecimal IR code."],
+    code: "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\n#include <IRremote.hpp>   // IRremote v3/v4 API\n\n#define IR_RECEIVE_PIN 11\nLiquidCrystal_I2C lcd(0x27, 16, 2);\n\nvoid setup() {\n  lcd.init(); lcd.backlight();\n  lcd.print(\"Point remote &\");\n  lcd.setCursor(0, 1); lcd.print(\"press any key\");\n  IrReceiver.begin(IR_RECEIVE_PIN);\n}\n\nvoid loop() {\n  if (IrReceiver.decode()) {\n    lcd.clear();\n    lcd.setCursor(0, 0);\n    lcd.print(\"Code: 0x\");\n    lcd.print(IrReceiver.decodedIRData.decodedRawData, HEX);\n    IrReceiver.resume();   // required before the next signal can be received\n    delay(1000);\n    lcd.setCursor(0, 1);\n    lcd.print(\"Point remote &\");\n  }\n}",
+    explanation: "IrReceiver.decode() returns true exactly once per received signal; IrReceiver.resume() must be called afterwards or the library will not accept the next signal - a common beginner bug is forgetting this call. decodedIRData.decodedRawData is the manufacturer- and protocol-dependent numeric code, printed here in hexadecimal for compactness.",
+    working: "Household remote button press -> 38 kHz-modulated IR burst -> receiver demodulates to a baseband pulse train on D11 -> IRremote library decodes protocol/value -> displayed on LCD as hexadecimal.",
+    result: "LCD shows a distinct hexadecimal code for each remote button pressed, e.g. illustrative values like 0x1FE48B7 (actual values depend entirely on the specific remote and protocol used, and are not predictable in advance).",
+    tip: "Confirm a working household remote is used; re-check wiring",
+  },
+  {
+    num: 35,
+    title: "Smart Room Light Controller",
+    concept: "To build a room light controller that automatically switches a relay-driven light demonstration in darkness, but allows a manual override button to take priority over the automatic decision - introducing mode arbitration between automatic and manual control.",
+    components: ["Arduino UNO R3, breadboard, 1 LDR, 1x10 kΩ resistor, 1 push button, 1 relay module, jumper wires."],
+    learning: ["Implement a two-mode system (AUTO/MANUAL) selected by a toggle button.", "Design priority logic where a manual action overrides an automatic decision.", "Apply the relay-demonstration pattern (Experiment 29) to a lighting scenario."],
+    code: "const int LDR_PIN = A0, BUTTON_PIN = 2, RELAY_PIN = 10;\nconst int DARK_THRESHOLD = 400;\nenum Mode { AUTO, MANUAL };\nMode mode = AUTO;\nbool lightOn = false;\n\nint lastReading = HIGH, stableState = HIGH;\nunsigned long lastChangeTime = 0;\nconst unsigned long DEBOUNCE_MS = 30;\n\nbool buttonEdge() {\n  int reading = digitalRead(BUTTON_PIN);\n  if (reading != lastReading) lastChangeTime = millis();\n  bool edge = false;\n  if ((millis() - lastChangeTime) > DEBOUNCE_MS && reading != stableState) {\n    stableState = reading;\n    if (stableState == LOW) edge = true;\n  }\n  lastReading = reading;\n  return edge;\n}\n\nvoid setup() {\n  pinMode(BUTTON_PIN, INPUT_PULLUP);\n  pinMode(RELAY_PIN, OUTPUT);\n}\n\nvoid loop() {\n  if (buttonEdge()) {\n    if (mode == AUTO) { mode = MANUAL; lightOn = true; }\n    else if (lightOn) { lightOn = false; }\n    else { mode = AUTO; }\n  }\n  if (mode == AUTO) {\n    lightOn = (analogRead(LDR_PIN) < DARK_THRESHOLD);\n  }\n  digitalWrite(RELAY_PIN, lightOn ? HIGH : LOW);\n}",
+    explanation: "The three-way button behaviour (AUTO -> MANUAL-ON -> MANUAL-OFF -> AUTO) is a small state machine in its own right, giving the user a full manual override cycle with a single button, previewing the more general finite-state-machine treatment in Experiment 40.",
+    working: "Button press -> toggles mode between AUTO and MANUAL (and, in MANUAL, also toggles the light state directly); in AUTO mode, the LDR reading alone decides the relay state.",
+    result: "In AUTO mode, the relay follows the LDR threshold as in Experiment 10; after one button press, the relay latches ON (MANUAL) regardless of light; a second press turns it OFF (still MANUAL); a third press returns to AUTO.",
+    tip: "Re-check the else chain",
+  },
+  {
+    num: 36,
+    title: "Room Environment Monitor",
+    concept: "To display temperature and humidity as two alternating full-screen LCD pages using non-blocking page-cycling, a technique needed by every later multi-reading experiment in this manual.",
+    components: ["Arduino UNO R3, breadboard, 16x2 I2C LCD, 1 DHT11, jumper wires."],
+    learning: ["Implement non-blocking, timed page-switching on a 2-row LCD.", "Separate a \"how often do we read the sensor\" timer from a \"how often do we flip the page\" timer.", "Structure display code around an explicit page-index variable."],
+    code: "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\n#include <DHT.h>\n#define DHT_PIN 7\n#define DHT_TYPE DHT11\nLiquidCrystal_I2C lcd(0x27, 16, 2);\nDHT dht(DHT_PIN, DHT_TYPE);\n\nconst unsigned long READ_INTERVAL_MS = 2000, PAGE_INTERVAL_MS = 3000;\nunsigned long lastRead = 0, lastPage = 0;\nfloat cachedTemp = 0, cachedHum = 0;\nint page = 0;\n\nvoid drawPage() {\n  lcd.clear();\n  lcd.setCursor(0, 0);\n  if (page == 0) {\n    lcd.print(\"Temperature\");\n    lcd.setCursor(0, 1);\n    lcd.print(cachedTemp, 1); lcd.print(\" C\");\n  } else {\n    lcd.print(\"Humidity\");\n    lcd.setCursor(0, 1);\n    lcd.print(cachedHum, 0); lcd.print(\" %\");\n  }\n}\n\nvoid setup() {\n  lcd.init(); lcd.backlight();\n  dht.begin();\n  drawPage();\n}\n\nvoid loop() {\n  if (millis() - lastRead >= READ_INTERVAL_MS) {\n    lastRead = millis();\n    float t = dht.readTemperature(), h = dht.readHumidity();\n    if (!isnan(t)) cachedTemp = t;\n    if (!isnan(h)) cachedHum = h;\n  }\n  if (millis() - lastPage >= PAGE_INTERVAL_MS) {\n    lastPage = millis();\n    page = 1 - page;\n    drawPage();\n  }\n}",
+    explanation: "cachedTemp/cachedHum decouple \"when we measure\" from \"when we display\", so a failed read (isnan) simply skips updating the cache rather than displaying an error mid-page - the last known good value remains visible until a valid new one arrives. drawPage() is a single function responsible for rendering whichever page is current, called both at startup and on every flip.",
+    working: "Sensor timer (2 s) -> refreshes cached temperature/humidity values; page timer (3 s) -> flips page between 0 and 1 and redraws the LCD from the cached values (not necessarily a fresh sensor read every flip).",
+    result: "LCD alternates: \"Temperature / NN.N C\" for 3 s, then \"Humidity / NN %\" for 3 s, repeating, with underlying values refreshing every 2 s regardless of which page is showing.",
+    tip: "Re-check the second if",
+  },
+  {
+    num: 37,
+    title: "Smart Plant Monitoring System",
+    concept: "To combine soil moisture, temperature, and humidity into one page-cycling plant-monitoring display, extending Experiment 36's page-cycling technique to three sensors and two combined pages.",
+    components: ["Arduino UNO R3, breadboard, 16x2 I2C LCD, 1 soil moisture sensor, 1 DHT11, jumper wires."],
+    learning: ["Combine two previously separate sensor experiments (soil moisture, DHT11) into one system.", "Extend page-cycling to more than two underlying readings.", "Practice organising multi-sensor code into clearly separated read/cache/display concerns."],
+    code: "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\n#include <DHT.h>\n#define DHT_PIN 7\n#define DHT_TYPE DHT11\nLiquidCrystal_I2C lcd(0x27, 16, 2);\nDHT dht(DHT_PIN, DHT_TYPE);\nconst int SOIL_PIN = A0;\nconst int DRY_RAW = 800, WET_RAW = 350;\n\nconst unsigned long READ_INTERVAL_MS = 2000, PAGE_INTERVAL_MS = 3000;\nunsigned long lastRead = 0, lastPage = 0;\nfloat cachedTemp = 0, cachedHum = 0;\nint cachedSoil = 0, page = 0;\n\nint soilMoisturePercent() {\n  int raw = analogRead(SOIL_PIN);\n  return constrain(map(raw, DRY_RAW, WET_RAW, 0, 100), 0, 100);\n}\n\nvoid drawPage() {\n  lcd.clear();\n  lcd.setCursor(0, 0);\n  if (page == 0) {\n    lcd.print(\"Soil Moisture\");\n    lcd.setCursor(0, 1); lcd.print(cachedSoil); lcd.print(\" %\");\n  } else {\n    lcd.print(cachedTemp, 1); lcd.print(\"C  \"); lcd.print(cachedHum, 0); lcd.print(\"%RH\");\n  }\n}\n\nvoid setup() {\n  lcd.init(); lcd.backlight();\n  dht.begin();\n  drawPage();\n}\n\nvoid loop() {\n  cachedSoil = soilMoisturePercent();   // cheap, safe to read every pass\n\n  if (millis() - lastRead >= READ_INTERVAL_MS) {\n    lastRead = millis();\n    float t = dht.readTemperature(), h = dht.readHumidity();\n    if (!isnan(t)) cachedTemp = t;\n    if (!isnan(h)) cachedHum = h;\n  }\n  if (millis() - lastPage >= PAGE_INTERVAL_MS) {\n    lastPage = millis();\n    page = 1 - page;\n    drawPage();\n  }\n}",
+    explanation: "Notice cachedSoil is updated unconditionally every pass (no timer guard), since analogRead() has no minimum-interval requirement, while cachedTemp/cachedHum remain behind the DHT11's 2 s guard - the code visibly reflects that these two sensors have different real-world timing constraints, rather than forcing both onto one schedule.",
+    working: "Soil moisture read every pass (cheap, no minimum interval) -> cached; DHT11 read every 2 s -> cached; page timer flips between \"Soil\" and \"Temp/Humidity\" pages, each drawn from its own cached values.",
+    result: "Page 0: \"Soil Moisture / NN %\"; Page 1: \"NN.NC NN%RH\", alternating every 3 s.",
+    tip: "Re-check it is outside that if",
+  },
+  {
+    num: 38,
+    title: "Automatic Plant Protection System",
+    concept: "To close the loop on Experiment 37 by adding automatic relay-driven watering demonstration and a critical-dryness buzzer alert, forming a complete (kit-safe, demonstration-scale) plant protection system.",
+    components: ["Arduino UNO R3, breadboard, 16x2 I2C LCD, 1 soil moisture sensor, 1 DHT11, 1 relay module, 1 active buzzer, jumper wires."],
+    learning: ["Combine sensing (Experiment 37), threshold alarm (Experiment 28), and relay actuation (Experiment 29) into one system.", "Implement two independent severity levels (dry -> water; critically dry -> also alarm).", "Practice full closed-loop system design: sense -> decide -> act -> display."],
+    code: "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\n#include <DHT.h>\n#define DHT_PIN 7\n#define DHT_TYPE DHT11\nLiquidCrystal_I2C lcd(0x27, 16, 2);\nDHT dht(DHT_PIN, DHT_TYPE);\nconst int SOIL_PIN = A0, RELAY_PIN = 10, BUZZER_PIN = 8;\nconst int DRY_RAW = 800, WET_RAW = 350;\nconst int DRY_LIMIT = 30, CRITICAL_LIMIT = 15;\n\nint soilMoisturePercent() {\n  int raw = analogRead(SOIL_PIN);\n  return constrain(map(raw, DRY_RAW, WET_RAW, 0, 100), 0, 100);\n}\n\nvoid setup() {\n  pinMode(RELAY_PIN, OUTPUT);\n  pinMode(BUZZER_PIN, OUTPUT);\n  lcd.init(); lcd.backlight();\n  dht.begin();\n}\n\nvoid loop() {\n  int soilPct = soilMoisturePercent();\n  bool pumpOn = (soilPct < DRY_LIMIT);\n  bool alarmOn = (soilPct < CRITICAL_LIMIT);\n\n  digitalWrite(RELAY_PIN, pumpOn ? HIGH : LOW);\n  digitalWrite(BUZZER_PIN, alarmOn ? HIGH : LOW);\n\n  lcd.setCursor(0, 0);\n  lcd.print(\"Soil:\"); lcd.print(soilPct); lcd.print(\"%  \");\n  lcd.setCursor(0, 1);\n  if (alarmOn)      lcd.print(\"CRITICAL! water!\");\n  else if (pumpOn)  lcd.print(\"Watering...     \");\n  else              lcd.print(\"OK              \");\n  delay(300);\n}",
+    explanation: "pumpOn and alarmOn are computed independently from the same soilPct reading but against two different constants, so the two actuators (relay, buzzer) never need to know about each other's thresholds directly - each output is driven by its own clearly named condition, which is easy to audit and extend.",
+    working: "Soil % < DRY_LIMIT -> relay (pump-demo) ON; soil % < CRITICAL_LIMIT -> additionally buzzer ON; LCD always shows current soil % and system status.",
+    result: "\"Soil:NN% / OK\" above 30%; \"Watering...\" with relay clicking between 15-30%; \"CRITICAL! water!\" with both relay and buzzer active below 15%.",
+    tip: "Re-check constant ordering",
+  },
+  {
+    num: 39,
+    title: "Smart Parking Assistant",
+    concept: "To build a reverse-parking-sensor-style assistant where the buzzer beeps faster as an obstacle gets closer, using non-blocking, distance-dependent beep timing instead of a simple on/off alarm.",
+    components: ["Arduino UNO R3, breadboard, 16x2 I2C LCD, 1 HC-SR04, 1 active buzzer, jumper wires."],
+    learning: ["Map a continuous distance reading onto a continuous beep interval.", "Implement non-blocking intermittent beeping using millis() (not delay(), which would freeze distance sensing between beeps).", "Extend Experiment 33's bucket-based system to a continuously variable response."],
+    code: "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\nLiquidCrystal_I2C lcd(0x27, 16, 2);\nconst int TRIG_PIN = 11, ECHO_PIN = 12, BUZZER_PIN = 8;\nconst unsigned long TIMEOUT_US = 30000UL;\nunsigned long lastToggle = 0;\nbool buzzerState = false;\n\nfloat measureDistanceCm() {\n  digitalWrite(TRIG_PIN, LOW); delayMicroseconds(2);\n  digitalWrite(TRIG_PIN, HIGH); delayMicroseconds(10);\n  digitalWrite(TRIG_PIN, LOW);\n  unsigned long duration = pulseIn(ECHO_PIN, HIGH, TIMEOUT_US);\n  return (duration == 0) ? 999 : duration / 58.0;\n}\n\nvoid setup() {\n  pinMode(TRIG_PIN, OUTPUT); pinMode(ECHO_PIN, INPUT);\n  pinMode(BUZZER_PIN, OUTPUT);\n  lcd.init(); lcd.backlight();\n}\n\nvoid loop() {\n  float d = measureDistanceCm();\n  d = constrain(d, 5, 100);\n  unsigned long interval = map(d, 5, 100, 80, 800);  // closer = shorter interval (ms)\n\n  if (millis() - lastToggle >= interval) {\n    lastToggle = millis();\n    buzzerState = !buzzerState;\n    digitalWrite(BUZZER_PIN, buzzerState ? HIGH : LOW);\n  }\n\n  lcd.setCursor(0, 0);\n  lcd.print(\"Dist:\"); lcd.print(d, 0); lcd.print(\"cm \");\n  lcd.print(d >= 100 ? \"SAFE \" : \"     \");\n}",
+    explanation: "constrain(d, 5, 100) bounds the distance before mapping, so both very close and out-of-range (999) readings clamp to sensible beep-interval extremes rather than producing an absurd mapped value. Because beeping uses the same non-blocking millis() pattern as Experiment 26, the HC-SR04 is re-measured every single loop() pass regardless of the current beep state.",
+    working: "Distance -> mapped to a beep interval (closer = shorter interval) -> buzzer toggled on/off at that interval using a non-blocking timer, while the HC-SR04 continues to be measured every pass, independent of the beep timing.",
+    result: "Slow, distinct beeps beyond 80 cm slowing further to silence past 100 cm (\"SAFE\"), increasingly rapid beeping as an object approaches, becoming very fast near 5 cm.",
+    tip: "Re-check the non-blocking pattern is followed",
+  },
+  {
+    num: 40,
+    title: "Electronic Security System",
+    concept: "To formalise Experiment 31's informal arm/disarm/alarm logic into an explicit, documented finite-state machine (FSM) with a state diagram, a status LED, and an arming entry delay - the reusable pattern every remaining security-related experiment builds on.",
+    components: ["Arduino UNO R3, breadboard, 1 IR obstacle sensor, 1 active buzzer, 1 push button, 1 LED (status indicator), 1x220 Ω resistor, jumper wires."],
+    learning: ["Draw and read a formal state-transition diagram (states, transitions, guard conditions).", "Implement an FSM in code using a switch statement over an enum.", "Add a practical refinement (entry delay) without changing the state model's core structure."],
+    code: "const int IR_PIN = 7, BUZZER_PIN = 8, BUTTON_PIN = 2, LED_PIN = 13;\nconst unsigned long ENTRY_DELAY_MS = 5000;\nenum State { DISARMED, ARMED, ALARM };\nState state = DISARMED;\nunsigned long armedAt = 0;\n\nint lastReading = HIGH, stableState = HIGH;\nunsigned long lastChangeTime = 0;\nconst unsigned long DEBOUNCE_MS = 30;\n\nbool buttonEdge() {\n  int reading = digitalRead(BUTTON_PIN);\n  if (reading != lastReading) lastChangeTime = millis();\n  bool edge = false;\n  if ((millis() - lastChangeTime) > DEBOUNCE_MS && reading != stableState) {\n    stableState = reading;\n    if (stableState == LOW) edge = true;\n  }\n  lastReading = reading;\n  return edge;\n}\n\nvoid setup() {\n  pinMode(IR_PIN, INPUT);\n  pinMode(BUZZER_PIN, OUTPUT);\n  pinMode(BUTTON_PIN, INPUT_PULLUP);\n  pinMode(LED_PIN, OUTPUT);\n}\n\nvoid loop() {\n  if (buttonEdge()) {\n    switch (state) {\n      case DISARMED: state = ARMED; armedAt = millis(); break;\n      case ARMED:    state = DISARMED; break;\n      case ALARM:    state = DISARMED; break;\n    }\n  }\n\n  if (state == ARMED && (millis() - armedAt) > ENTRY_DELAY_MS\n      && digitalRead(IR_PIN) == LOW) {\n    state = ALARM;\n  }\n\n  switch (state) {\n    case DISARMED: digitalWrite(LED_PIN, LOW); digitalWrite(BUZZER_PIN, LOW); break;\n    case ARMED:    digitalWrite(LED_PIN, HIGH); digitalWrite(BUZZER_PIN, LOW); break;\n    case ALARM:    digitalWrite(LED_PIN, (millis() / 200) % 2); digitalWrite(BUZZER_PIN, HIGH); break;\n  }\n}",
+    explanation: "The two switch(state) blocks separate transition logic (the first, reacting to the button) from output logic (the second, driving the LED/buzzer purely from the current state) - a clean FSM implementation style that scales well as more states/outputs are added (used again in Experiments 41, 49, and 50). (millis() / 200) % 2 is a compact non-blocking way to blink the LED without a separate timer variable.",
+    working: "Button press -> DISARMED <-> ARMED toggle; while ARMED (after the entry delay has elapsed) an obstacle event -> ALARM (latched); a button press from ALARM -> DISARMED. The status LED is solid in ARMED, off in DISARMED, and blinking in ALARM.",
+    result: "LED off/DISARMED -> solid/ARMED (ignoring the sensor for 5 s) -> blinking+buzzer/ALARM once triggered after the delay -> off/DISARMED on the next button press.",
+    tip: "Re-check the millis() - armedAt comparison",
+  },
+  {
+    num: 41,
+    title: "Multi-Zone Security Detector",
+    concept: "To extend Experiment 40's single-sensor FSM to two independent security zones - an IR obstacle sensor (Zone 1) and a laser/LDR beam-break pair (Zone 2) - reporting which zone triggered on the LCD.",
+    components: ["Arduino UNO R3, breadboard, 16x2 I2C LCD, 1 IR obstacle sensor, 1 laser module, 1 LDR, 1x10 kΩ resistor, 1 active buzzer, jumper wires."],
+    learning: ["Build a laser-and-LDR beam-break sensor from discrete kit components.", "Extend a single-sensor FSM to accept multiple independent trigger sources.", "Report event provenance (which zone) rather than just an undifferentiated alarm."],
+    code: "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\nLiquidCrystal_I2C lcd(0x27, 16, 2);\nconst int IR_PIN = 7, LDR_PIN = A1, BUZZER_PIN = 8;\nconst int BEAM_THRESHOLD = 300;   // tune experimentally; low reading = beam broken\nenum State { DISARMED, ARMED, ALARM };\nState state = ARMED;   // simplified for this experiment: always armed after power-up\nbool zone1Triggered = false, zone2Triggered = false;\n\nvoid setup() {\n  pinMode(IR_PIN, INPUT);\n  pinMode(BUZZER_PIN, OUTPUT);\n  lcd.init(); lcd.backlight();\n}\n\nvoid loop() {\n  bool z1 = (digitalRead(IR_PIN) == LOW);\n  bool z2 = (analogRead(LDR_PIN) < BEAM_THRESHOLD);\n\n  if (state == ARMED && (z1 || z2)) {\n    state = ALARM;\n    zone1Triggered = z1;\n    zone2Triggered = z2;\n  }\n\n  digitalWrite(BUZZER_PIN, (state == ALARM) ? HIGH : LOW);\n\n  lcd.setCursor(0, 0);\n  if (state == ALARM) {\n    lcd.print(\"ALARM Zone:\");\n    lcd.print(zone1Triggered ? \"1\" : \" \");\n    lcd.print(zone2Triggered ? \"2\" : \" \");\n  } else {\n    lcd.print(\"Armed - clear   \");\n  }\n}",
+    explanation: "This experiment deliberately keeps state simplified (always ARMED after power-up, no button/disarm shown) to keep the listing focused on the multi-zone extension; combining it with Experiment 40's full DISARMED/ARMED/entry-delay logic is a natural next step, exercised in the Extension Challenge. zone1Triggered/zone2Triggered are latched booleans recording which zone(s) caused the most recent alarm, so the LCD can report provenance even though both zones share one buzzer.",
+    working: "Zone 1: IR obstacle OUT LOW -> Zone 1 triggered. Zone 2: LDR reading drops below a \"beam broken\" threshold -> Zone 2 triggered. Either event, while ARMED, moves the FSM to ALARM, and the LCD reports which zone caused it.",
+    result: "\"Armed - clear\" normally; \"ALARM Zone:1\", \"ALARM Zone: 2\", or \"ALARM Zone:12\" depending on which zone(s) triggered, with the buzzer sounding in all ALARM cases.",
+    tip: "Realign; recalibrate threshold",
+  },
+  {
+    num: 42,
+    title: "Digital Distance Warning System",
+    concept: "To build a multi-threshold ultrasonic warning system with formal hysteresis at each boundary and alarm priority so only the single most urgent LED/buzzer condition is ever active at once.",
+    components: ["Arduino UNO R3, breadboard, 1 HC-SR04, 3 LEDs (green/yellow/red), 3x220 Ω resistors, 1 active buzzer, jumper wires."],
+    learning: ["Apply hysteresis independently at two threshold boundaries.", "Implement alarm priority: when multiple conditions could apply, only the most severe one wins.", "Combine LED-bar indication with buzzer alarm restricted to the most severe tier only."],
+    code: "const int TRIG_PIN = 11, ECHO_PIN = 12;\nconst int GREEN = 8, YELLOW = 9, RED = 10, BUZZER_PIN = 13;\nconst unsigned long TIMEOUT_US = 30000UL;\nenum Tier { FAR, NEAR, CLOSE };\nTier tier = FAR;\n\nfloat measureDistanceCm() {\n  digitalWrite(TRIG_PIN, LOW); delayMicroseconds(2);\n  digitalWrite(TRIG_PIN, HIGH); delayMicroseconds(10);\n  digitalWrite(TRIG_PIN, LOW);\n  unsigned long duration = pulseIn(ECHO_PIN, HIGH, TIMEOUT_US);\n  return (duration == 0) ? 999 : duration / 58.0;\n}\n\nvoid setup() {\n  pinMode(TRIG_PIN, OUTPUT); pinMode(ECHO_PIN, INPUT);\n  pinMode(GREEN, OUTPUT); pinMode(YELLOW, OUTPUT); pinMode(RED, OUTPUT);\n  pinMode(BUZZER_PIN, OUTPUT);\n}\n\nvoid loop() {\n  float d = measureDistanceCm();\n\n  if (tier == FAR   && d < 28)              tier = NEAR;\n  else if (tier == NEAR && d > 32)          tier = FAR;\n  else if (tier == NEAR && d < 8)           tier = CLOSE;\n  else if (tier == CLOSE && d > 12)         tier = NEAR;\n\n  digitalWrite(GREEN,  tier == FAR);\n  digitalWrite(YELLOW, tier == NEAR);\n  digitalWrite(RED,    tier == CLOSE);\n  digitalWrite(BUZZER_PIN, tier == CLOSE);   // buzzer: CLOSE tier only\n}",
+    explanation: "Each hysteresis band (302 cm and 102 cm) only changes tier when the reading clearly crosses into the next band from the current tier's perspective, exactly generalising Experiment 25's single-boundary margin to two boundaries. digitalWrite(GREEN, tier == FAR) relies on the boolean expression's implicit 0/1 value, a compact idiom for \"exactly one of three outputs active\".",
+    working: "Distance -> hysteresis-filtered tier (FAR/NEAR/CLOSE) -> matching LED lit; buzzer sounds only while the tier is CLOSE.",
+    result: "Green beyond 30 cm, yellow between 10-30 cm, red (with buzzer) within 10 cm, with no chatter at either boundary.",
+    tip: "Increase the hysteresis margin",
+  },
+  {
+    num: 43,
+    title: "Light Intensity Measurement System",
+    concept: "To compare ambient light at two separate physical locations using two LDRs simultaneously, displaying both raw readings and which side is brighter - a relative, comparative measurement rather than a single absolute one.",
+    components: ["Arduino UNO R3, breadboard, 2 LDRs, 2x10 kΩ resistors, 16x2 I2C LCD, jumper wires."],
+    learning: ["Wire and read two independent LDR dividers on separate analog pins.", "Perform a relative (comparative) rather than absolute measurement.", "Recognise the kit-stock constraint (exactly 2 LDRs) this experiment exercises fully."],
+    code: "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\nLiquidCrystal_I2C lcd(0x27, 16, 2);\nconst int LEFT_PIN = A0, RIGHT_PIN = A1;\n\nvoid setup() {\n  lcd.init(); lcd.backlight();\n}\n\nvoid loop() {\n  int left = analogRead(LEFT_PIN);\n  int right = analogRead(RIGHT_PIN);\n\n  lcd.setCursor(0, 0);\n  lcd.print(\"L:\"); lcd.print(left); lcd.print(\"  R:\"); lcd.print(right); lcd.print(\"   \");\n  lcd.setCursor(0, 1);\n  if (abs(left - right) < 20) {\n    lcd.print(\"Similar         \");\n  } else if (left > right) {\n    lcd.print(\"Left brighter   \");\n  } else {\n    lcd.print(\"Right brighter  \");\n  }\n  delay(300);\n}",
+    explanation: "abs(left - right) < 20 adds a \"similar\" dead-band, so small, insignificant differences (within normal analog noise) do not falsely claim one side is brighter - otherwise the display could flicker between \"Left brighter\" and \"Right brighter\" from noise alone, even under genuinely even lighting.",
+    working: "Both A0 and A1 read every pass -> compared directly -> LCD reports both raw values and which side currently reads brighter.",
+    result: "\"L:NNN R:NNN\" on row 0; \"Similar\", \"Left brighter\", or \"Right brighter\" on row 1, changing correctly as one LDR is shaded.",
+    tip: "Note this as a real limitation of relative uncalibrated sensors",
+  },
+  {
+    num: 44,
+    title: "Automatic Day/Night Controller",
+    concept: "To formalise hysteresis as a small, reusable, generalised function - rather than the inline margin checks of Experiments 25/38/42 - and apply it to a relay-driven day/night light controller as a clean reference implementation.",
+    components: ["Arduino UNO R3, breadboard, 1 LDR, 1x10 kΩ resistor, 1 relay module, jumper wires."],
+    learning: ["Design a general-purpose hysteresis function reusable across future experiments.", "Explain hysteresis width selection as an engineering trade-off (responsiveness vs. chatter immunity).", "Apply the reusable function to a new scenario without duplicating its logic."],
+    code: "const int LDR_PIN = A0, RELAY_PIN = 10;\nconst int LOW_THRESH = 350, HIGH_THRESH = 450;   // 100-code hysteresis gap\nbool lightOn = false;\n\nbool hysteresis(int value, bool state, int low, int high) {\n  if (!state && value < low)  return true;    // turn ON once clearly dark\n  if (state  && value > high) return false;   // turn OFF once clearly bright\n  return state;                               // otherwise: no change\n}\n\nvoid setup() {\n  pinMode(RELAY_PIN, OUTPUT);\n}\n\nvoid loop() {\n  int reading = analogRead(LDR_PIN);\n  lightOn = hysteresis(reading, lightOn, LOW_THRESH, HIGH_THRESH);\n  digitalWrite(RELAY_PIN, lightOn ? HIGH : LOW);\n}",
+    explanation: "hysteresis() takes the current state as a parameter and returns the (possibly identical) new state, keeping it a pure function with no hidden internal memory - the calling code owns lightOn and decides what to do with the result, which is exactly why the same function can be reused in Experiment 45 for an entirely different physical quantity (temperature) without modification.",
+    working: "LDR reading -> passed through the reusable hysteresis() function together with the current light state -> returns the (possibly unchanged) new state -> drives the relay.",
+    result: "Relay switches ON once the reading drops below 350 and stays on until the reading rises above 450, with no rapid clicking in the 350-450 band.",
+    tip: "Widen the LOW/HIGH threshold gap",
+  },
+  {
+    num: 45,
+    title: "Temperature-Controlled System",
+    concept: "To build a temperature-controlled relay demonstration (a \"fan/heater\" stand-in) by reusing Experiment 44's hysteresis function unchanged on a DHT11 temperature reading, proving the function generalises across sensor types.",
+    components: ["Arduino UNO R3, breadboard, 16x2 I2C LCD, 1 DHT11, 1 relay module, jumper wires."],
+    learning: ["Reuse a previously written, generalised function on a new physical quantity.", "Adapt hysteresis() to floating-point sensor data.", "Combine LCD status display with relay-driven closed-loop control."],
+    code: "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\n#include <DHT.h>\n#define DHT_PIN 7\n#define DHT_TYPE DHT11\nLiquidCrystal_I2C lcd(0x27, 16, 2);\nDHT dht(DHT_PIN, DHT_TYPE);\nconst int RELAY_PIN = 10;\nconst float LOW_TEMP = 28.0, HIGH_TEMP = 30.0;   // 2C hysteresis gap\nconst unsigned long READ_INTERVAL_MS = 2000;\nunsigned long lastRead = 0;\nbool fanOn = false;\nfloat lastTemp = 0;\n\nbool hysteresis(float value, bool state, float low, float high) {\n  if (!state && value > high) return true;    // turn fan ON once clearly hot\n  if (state  && value < low)  return false;   // turn fan OFF once clearly cool\n  return state;\n}\n\nvoid setup() {\n  pinMode(RELAY_PIN, OUTPUT);\n  lcd.init(); lcd.backlight();\n  dht.begin();\n}\n\nvoid loop() {\n  if (millis() - lastRead >= READ_INTERVAL_MS) {\n    lastRead = millis();\n    float t = dht.readTemperature();\n    if (!isnan(t)) lastTemp = t;\n    fanOn = hysteresis(lastTemp, fanOn, LOW_TEMP, HIGH_TEMP);\n    digitalWrite(RELAY_PIN, fanOn ? HIGH : LOW);\n\n    lcd.setCursor(0, 0);\n    lcd.print(\"T:\"); lcd.print(lastTemp, 1);\n    lcd.print(fanOn ? \" FAN ON \" : \" FAN OFF\");\n  }\n}",
+    explanation: "Note the hysteresis() function body here is logically the mirror image of Experiment 44's (turning ON above a high threshold rather than below a low one, since heat rising is the \"trigger\" condition rather than darkness) - demonstrating that the same general pattern serves both \"turn on when a value gets low\" and \"turn on when a value gets high\" scenarios, just by swapping which comparison is used with which threshold.",
+    working: "Temperature reading -> passed through the (float-adapted) hysteresis() function together with the current fan state -> drives the relay; LCD shows temperature and fan state.",
+    result: "LCD shows \"T:NN.N FAN OFF\" normally, switching to \"T:NN.N FAN ON\" once temperature exceeds 30° C, remaining on until it drops below 28° C.",
+    tip: "Warm the sensor directly to test",
+  },
+  {
+    num: 46,
+    title: "IR Remote Smart Controller",
+    concept: "To use decoded codes from a household IR remote to independently toggle an LED and a relay-driven demonstration load, turning Experiment 34's passive decoder into an interactive controller.",
+    components: ["Arduino UNO R3, breadboard, 16x2 I2C LCD, 1 IR receiver, 1 LED, 1x220 Ω resistor, 1 relay module, jumper wires, plus the same household remote used in Experiment 34."],
+    learning: ["Map specific, previously-recorded IR codes to specific actions.", "Implement independent toggle state per output, driven by distinct remote buttons.", "Handle repeated/held-button IR codes without unwanted rapid re-toggling."],
+    code: "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\n#include <IRremote.hpp>\n#define IR_RECEIVE_PIN 11\nLiquidCrystal_I2C lcd(0x27, 16, 2);\nconst int LED_PIN = 8, RELAY_PIN = 10;\n\n// Replace these with codes YOU recorded in Experiment 34 for your own remote:\nconst unsigned long CODE_LED   = 0xFF6897UL;\nconst unsigned long CODE_RELAY = 0xFF9867UL;\n\nbool ledOn = false, relayOn = false;\n\nvoid setup() {\n  pinMode(LED_PIN, OUTPUT);\n  pinMode(RELAY_PIN, OUTPUT);\n  lcd.init(); lcd.backlight();\n  IrReceiver.begin(IR_RECEIVE_PIN);\n}\n\nvoid loop() {\n  if (IrReceiver.decode()) {\n    unsigned long code = IrReceiver.decodedIRData.decodedRawData;\n\n    if (code == CODE_LED) {\n      ledOn = !ledOn;\n      digitalWrite(LED_PIN, ledOn);\n    } else if (code == CODE_RELAY) {\n      relayOn = !relayOn;\n      digitalWrite(RELAY_PIN, relayOn);\n    }\n    // any other code (including repeat codes) is simply ignored\n\n    lcd.setCursor(0, 0);\n    lcd.print(\"LED:\"); lcd.print(ledOn ? \"ON \" : \"OFF\");\n    lcd.print(\" RLY:\"); lcd.print(relayOn ? \"ON \" : \"OFF\");\n\n    IrReceiver.resume();\n  }\n}",
+    explanation: "The two CODE_LED/CODE_RELAY constants are explicitly commented as needing replacement with values the learner records themselves, since remote codes are remote-specific and cannot be predicted in advance (as discussed in Experiment 34). Because repeat codes from a held button do not equal either stored constant (they use a distinct, protocol-specific repeat marker), they naturally fall through to \"ignored\" without special-case code.",
+    working: "Remote button press -> decoded hex code -> matched against two known codes -> toggles the LED or the relay accordingly; unrecognised or repeat codes are ignored.",
+    result: "Pressing the chosen \"LED\" button toggles the LED on/off once per press; pressing the chosen \"relay\" button independently toggles the relay; the LCD reflects both states live.",
+    tip: "Re-record codes per Experiment 34",
+  },
+  {
+    num: 47,
+    title: "Multi-Sensor Environmental Station",
+    concept: "To integrate DHT11, soil moisture, LDR, and HC-SR04 into one station using a formal non-blocking round-robin scheduler, generalising Experiment 37's two-sensor cycling to four independently-timed sensors on four LCD pages.",
+    components: ["Arduino UNO R3, breadboard, 16x2 I2C LCD, 1 DHT11, 1 soil moisture sensor, 1 LDR, 1x10 kΩ resistor, 1 HC-SR04, jumper wires."],
+    learning: ["Design a round-robin scheduler that polls one sensor per scheduler \"tick\" rather than all sensors every pass.", "Manage four independent cached readings and four display pages cleanly.", "Recognise the scalability limit of hand-written per-sensor timers as sensor count grows."],
+    code: "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\n#include <DHT.h>\n#define DHT_PIN 7\n#define DHT_TYPE DHT11\nLiquidCrystal_I2C lcd(0x27, 16, 2);\nDHT dht(DHT_PIN, DHT_TYPE);\nconst int SOIL_PIN = A0, LDR_PIN = A1, TRIG_PIN = 11, ECHO_PIN = 12;\nconst unsigned long SLOT_INTERVAL_MS = 2500;\nunsigned long lastSlot = 0;\nint slot = 0;\n\nfloat measureDistanceCm() {\n  digitalWrite(TRIG_PIN, LOW); delayMicroseconds(2);\n  digitalWrite(TRIG_PIN, HIGH); delayMicroseconds(10);\n  digitalWrite(TRIG_PIN, LOW);\n  unsigned long duration = pulseIn(ECHO_PIN, HIGH, 30000UL);\n  return (duration == 0) ? -1 : duration / 58.0;\n}\n\nvoid showSlot0() { float t = dht.readTemperature();\n  lcd.clear(); lcd.print(\"Temp:\"); if (!isnan(t)) lcd.print(t, 1); else lcd.print(\"err\"); }\nvoid showSlot1() { int raw = analogRead(SOIL_PIN);\n  int pct = constrain(map(raw, 800, 350, 0, 100), 0, 100);\n  lcd.clear(); lcd.print(\"Soil:\"); lcd.print(pct); lcd.print(\"%\"); }\nvoid showSlot2() { int raw = analogRead(LDR_PIN);\n  lcd.clear(); lcd.print(\"Light:\"); lcd.print(map(raw, 0, 1023, 0, 100)); lcd.print(\"%\"); }\nvoid showSlot3() { float d = measureDistanceCm();\n  lcd.clear(); lcd.print(\"Dist:\"); if (d > 0) lcd.print(d, 0); else lcd.print(\"--\"); lcd.print(\"cm\"); }\n\nvoid (*pages[4])() = { showSlot0, showSlot1, showSlot2, showSlot3 };\n\nvoid setup() {\n  pinMode(TRIG_PIN, OUTPUT); pinMode(ECHO_PIN, INPUT);\n  lcd.init(); lcd.backlight();\n  dht.begin();\n}\n\nvoid loop() {\n  if (millis() - lastSlot >= SLOT_INTERVAL_MS) {\n    lastSlot = millis();\n    pages[slot]();              // call the function for the current slot\n    slot = (slot + 1) % 4;\n  }\n}",
+    explanation: "void (*pages[4])() is an array of function pointers - exactly the generalisation previewed in Experiment 36's Extension Challenge. pages[slot]() calls whichever function corresponds to the current slot, so adding a fifth sensor later means adding one more function and one more array entry, with no change to the scheduling logic itself.",
+    working: "A shared scheduler timer advances slot (0-3) every SLOT_INTERVAL_MS; each tick reads and caches only that slot's sensor and redraws the LCD from the corresponding cached value.",
+    result: "LCD cycles: \"Temp:NN.N\" -> \"Soil:NN%\" -> \"Light:NN%\" -> \"Dist:NNcm\" -> repeats, each for 2.5 s.",
+    tip: "Re-check slot = (slot+1)%4 runs every tick",
+  },
+  {
+    num: 48,
+    title: "Smart Classroom Automation Prototype",
+    concept: "To combine automatic light control, environmental monitoring, and an occupancy proxy into one classroom-automation prototype, demonstrating how independently-developed subsystems compose into a coherent application.",
+    components: ["Arduino UNO R3, breadboard, 16x2 I2C LCD, 1 LDR, 1x10 kΩ resistor, 1 DHT11, 1 IR obstacle sensor, 1 relay module, 1 active buzzer, jumper wires."],
+    learning: ["Use an IR obstacle sensor at a doorway as a simple occupancy proxy (not a true occupancy sensor).", "Combine light automation (hysteresis), environment monitoring (DHT11), and an occupancy-gated comfort alert.", "Practice integrating three previously separate subsystems into one coherent loop()."],
+    code: "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\n#include <DHT.h>\n#define DHT_PIN 7\n#define DHT_TYPE DHT11\nLiquidCrystal_I2C lcd(0x27, 16, 2);\nDHT dht(DHT_PIN, DHT_TYPE);\nconst int LDR_PIN = A0, IR_PIN = 6, RELAY_PIN = 10, BUZZER_PIN = 8;\nconst unsigned long OCCUPANCY_TIMEOUT_MS = 60000;   // 1 minute\nconst float COMFORT_TEMP = 29.0;\nunsigned long lastCrossing = 0;\nbool lightOn = false;\n\nbool hysteresis(int value, bool state, int low, int high) {\n  if (!state && value < low)  return true;\n  if (state  && value > high) return false;\n  return state;\n}\n\nvoid setup() {\n  pinMode(IR_PIN, INPUT);\n  pinMode(RELAY_PIN, OUTPUT);\n  pinMode(BUZZER_PIN, OUTPUT);\n  lcd.init(); lcd.backlight();\n  dht.begin();\n}\n\nvoid loop() {\n  if (digitalRead(IR_PIN) == LOW) lastCrossing = millis();\n  bool occupied = (millis() - lastCrossing) < OCCUPANCY_TIMEOUT_MS;\n\n  lightOn = hysteresis(analogRead(LDR_PIN), lightOn, 350, 450);\n  digitalWrite(RELAY_PIN, lightOn ? HIGH : LOW);\n\n  float t = dht.readTemperature();\n  bool remind = occupied && !isnan(t) && (t > COMFORT_TEMP);\n  digitalWrite(BUZZER_PIN, remind ? HIGH : LOW);\n\n  lcd.setCursor(0, 0);\n  lcd.print(occupied ? \"Occ \" : \"Empt\");\n  lcd.print(lightOn ? \" Light\" : \" Dark \");\n  lcd.print(remind ? \" Warm!\" : \"      \");\n  delay(500);\n}",
+    explanation: "Occupancy is a simple latched timeout, not a continuous sensor reading: lastCrossing records the last doorway event, and occupied is derived freshly each pass from how long ago that was - no separate \"occupied\" variable needs manual clearing, since the timeout comparison naturally becomes false once enough time has passed with no new crossings.",
+    working: "Doorway crossing -> occupancy proxy latched for a timeout window; light relay driven by LDR hysteresis regardless of occupancy; buzzer sounds only if occupied and temperature exceeds a comfort threshold.",
+    result: "LCD shows a combination of \"Occ\"/\"Empt\", \" Light\"/\" Dark \", and \" Warm!\" as appropriate, with the buzzer sounding only in the occupied+warm combination.",
+    tip: "Check IR sensor for false triggers",
+  },
+  {
+    num: 49,
+    title: "Security and Environment Monitoring Station",
+    concept: "To combine Experiment 40/41's security FSM with environmental sensing on one shared LCD, introducing explicit alarm prioritisation: security alerts must always pre-empt routine environmental display, never the reverse.",
+    components: ["Arduino UNO R3, breadboard, 16x2 I2C LCD, 1 DHT11, 1 IR obstacle sensor (security zone), 1 active buzzer, 1 push button, jumper wires."],
+    learning: ["Combine a security FSM with routine sensor display sharing one output device.", "Implement display priority: security state overrides normal page-cycling whenever active.", "Justify a priority ordering from a systems-safety perspective."],
+    code: "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\n#include <DHT.h>\n#define DHT_PIN 7\n#define DHT_TYPE DHT11\nLiquidCrystal_I2C lcd(0x27, 16, 2);\nDHT dht(DHT_PIN, DHT_TYPE);\nconst int IR_PIN = 6, BUZZER_PIN = 8, BUTTON_PIN = 2;\nenum State { DISARMED, ARMED, ALARM };\nState state = DISARMED;\n\nint lastReading = HIGH, stableState = HIGH;\nunsigned long lastChangeTime = 0;\nconst unsigned long DEBOUNCE_MS = 30, READ_INTERVAL_MS = 2000;\nunsigned long lastRead = 0;\nfloat cachedTemp = 0;\n\nbool buttonEdge() {\n  int reading = digitalRead(BUTTON_PIN);\n  if (reading != lastReading) lastChangeTime = millis();\n  bool edge = false;\n  if ((millis() - lastChangeTime) > DEBOUNCE_MS && reading != stableState) {\n    stableState = reading;\n    if (stableState == LOW) edge = true;\n  }\n  lastReading = reading;\n  return edge;\n}\n\nvoid setup() {\n  pinMode(IR_PIN, INPUT);\n  pinMode(BUZZER_PIN, OUTPUT);\n  pinMode(BUTTON_PIN, INPUT_PULLUP);\n  lcd.init(); lcd.backlight();\n  dht.begin();\n}\n\nvoid loop() {\n  if (buttonEdge()) {\n    state = (state == DISARMED) ? ARMED : DISARMED;\n  }\n  if (state == ARMED && digitalRead(IR_PIN) == LOW) state = ALARM;\n  digitalWrite(BUZZER_PIN, (state == ALARM) ? HIGH : LOW);\n\n  if (millis() - lastRead >= READ_INTERVAL_MS) {\n    lastRead = millis();\n    float t = dht.readTemperature();\n    if (!isnan(t)) cachedTemp = t;\n  }\n\n  lcd.setCursor(0, 0);\n  if (state == ALARM) {\n    lcd.print(\"** ALARM! **    \");   // security always wins the display\n  } else {\n    lcd.print(\"Temp: \"); lcd.print(cachedTemp, 1); lcd.print(\" C   \");\n  }\n}",
+    explanation: "The temperature is still read and cached on its own schedule even while ALARM is showing, so that the moment the alarm clears, an up-to-date reading is already available - the environmental subsystem is never truly paused, only its display is pre-empted, which is an important distinction for keeping both subsystems genuinely concurrent.",
+    working: "Security FSM (as Experiment 40, using D6 for the sensor) runs independently of environmental sensing; the LCD-drawing code checks the security state first - if ALARM, it shows only alarm status; otherwise, it shows the environmental reading.",
+    result: "\"Temp: NN.N C\" during normal operation; \"** ALARM! **\" immediately and exclusively once triggered while armed, reverting cleanly to temperature display once disarmed.",
+    tip: "Re-check it is the first condition in the display block",
+  },
+  {
+    num: 50,
+    title: "Mini Smart Home Automation System",
+    concept: "To integrate every sensor and actuator technique developed across this manual - security FSM, environmental monitoring, automatic lighting, distance sensing, and alarm prioritisation - into one coherent, non-blocking Mini Smart Home Automation System, built entirely from kit components.",
+    components: ["Arduino UNO R3, breadboard, 16x2 I2C LCD, 1 LDR + 1x10 kΩ resistor, 1 DHT11, 1 soil moisture sensor, 1 IR obstacle sensor (doorway/security), 1 HC-SR04, 1 relay module, 1 active buzzer, 1 push button, jumper wires (all components used are drawn from the single kit inventory in the manual no component is used twice simultaneously beyond kit stock)."],
+    learning: ["Specify system requirements and a pin allocation plan before writing code.", "Integrate 5 sensors and 2 actuators under one non-blocking scheduler with no polling conflicts.", "Apply a finite-state machine, hysteresis, and alarm prioritisation together in one program.", "Validate the complete system against a written checklist rather than ad hoc testing.", "Critically state the system's real limitations and credible future enhancements."],
+    code: "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\n#include <DHT.h>\n#define DHT_PIN 7\n#define DHT_TYPE DHT11\nLiquidCrystal_I2C lcd(0x27, 16, 2);\nDHT dht(DHT_PIN, DHT_TYPE);\n\nconst int BUTTON_PIN = 2, IR_PIN = 6, BUZZER_PIN = 8, RELAY_PIN = 10;\nconst int TRIG_PIN = 11, ECHO_PIN = 12, LDR_PIN = A0, SOIL_PIN = A1;\nconst unsigned long ENTRY_DELAY_MS = 5000, SLOT_INTERVAL_MS = 2500;\n\nenum State { DISARMED, ARMED, ALARM };\nState state = DISARMED;\nunsigned long armedAt = 0;\n\nint lastReading = HIGH, stableState = HIGH;\nunsigned long lastChangeTime = 0;\nconst unsigned long DEBOUNCE_MS = 30;\nbool lightOn = false;\nunsigned long lastSlot = 0;\nint slot = 0;\nfloat cachedTemp = 0, cachedHum = 0;\nint cachedSoil = 0;\nfloat cachedDist = -1;\n\nbool buttonEdge() {\n  int reading = digitalRead(BUTTON_PIN);\n  if (reading != lastReading) lastChangeTime = millis();\n  bool edge = false;\n  if ((millis() - lastChangeTime) > DEBOUNCE_MS && reading != stableState) {\n    stableState = reading;\n    if (stableState == LOW) edge = true;\n  }\n  lastReading = reading;\n  return edge;\n}\n\nbool hysteresis(int value, bool st, int low, int high) {\n  if (!st && value < low) return true;\n  if (st && value > high) return false;\n  return st;\n}\n\nfloat measureDistanceCm() {\n  digitalWrite(TRIG_PIN, LOW); delayMicroseconds(2);\n  digitalWrite(TRIG_PIN, HIGH); delayMicroseconds(10);\n  digitalWrite(TRIG_PIN, LOW);\n  unsigned long d = pulseIn(ECHO_PIN, HIGH, 30000UL);\n  return (d == 0) ? -1 : d / 58.0;\n}\n\nvoid setup() {\n  pinMode(BUTTON_PIN, INPUT_PULLUP);\n  pinMode(IR_PIN, INPUT);\n  pinMode(BUZZER_PIN, OUTPUT);\n  pinMode(RELAY_PIN, OUTPUT);\n  pinMode(TRIG_PIN, OUTPUT); pinMode(ECHO_PIN, INPUT);\n  lcd.init(); lcd.backlight();\n  dht.begin();\n}\n\nvoid loop() {\n  // 1) Security FSM\n  if (buttonEdge()) {\n    if (state == DISARMED) { state = ARMED; armedAt = millis(); }\n    else state = DISARMED;\n  }\n  if (state == ARMED && (millis() - armedAt) > ENTRY_DELAY_MS\n      && digitalRead(IR_PIN) == LOW) {\n    state = ALARM;\n  }\n  digitalWrite(BUZZER_PIN, (state == ALARM) ? HIGH : LOW);\n\n  // 2) Automatic lighting (always active)\n  lightOn = hysteresis(analogRead(LDR_PIN), lightOn, 350, 450);\n  digitalWrite(RELAY_PIN, lightOn ? HIGH : LOW);\n\n  // 3) Round-robin environmental scheduler\n  if (millis() - lastSlot >= SLOT_INTERVAL_MS) {\n    lastSlot = millis();\n    if (slot == 0) {\n      float t = dht.readTemperature(), h = dht.readHumidity();\n      if (!isnan(t)) cachedTemp = t;\n      if (!isnan(h)) cachedHum = h;\n    } else if (slot == 1) {\n      cachedSoil = constrain(map(analogRead(SOIL_PIN), 800, 350, 0, 100), 0, 100);\n    } else {\n      cachedDist = measureDistanceCm();\n    }\n    slot = (slot + 1) % 3;\n  }\n\n  // 4) Display (security has absolute priority)\n  lcd.setCursor(0, 0);\n  if (state == ALARM) {\n    lcd.print(\"** ALARM! **    \");\n  } else if (slot == 1) {\n    lcd.print(\"T:\"); lcd.print(cachedTemp, 1); lcd.print(\" H:\"); lcd.print(cachedHum, 0); lcd.print(\"%  \");\n  } else if (slot == 2) {\n    lcd.print(\"Soil: \"); lcd.print(cachedSoil); lcd.print(\"%       \");\n  } else {\n    lcd.print(\"Dist: \"); lcd.print(cachedDist, 0); lcd.print(\" cm      \");\n  }\n}",
+    explanation: "The four numbered comments in loop() mirror the Algorithm section's four steps exactly, so the code's structure is traceable back to the design without needing external documentation. Notice the lighting (step 2) and security (step 1) subsystems run unconditionally every pass (they are safety/comfort-critical and must never wait behind the slower environmental scheduler), while only the environmental readings (step 3) are gated behind the round-robin timer - a direct application of the \"what needs to run every pass vs. what can be scheduled\" reasoning built up since Experiment 26.",
+    working: "Security FSM and lighting hysteresis run every loop() pass (fast, safety/comfort-relevant); the round-robin environmental scheduler runs on a slower tick; the LCD is drawn last each pass, with security state checked first and given exclusive display priority whenever active.",
+    result: "Under normal conditions, the LCD cycles Temp/Humidity -> Soil -> Distance every 2.5 s, the relay silently tracks ambient light with hysteresis, and arming/triggering/disarming produces an immediate, exclusive \"** ALARM! **\" display and buzzer during the ALARM state only.",
+    tip: "Search for and remove any delay() beyond microsecond-scale sensor timing",
+  },
+  {
+    num: 51,
+    title: "Bonus: Servo-Controlled Automatic Barrier",
+    concept: "To build an automatic barrier that opens (servo swings to 90°) when a vehicle is detected within range by the HC-SR04, and closes (servo returns to 0°) once the vehicle passes, extending Experiment 33/39's parking-sensor pattern with a genuine mechanical actuator instead of an LED/relay demonstration.",
+    components: ["Arduino UNO R3, breadboard, 1 HC-SR04, 1 SG90 micro servo motor, jumper wires."],
+    learning: ["Install and use the built-in Servo library.", "Command a servo to a specific angle with servo.write().", "Combine a previously verified sensor function with a new actuator type."],
+    code: "#include <Servo.h>\n\nconst int TRIG_PIN = 9, ECHO_PIN = 10, SERVO_PIN = 6;\nconst unsigned long TIMEOUT_US = 30000UL;\nServo barrierServo;\n\nfloat measureDistanceCm() {\n  digitalWrite(TRIG_PIN, LOW); delayMicroseconds(2);\n  digitalWrite(TRIG_PIN, HIGH); delayMicroseconds(10);\n  digitalWrite(TRIG_PIN, LOW);\n  unsigned long duration = pulseIn(ECHO_PIN, HIGH, TIMEOUT_US);\n  return (duration == 0) ? 999 : duration / 58.0;\n}\n\nvoid setup() {\n  pinMode(TRIG_PIN, OUTPUT);\n  pinMode(ECHO_PIN, INPUT);\n  barrierServo.attach(SERVO_PIN);\n  barrierServo.write(0);   // start closed\n}\n\nvoid loop() {\n  float d = measureDistanceCm();\n  if (d < 15.0) {\n    barrierServo.write(90);   // open\n  } else {\n    barrierServo.write(0);    // closed\n  }\n  delay(200);\n}",
+    explanation: "barrierServo.attach(SERVO_PIN) configures D6 to generate the 50 Hz servo control signal internally (handled by the Servo library's own timer, independent of analogWrite()'s PWM). barrierServo.write(angle) takes a plain angle in degrees, not a raw pulse width, making the code read directly in terms of the physical barrier position.",
+    working: "Distance measured -> compared against a 15 cm threshold -> below threshold: servo commanded to 90° (barrier open); above threshold: servo commanded to 0° (barrier closed).",
+    result: "Barrier servo rests at 0°; swings smoothly to 90° within 0.2-0.3 s of an object crossing the 15 cm threshold, and returns to 0° once it is clear.",
+    tip: "Use a separate 5V supply for the servo, common ground only",
+  },
 ];

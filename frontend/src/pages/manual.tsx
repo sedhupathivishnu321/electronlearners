@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Cpu, Printer, Copy, Check, Sparkles, BookOpen, Wrench, Lightbulb, Edit3, ShieldCheck } from 'lucide-react';
-import { EXPERIMENTS_15 } from '../data/experimentsData';
+import { EXPERIMENTS_50 } from '../data/experimentsData';
 import FritzingCircuit from '../components/FritzingCircuit';
 import { getAssetUrl } from '../utils/assets';
 import { Logo } from '../components/ui/Logo';
@@ -10,7 +10,7 @@ export default function PerfectArduinoManualPage() {
   const [selectedExpNum, setSelectedExpNum] = useState<number>(1);
   const [copied, setCopied] = useState<boolean>(false);
 
-  const exp = EXPERIMENTS_15.find((e) => e.num === selectedExpNum) || EXPERIMENTS_15[0];
+  const exp = EXPERIMENTS_50.find((e) => e.num === selectedExpNum) || EXPERIMENTS_50[0];
 
   const handleCopyCode = () => {
     navigator.clipboard.writeText(exp.code);
@@ -29,7 +29,7 @@ export default function PerfectArduinoManualPage() {
             <span>Back to Arduino Starter Kit</span>
           </Link>
           <h1 className="text-3xl font-heading font-black text-white flex items-center gap-3">
-            <span className="gradient-text-blue">Arduino STEM Kit</span> Official 15-Experiment Lab Manual
+            <span className="gradient-text-blue">Arduino STEM Kit</span> Official 50-Experiment Lab Manual
           </h1>
           <p className="text-slate-400 text-xs mt-1">Pixel-perfect hardware laboratory manual with Fritzing schematics & C++ code.</p>
         </div>
@@ -49,7 +49,7 @@ export default function PerfectArduinoManualPage() {
 
       {/* EXPERIMENT SELECTOR TABS */}
       <div className="max-w-7xl mx-auto flex items-center space-x-2 overflow-x-auto pb-4 mb-6 scrollbar-none print:hidden">
-        {EXPERIMENTS_15.map((item) => (
+        {EXPERIMENTS_50.map((item) => (
           <button
             key={item.num}
             onClick={() => setSelectedExpNum(item.num)}

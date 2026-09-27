@@ -12,13 +12,13 @@ export interface ResourceDownload {
 export const DOWNLOADS_DATA: ResourceDownload[] = [
   {
     id: "dl-1",
-    title: "Arduino UNO Starter Kit 15-Project Manual",
+    title: "JR Learners Basic Embedded Systems Laboratory Manual (50 Experiments)",
     category: "PDF Manuals",
     fileType: "PDF",
-    size: "14.2 MB",
+    size: "5.4 MB",
     downloadsCount: 3420,
     url: "/downloads/manuals/Arduino_Starter_Kit_Guide.pdf",
-    description: "Complete 120-page full-color assembly guide with wiring diagrams and C++ code explanation."
+    description: "Complete 302-page lab manual for the Arduino Starter Kit: 50 fully worked experiments (theory, circuit diagrams, algorithms, flowcharts, complete Arduino code, troubleshooting, and viva questions) across Simple, Average, and Advanced layers, plus 15 appendices."
   },
   {
     id: "dl-2",

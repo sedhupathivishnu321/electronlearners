@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { EXPERIMENTS_15, ExperimentData } from '../data/experimentsData';
+import { EXPERIMENTS_50, ExperimentData } from '../data/experimentsData';
 import FritzingCircuit from '../components/FritzingCircuit';
 import { getAssetUrl } from '../utils/assets';
 import { Logo } from '../components/ui/Logo';
 import { ArrowLeft, Save, Plus, Trash2, Printer, Download, Upload, Edit3, Check, Cpu, Lightbulb, Wrench, BookOpen, Sparkles } from 'lucide-react';
 
 export default function LocalEditableManual() {
-  const [experiments, setExperiments] = useState<ExperimentData[]>(EXPERIMENTS_15);
+  const [experiments, setExperiments] = useState<ExperimentData[]>(EXPERIMENTS_50);
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const [isEditing, setIsEditing] = useState<boolean>(true);
   const [savedStatus, setSavedStatus] = useState<string | null>(null);

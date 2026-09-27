@@ -41,23 +41,43 @@ export const PRODUCTS_DATA: STEMProduct[] = [
     stock: 45,
     badge: "Bestseller",
     image: "https://images.unsplash.com/photo-1553406830-ef2513450d76?w=600&auto=format&fit=crop&q=80",
-    shortDesc: "The ultimate beginner kit for electronics & microcontrollers. Includes Arduino UNO R3, 30+ components, and step-by-step PDF manual.",
-    description: "Start your journey in hardware programming with our comprehensive Arduino Starter Kit. Designed for students, beginners, and educators, this kit includes everything needed to build 15 exciting projects ranging from simple LED blinkers to smart temperature monitors.",
+    shortDesc: "The ultimate beginner kit for electronics & microcontrollers. Includes Arduino UNO R3, 25+ components, and a complete 50-experiment PDF lab manual.",
+    description: "Start your journey in hardware programming with our comprehensive Arduino Starter Kit. Designed for students, beginners, and educators, this kit includes everything needed to work through all 50 hands-on experiments in the JR Learners Basic Embedded Systems Laboratory Manual, progressing from simple LED blinkers through sensor interfacing to a complete Mini Smart Home Automation capstone.",
     learningObjectives: [
-      "Master C/C++ basics in Arduino IDE",
-      "Understand Digital & Analog I/O pins",
-      "Interface sensors (Ultrasonic, DHT11, LDR, PIR)",
-      "Drive DC Motors, Servo Motors, and LCD displays"
+      "Master C/C++ basics in Arduino IDE, from digitalWrite() to non-blocking millis() scheduling",
+      "Understand Digital & Analog I/O, PWM, and the I2C bus",
+      "Interface sensors: HC-SR04 ultrasonic, DHT11 temperature/humidity, LDR, IR obstacle, soil moisture, and IR receiver",
+      "Drive actuators: LEDs, buzzers, a 5V relay module, and an SG90 servo motor",
+      "Build a 16x2 I2C LCD display interface and a relay-driven automation demonstration"
     ],
     components: [
-      { name: "Arduino UNO R3 Board", quantity: 1 },
+      { name: "Arduino UNO R3 Board + USB Cable", quantity: 1 },
+      { name: "5V Power Adapter", quantity: 1 },
+      { name: "Multi-Output Breadboard Power Module", quantity: 1 },
       { name: "Breadboard 830 Points", quantity: 1 },
-      { name: "Jumper Wires (M-M, M-F, F-F)", quantity: 65 },
-      { name: "DHT11 Temp & Humidity Sensor", quantity: 1 },
+      { name: "Assorted Resistors", quantity: 100 },
+      { name: "Assorted LEDs (Red, Blue, Green, White, Yellow)", quantity: 25 },
+      { name: "5V Relay Module", quantity: 1 },
+      { name: "Connectivity Tester", quantity: 1 },
+      { name: "Push Buttons", quantity: 5 },
+      { name: "16x2 LCD Display with I2C Interface", quantity: 1 },
+      { name: "Female-to-Female Jumper Wires", quantity: 10 },
+      { name: "Male-to-Female Jumper Wires", quantity: 10 },
+      { name: "Male-to-Male Jumper Wires", quantity: 10 },
+      { name: "Push-Button Module", quantity: 1 },
+      { name: "LDR (Light Dependent Resistor)", quantity: 2 },
+      { name: "IR Obstacle Sensor", quantity: 1 },
       { name: "HC-SR04 Ultrasonic Sensor", quantity: 1 },
-      { name: "16x2 LCD Display with I2C", quantity: 1 },
+      { name: "Soil Moisture Sensor", quantity: 1 },
+      { name: "DHT11 Temperature & Humidity Sensor", quantity: 1 },
+      { name: "Buzzers (1 Active + 1 Passive)", quantity: 2 },
+      { name: "Laser Diode Module", quantity: 1 },
+      { name: "PN-Junction Diode", quantity: 1 },
+      { name: "IR Receiver Module", quantity: 1 },
+      { name: "Potentiometer (10k)", quantity: 1 },
       { name: "SG90 Micro Servo Motor", quantity: 1 },
-      { name: "Assorted LEDs & Resistors Pack", quantity: 100 }
+      { name: "Storage Box", quantity: 1 },
+      { name: "USB-to-C Converter", quantity: 1 }
     ],
     specifications: {
       "Microcontroller": "ATmega328P",
@@ -78,7 +98,8 @@ export const PRODUCTS_DATA: STEMProduct[] = [
     videoUrl: "https://www.youtube.com/watch?v=nL34zDTPkcs",
     faqs: [
       { question: "Is prior coding experience required?", answer: "No! The step-by-step manual guides you from absolute scratch." },
-      { question: "Can I use Windows, Mac, or Linux?", answer: "Yes, Arduino IDE runs on Windows, macOS, and Linux." }
+      { question: "Can I use Windows, Mac, or Linux?", answer: "Yes, Arduino IDE runs on Windows, macOS, and Linux." },
+      { question: "How many experiments does the manual cover?", answer: "All 50, organised into Layer 1 (Simple, 1-17), Layer 2 (Average, 18-34), and Layer 3 (Advanced, 35-50), ending in a Mini Smart Home Automation capstone. Read it interactively at /manual or download the full print-ready PDF from /downloads." }
     ]
   },
   {
