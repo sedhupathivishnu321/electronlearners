@@ -1,14 +1,7 @@
 /** @type {import('next').NextConfig} */
-const isGithubActions = process.env.GITHUB_ACTIONS || false;
-
-let basePath = '';
-let assetPrefix = '';
-
-if (isGithubActions && process.env.GITHUB_REPOSITORY) {
-  const repo = process.env.GITHUB_REPOSITORY.replace(/.*?\//, '');
-  basePath = `/${repo}`;
-  assetPrefix = `/${repo}/`;
-}
+// Served from the custom domain root (jrlearners.com), so no base path.
+const basePath = '';
+const assetPrefix = '';
 
 const nextConfig = {
   output: 'export',
