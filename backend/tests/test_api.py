@@ -1,4 +1,4 @@
-# Backend API test: node-free, run with `python backend/tests/test_api.py` (needs: pip install -r backend/requirements.txt aiosmtpd httpx)
+# Backend API test: node-free, run with `python backend/tests/test_api.py` (needs: pip install -r backend/requirements.txt aiosmtpd "httpx<0.28")
 import os, sys, tempfile, time, hashlib
 tmp = tempfile.mkdtemp()
 os.environ.update({"DATA_DIR": tmp, "ADMIN_EMAIL": "boss@test.com", "ADMIN_PASSWORD": "AdminPass123", "PAYU_KEY": "k_test", "PAYU_SALT": "salt_test", "PAYU_ENV": "test",

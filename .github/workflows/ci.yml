@@ -12,7 +12,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - run: pip install -r backend/requirements.txt aiosmtpd httpx
+      - run: pip install -r backend/requirements.txt aiosmtpd "httpx<0.28"
       - name: Backend API tests (accounts, orders, PayU hashes, mail)
         run: python backend/tests/test_api.py
 

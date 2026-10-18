@@ -15,13 +15,17 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    env:
-      HAS_SERVER: ${{ secrets.SSH_HOST != '' }}
     steps:
+      - name: Is a server configured?
+        id: srv
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+        run: |
+          if [ -n "$SSH_HOST" ]; then echo "has=true" >> "$GITHUB_OUTPUT"; else echo "has=false" >> "$GITHUB_OUTPUT"; fi
       - uses: actions/checkout@v4
-        if: env.HAS_SERVER == 'true'
+        if: steps.srv.outputs.has == 'true'
       - name: Write backend/.env from the secrets
-        if: env.HAS_SERVER == 'true'
+        if: steps.srv.outputs.has == 'true'
         env:
           API_DOMAIN: ${{ vars.API_DOMAIN }}
         run: |
@@ -48,7 +52,7 @@ jobs:
           EOF
           sed -i 's/^ *//' backend/.env
       - name: Copy files and start the stack
-        if: env.HAS_SERVER == 'true'
+        if: steps.srv.outputs.has == 'true'
         env:
           API_DOMAIN: ${{ vars.API_DOMAIN }}
         run: |
@@ -59,5 +63,5 @@ jobs:
           tar czf - backend Dockerfile.backend docker-compose.yml Caddyfile | ssh -i ~/.ssh/id "$T" 'mkdir -p ~/jrlearners && tar xzf - -C ~/jrlearners && chmod 600 ~/jrlearners/backend/.env'
           ssh -i ~/.ssh/id "$T" "cd ~/jrlearners && API_DOMAIN=${API_DOMAIN} docker compose up -d --build"
       - name: Skipped
-        if: env.HAS_SERVER != 'true'
+        if: steps.srv.outputs.has != 'true'
         run: echo "No SSH_HOST secret yet: nothing to deploy to. See the comments at the top of this file."
