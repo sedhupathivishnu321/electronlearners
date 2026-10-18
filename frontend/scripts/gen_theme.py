@@ -107,6 +107,13 @@ out.append('/* saturated backgrounds: dark enough for light text (AA contrast) *
 # semi-transparent dark panels over the light page look muddy grey: make them solid dark
 alpha_dark = [t for t in DARK_TOKENS if '/' in t and t.startswith('bg-') and not t.startswith('bg-black')]
 out.append('/* translucent dark panels become solid dark panels */' + chr(10) + join(sel(alpha_dark)) + ' { background-color: rgba(21, 30, 53, 0.96) !important; }')
+
+# Buttons and button-like links never use a black / dark fill: a dark token on a <button> or <a> becomes a light slate button
+DARK_BTN = ', '.join(f'button{t}, a{t}, [role="button"]{t}' for t in sel(DARK_TOKENS, DARK_CLASSES))
+DARK_BTN_HOVER = ', '.join(f'button{t}:hover, a{t}:hover, [role="button"]{t}:hover' for t in sel(DARK_TOKENS, DARK_CLASSES))
+HOVER_DARK = [f'hover:bg-{c}-{sh}' for c in ('slate', 'gray', 'zinc') for sh in ('600', '700', '800', '900', '950')]
+DARK_HOVER_BTN = ', '.join(f'button.{esc(t)}:hover, a.{esc(t)}:hover' for t in HOVER_DARK)
+out.append('/* buttons are never black: dark-filled buttons become light slate buttons with navy text */' + chr(10) + DARK_BTN + ' { background-color: #E2E8F0 !important; border-color: #94A3B8 !important; ' + var_block('#14213D', '#475569', 0) + ' color: #14213D; }' + chr(10) + DARK_BTN_HOVER + ', ' + DARK_HOVER_BTN + ' { background-color: #CBD5E1 !important; }')
 out.append('''
 /* gradient headline text becomes a solid, readable colour */
 .gradient-text-blue, .gradient-text-orange {
@@ -140,6 +147,7 @@ input:not(.x), select:not(.x), textarea:not(.x) {
 input:not(.x)::placeholder, textarea:not(.x)::placeholder { color: #64748B !important; -webkit-text-fill-color: #64748B !important; opacity: 1; }
 input:focus, select:focus, textarea:focus { border-color: #2563EB !important; outline: none !important; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2); }
 select option { color: #14213D; background: #FFFFFF; }
+input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill { -webkit-text-fill-color: #14213D !important; box-shadow: 0 0 0 1000px #FFFFFF inset !important; }
 input[type="radio"]:not(.x), input[type="checkbox"]:not(.x) { -webkit-text-fill-color: initial !important; }
 input:not(.x):disabled, select:not(.x):disabled, textarea:not(.x):disabled { background-color: #E2E8F0 !important; color: #475569 !important; -webkit-text-fill-color: #475569 !important; }
 

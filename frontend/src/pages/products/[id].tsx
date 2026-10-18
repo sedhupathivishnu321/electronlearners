@@ -123,9 +123,6 @@ export default function ProductDetail() {
               <div>
                 <span className="text-slate-500">Availability:</span> <span className="text-white ml-1">{product.stock > 0 ? 'Available' : 'Out of Stock'}</span>
               </div>
-              <div>
-                <span className="text-slate-500">Warranty:</span> <span className="text-white ml-1">6 Months Limited</span>
-              </div>
             </div>
           </div>
 
@@ -188,7 +185,7 @@ export default function ProductDetail() {
             { key: 'included', label: "What's Included" },
             { key: 'compat', label: 'Compatibility' },
             { key: 'how', label: 'How to Use' },
-            { key: 'projects', label: `Projects (${kitProjects.length})` },
+            { key: 'projects', label: product.id === 'prod-9' ? 'Projects (400)' : `Projects (${kitProjects.length})` },
             { key: 'docs', label: 'Documentation' },
             { key: 'qna', label: 'Q&A' }
           ].map((tab) => (
@@ -233,10 +230,6 @@ export default function ProductDetail() {
                   <span className="text-white font-semibold">{val}</span>
                 </div>
               ))}
-              <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex justify-between">
-                <span className="text-slate-450 font-medium">Warranty Duration</span>
-                <span className="text-white font-semibold">6 Months Limited</span>
-              </div>
             </div>
           )}
 
@@ -283,8 +276,16 @@ export default function ProductDetail() {
 
           {activeTab === 'projects' && (
             <div className="space-y-4">
-              <h3 className="text-sm font-bold text-white uppercase tracking-wide">The {kitProjects.length} Projects in This Kit</h3>
-              {kitProjects.length > 0 ? (
+              <h3 className="text-sm font-bold text-white uppercase tracking-wide">{product.id === 'prod-9' ? 'All 400 projects' : `The ${kitProjects.length} Projects in This Kit`}</h3>
+              {product.id === 'prod-9' ? (
+                <div className="space-y-3 text-sm">
+                  <p>The All-in-One kit contains the parts for all 400 projects (8 levels x 50).</p>
+                  <div className="flex flex-wrap gap-2">
+                    <Link href="/projects" className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-bold">Browse all 400 projects</Link>
+                    <Link href="/downloads" className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold">Download the sketches</Link>
+                  </div>
+                </div>
+              ) : kitProjects.length > 0 ? (
                 <div className="space-y-5">
                   {(['Basic', 'Intermediate', 'Advanced'] as const).map((tier) => (
                     <div key={tier} className="space-y-2">

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useApp } from '../context/AppContext';
-import { User, BookOpen, ShoppingBag, Award, Heart, Shield, CheckCircle, ExternalLink, QrCode, FileText, Download, Code, MessageSquare, Clock, HelpCircle, Package, ArrowRight } from 'lucide-react';
+import { User, BookOpen, ShoppingBag, Award, Heart, Shield, CheckCircle, ExternalLink, QrCode, FileText, Download, Code, MessageSquare, Clock, HelpCircle, Package, ArrowRight, ShoppingCart } from 'lucide-react';
 
 export default function StudentDashboard() {
   const router = useRouter();
@@ -21,7 +21,7 @@ export default function StudentDashboard() {
       <div className="max-w-md mx-auto px-4 py-20 text-center space-y-4">
         <h2 className="text-xl font-bold text-white uppercase tracking-wider">Please Sign In</h2>
         <p className="text-slate-400 text-xs">You must be logged in to view your orders, courses, and certificates.</p>
-        <Link href="/login" className="inline-block px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow">
+        <Link href="/login?next=/dashboard" className="inline-block px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow">
           Sign In
         </Link>
       </div>
@@ -29,7 +29,7 @@ export default function StudentDashboard() {
   }
 
   // Filter entities for user
-  const userOrders = orders.filter(o => o.customerEmail.toLowerCase() === user.email.toLowerCase());
+  const userOrders = orders;                                  // the server already returns only this user's orders
   const userTickets = supportTickets.filter(t => t.email.toLowerCase() === user.email.toLowerCase());
 
   // Mock enrolled courses matching user profile IDs
@@ -66,7 +66,7 @@ export default function StudentDashboard() {
             <p className="text-slate-400 text-xs">{user.email} • {user.institution || "Independent Maker"}</p>
             <div className="flex items-center gap-1.5 mt-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-2.5 py-1 rounded-lg w-fit text-[10px] font-bold">
               <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping"></span>
-              <span>🔗 REGISTERED & LINKED TO GOOGLE DRIVE DATABASE SPREADSHEET</span>
+              <span>Secure account · orders saved to your account</span>
             </div>
           </div>
         </div>
@@ -217,116 +217,78 @@ export default function StudentDashboard() {
           </div>
         )}
 
-        {/* ORDERS TAB (TIMELINE & DOWNLOADABLE RESOURCES) */}
+        {/* ORDERS TAB (from the server database) */}
         {activeTab === 'orders' && (
           <div className="space-y-6">
             {userOrders.length > 0 ? (
               userOrders.map((order) => {
                 const stepIdx = getStatusIndex(order.status);
                 const steps = ['Placed', 'Processing', 'Shipped', 'Delivered'];
-                
+                const payNote = order.paymentStatus === 'paid' ? 'Paid' : order.paymentStatus === 'placed' ? 'Pay on delivery' : order.paymentStatus === 'pending' ? 'Payment pending' : order.paymentStatus === 'refunded' ? 'Refunded' : 'Payment failed';
                 return (
-                  <div key={order.id} className="p-6 rounded-2xl glass-card border border-slate-800 space-y-6 shadow-xl">
-                    {/* Order Meta Header */}
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-850 pb-4 gap-2 text-xs">
+                  <div key={order.id} className="p-6 rounded-2xl glass-card space-y-6 shadow-xl">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-300 pb-4 gap-2 text-xs">
                       <div>
-                        <div className="text-white font-bold">Order ID: <span className="font-mono text-cyan-455">#{order.id}</span></div>
-                        <div className="text-slate-500 text-[10px]">Placed on: {new Date(order.createdAt).toLocaleDateString()}</div>
+                        <div className="font-bold">Order <span className="font-mono text-cyan-500">#{order.id}</span></div>
+                        <div className="text-slate-500 text-[10px]">Placed on {new Date(order.createdAt).toLocaleDateString()}</div>
                       </div>
-                      <div className="text-right sm:text-right">
-                        <div className="text-slate-400">Total Paid: <span className="font-bold text-white">₹{order.total}</span></div>
-                        <div className="text-[10px] text-slate-550">via {order.paymentMethod}</div>
+                      <div className="sm:text-right">
+                        <div>Total: <span className="font-bold">₹{order.total}</span> <span className="text-slate-500">({payNote})</span></div>
+                        <div className="text-[10px] text-slate-500">via {order.paymentMethod}</div>
                       </div>
                     </div>
 
-                    {/* Timeline Visual Progress */}
                     <div className="space-y-3">
-                      <div className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Shipping Status</div>
+                      <div className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Delivery status</div>
                       <div className="grid grid-cols-4 gap-2 relative pt-2">
-                        {/* Connecting Line */}
-                        <div className="absolute top-5 left-[12.5%] right-[12.5%] h-1 bg-slate-800 z-0">
-                          <div
-                            className="bg-emerald-500 h-full transition-all duration-550"
-                            style={{ width: `${(stepIdx / 3) * 100}%` }}
-                          ></div>
+                        <div className="absolute top-5 left-[12.5%] right-[12.5%] h-1 bg-slate-300 z-0">
+                          <div className="bg-emerald-500 h-full transition-all" style={{ width: `${(stepIdx / 3) * 100}%` }}></div>
                         </div>
+                        {steps.map((step, idx) => (
+                          <div key={step} className="flex flex-col items-center relative z-10 text-center text-[10px]">
+                            <div className={`w-8 h-8 rounded-full border flex items-center justify-center font-bold ${idx <= stepIdx ? 'bg-emerald-600 border-emerald-600' : 'bg-white border-slate-300 text-slate-500'}`}>{idx <= stepIdx ? '✓' : idx + 1}</div>
+                            <span className={`mt-2 font-bold uppercase tracking-wider ${idx === stepIdx ? 'text-blue-400 font-extrabold' : ''}`}>{step}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
 
-                        {steps.map((step, idx) => {
-                          const isDone = idx <= stepIdx;
-                          const isCurrent = idx === stepIdx;
+                    <div className="border-t border-slate-300 pt-4 grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+                      <div className="space-y-2">
+                        <div className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Ordered items</div>
+                        {order.items.map((item, idx) => (
+                          <div key={idx} className="flex items-center justify-between bg-slate-100 p-2.5 rounded-lg border border-slate-300">
+                            <span className="font-semibold">{item.productName}</span>
+                            <span className="text-slate-500 font-bold">× {item.quantity}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="space-y-2">
+                        <div className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Your project guides</div>
+                        {order.items.map((item, idx) => {
+                          const lvl = Number(item.productId.replace('prod-', ''));
+                          const all = lvl === 9;
                           return (
-                            <div key={step} className="flex flex-col items-center relative z-10 text-center text-[10px]">
-                              <div className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all ${
-                                isDone 
-                                  ? 'bg-emerald-600 border-emerald-500 text-white font-bold shadow shadow-emerald-600/20' 
-                                  : 'bg-slate-950 border-slate-800 text-slate-600'
-                              }`}>
-                                {isDone ? '✓' : idx + 1}
+                            <div key={idx} className="p-3 rounded-lg bg-slate-100 border border-slate-300 space-y-2">
+                              <div className="font-semibold">{item.productName}</div>
+                              <div className="flex gap-2">
+                                <Link href={all ? '/projects' : `/projects?kit=${lvl}`} className="flex-grow py-1.5 rounded bg-blue-600 hover:bg-blue-500 text-[10px] font-bold flex items-center justify-center gap-1"><FileText className="w-3 h-3" /> {all ? '400' : '50'} projects</Link>
+                                <Link href="/downloads" className="flex-grow py-1.5 rounded bg-emerald-600 hover:bg-emerald-500 text-[10px] font-bold flex items-center justify-center gap-1"><Code className="w-3 h-3" /> Sketches</Link>
                               </div>
-                              <span className={`mt-2 font-bold uppercase tracking-wider ${
-                                isCurrent ? 'text-blue-400 font-extrabold' : isDone ? 'text-slate-205' : 'text-slate-550'
-                              }`}>{step}</span>
                             </div>
                           );
                         })}
                       </div>
                     </div>
-
-                    {/* Purchased Products & Downloadable Resources Funnel */}
-                    <div className="border-t border-slate-850 pt-4 grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
-                      {/* Products list */}
-                      <div className="space-y-2">
-                        <div className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Ordered Items</div>
-                        <div className="space-y-2">
-                          {order.items.map((item, idx) => (
-                            <div key={idx} className="flex items-center justify-between bg-slate-950 p-2.5 rounded-lg border border-slate-900">
-                              <span className="text-slate-300 font-semibold">{item.productName}</span>
-                              <span className="text-slate-500 font-bold">x{item.quantity}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Downloadable Guides/Codes */}
-                      <div className="space-y-2">
-                        <div className="text-[10px] uppercase font-bold text-slate-500 tracking-wider">Digital Resources (.pdf, .zip)</div>
-                        <div className="space-y-2">
-                          {order.items.map((item, idx) => {
-                            const isHardware = item.productName.toLowerCase().includes('kit') || item.productName.toLowerCase().includes('board') || item.productName.toLowerCase().includes('sensor');
-                            if (!isHardware) return null;
-                            
-                            return (
-                              <div key={idx} className="p-3 rounded-lg bg-slate-950 border border-slate-900 space-y-2">
-                                <div className="font-semibold text-slate-400">{item.productName} Materials</div>
-                                <div className="flex gap-2">
-                                  <button
-                                    onClick={() => alert(`Downloading User Assembly Lab Manual for: ${item.productName}`)}
-                                    className="flex-grow py-1.5 rounded bg-slate-900 hover:bg-blue-600 hover:text-white text-[9px] font-bold border border-slate-800 flex items-center justify-center gap-1 transition-all"
-                                  >
-                                    <FileText className="w-3 h-3 text-cyan-400" /> Manual
-                                  </button>
-                                  <button
-                                    onClick={() => alert(`Downloading Verified Microcontroller Codes for: ${item.productName}`)}
-                                    className="flex-grow py-1.5 rounded bg-slate-900 hover:bg-blue-600 hover:text-white text-[9px] font-bold border border-slate-800 flex items-center justify-center gap-1 transition-all"
-                                  >
-                                    <Code className="w-3 h-3 text-emerald-400" /> Code Pack
-                                  </button>
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    </div>
-
                   </div>
                 );
               })
             ) : (
-              <div className="text-center py-16 space-y-3 glass-card border border-slate-850 rounded-2xl">
-                <Package className="w-12 h-12 text-slate-650 mx-auto" />
-                <h3 className="text-xs font-bold text-white uppercase tracking-wider">No Orders Found</h3>
-                <p className="text-[10px] text-slate-405">Purchase any of our hardware kits to track shipping & access download manuals here.</p>
+              <div className="text-center py-16 space-y-3 glass-card rounded-2xl">
+                <Package className="w-12 h-12 text-slate-500 mx-auto" />
+                <h3 className="text-xs font-bold uppercase tracking-wider">No orders yet</h3>
+                <p className="text-[11px] text-slate-500">Order any kit to track delivery here and open its project guides.</p>
+                <Link href="/products" className="inline-block px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-bold">Browse the kits</Link>
               </div>
             )}
           </div>

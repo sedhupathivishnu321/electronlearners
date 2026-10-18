@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useApp } from '../context/AppContext';
-import { API_V1, paymentsConfigured } from '../utils/api';
+import { api, paymentsConfigured } from '../utils/api';
 import { ShieldCheck, CreditCard, Truck, Info, Loader2, AlertTriangle } from 'lucide-react';
 
 const FREE_SHIPPING_OVER = 1500;
@@ -12,7 +12,7 @@ type Method = 'payu' | 'cod';
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { cart, placeOrder, user, validateCoupon } = useApp();
+  const { cart, user, authReady, validateCoupon, clearCart, refreshOrders } = useApp();
 
   const [coupon, setCoupon] = useState('');
   useEffect(() => {
@@ -31,9 +31,12 @@ export default function CheckoutPage() {
     return { subtotal, discount, shipping, total: Math.max(0, subtotal + shipping - discount) };
   }, [cart, coupon, validateCoupon]);
 
-  const [fullName, setFullName] = useState(user?.name || '');
-  const [email, setEmail] = useState(user?.email || '');
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
+  useEffect(() => {
+    if (user) { setFullName((v) => v || user.name); setEmail((v) => v || user.email); }
+  }, [user]);
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
@@ -49,16 +52,7 @@ export default function CheckoutPage() {
     setBusy(true);
     setError('');
     try {
-      const res = await fetch(`${API_V1}/payments/payu/initiate`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items: cart.map((c) => ({ id: c.product.id, quantity: c.quantity })), coupon: coupon || null, customer }),
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        const detail = Array.isArray(data.detail) ? data.detail.map((d: { loc?: string[]; msg: string }) => `${(d.loc || []).slice(-1)[0] ?? ''}: ${d.msg}`).join('; ') : data.detail;
-        throw new Error(detail || `Payment could not be started (${res.status})`);
-      }
+      const data = await api('/payments/payu/initiate', { body: { items: cart.map((x) => ({ id: x.product.id, quantity: x.quantity })), coupon: coupon || null, customer } });
       // PayU's hosted checkout expects a normal form POST from the browser
       const form = document.createElement('form');
       form.method = 'POST';
@@ -78,6 +72,20 @@ export default function CheckoutPage() {
     }
   };
 
+  const placeCod = async () => {
+    setBusy(true);
+    setError('');
+    try {
+      await api('/orders/cod', { body: { items: cart.map((x) => ({ id: x.product.id, quantity: x.quantity })), coupon: coupon || null, customer } });
+      clearCart();
+      await refreshOrders();
+      router.push('/dashboard?tab=orders');
+    } catch (e) {
+      setError((e as Error).message);
+      setBusy(false);
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (cart.length === 0 || busy) return;
@@ -85,9 +93,29 @@ export default function CheckoutPage() {
       void payWithPayU();
       return;
     }
-    const newOrder = placeOrder({ name: customer.name, email: customer.email, phone: customer.phone, address: customer.address, city: customer.city, state: customer.state, zip: customer.zip, gstin: customer.gstin }, 'Cash on Delivery', totals.subtotal, totals.shipping, totals.discount, totals.total);
-    if (newOrder) router.push('/dashboard?tab=orders');
+    void placeCod();
   };
+
+  if (!authReady) {
+    return <div className="max-w-3xl mx-auto px-4 py-16 text-center text-slate-500">Loading…</div>;
+  }
+
+  if (!user) {
+    const here = `/checkout/${coupon ? `?coupon=${encodeURIComponent(coupon)}` : ''}`;
+    return (
+      <div className="max-w-lg mx-auto px-4 py-16">
+        <div className="p-8 rounded-2xl glass-card text-center space-y-4">
+          <ShieldCheck className="w-10 h-10 mx-auto text-blue-500" />
+          <h1 className="text-xl font-heading font-extrabold uppercase">Sign in to place your order</h1>
+          <p className="text-sm text-slate-500">You need an account to order. It keeps your orders, delivery updates and invoices in one place. Your cart is saved.</p>
+          <div className="flex flex-wrap gap-3 justify-center">
+            <Link href={`/login?next=${encodeURIComponent(here)}`} className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-bold">Sign in</Link>
+            <Link href={`/register?next=${encodeURIComponent(here)}`} className="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold">Create account</Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (cart.length === 0) {
     return (

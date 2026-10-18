@@ -22,6 +22,8 @@ Every kit contains an Arduino UNO R3, USB cable, breadboard, jumper wires, resis
 | 7 | Wireless & Remote Control | Bluetooth, 2.4 GHz radio, IR, Wi-Fi, 3.3 V interfacing | ₹2,066 |
 | 8 | Smart Systems Capstone | RFID access, RTC logging, load cell, INA219, MPU6050, MAX30102 | ₹2,560 |
 
+**All-in-One Kit (₹7,665):** the common core once (₹527.20) + the level-specific parts of all 8 kits (₹4,947.70) = ₹5,474.90, plus 40 %. That is ₹5,168 less than the eight kits bought separately (₹12,833).
+
 **Pricing rule:** price = BOM component cost of the kit (including the common core) + 40 %, rounded to the nearest rupee. The server holds the same table in [backend/app/catalog.py](backend/app/catalog.py) and always recomputes the amount itself; the browser's total is never trusted.
 
 ## Site features
@@ -30,6 +32,8 @@ Every kit contains an Arduino UNO R3, USB cable, breadboard, jumper wires, resis
 - **400 project guides** (`/projects`): parts list, circuit notes, Arduino sketch (copy / download .ino), neighbour navigation and a one-click link into the simulator.
 - **ArduinoForge simulator** (`/simulator`, full screen at `/arduinoforge/`): breadboard circuit simulator with all 400 projects (`/arduinoforge/?example=k8-01-rfid-uid` opens one directly).
 - **Downloads**: one ZIP of sketches per kit.
+- **Accounts and orders**: users register and sign in (server-side, scrypt password hashes, signed 12-hour tokens, lock-out after 5 wrong passwords, rate limits); an account is required to order. Orders, accounts and enquiries live in the backend database.
+- **E-mail**: every registration, order (paid or COD), contact form, support ticket and bulk quote is e-mailed to `admin@jrlearners.com`; customers get a confirmation copy.
 - **Payments** with PayU (UPI, cards, netbanking, wallets, EMI) or Cash on Delivery, with server-side price checking and signature-verified callbacks.
 - Courses, YouTube tutorials, blog, certificates with verification, school / teacher portals, support tickets, bulk quotes.
 - Accessible colour theme: no pure black or white text, every text/background pair is checked for contrast.
@@ -65,13 +69,23 @@ Flow: the checkout page sends the cart and customer details to `POST /api/v1/pay
    | `PAYU_ENV` | `live` or `test` (test keys only work with `test`) |
    | `PUBLIC_API_URL` | the public URL of the backend, e.g. `https://jrlearners-api.onrender.com` |
    | `FRONTEND_URL`, `CORS_ORIGINS` | `https://jrlearners.com` |
-   | `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `SECRET_KEY` | admin login for the admin panel and a long random string |
+   | `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `SECRET_KEY` | the administrator account (created at start-up) and a long random string for signing tokens |
+   | `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURITY`, `SMTP_USER`, `SMTP_PASSWORD`, `SMTP_FROM` | the mail server used to send notifications to `ADMIN_NOTIFY_EMAIL` (default `admin@jrlearners.com`). Until SMTP is set, messages wait in the `mail_outbox` table and are sent as soon as it is |
+   | `TRUST_PROXY` | `1` behind Render / nginx |
    | `PAYU_CLIENT_ID`, `PAYU_CLIENT_SECRET` | only for the payment-links / split-payment APIs (not used by hosted checkout) |
 
    For local work copy `backend/.env.example` to `backend/.env` (git-ignored) and run `cd backend && pip install -r requirements.txt && uvicorn app.main:app --reload`.
 
 2. **PayU dashboard**: add the backend URL as the success / failure / webhook URL (`{PUBLIC_API_URL}/api/v1/payments/payu/callback` and `.../webhook`) if your account restricts return URLs.
 3. **Front end**: add a GitHub repository variable `API_URL` (Settings, Secrets and variables, Actions, Variables) with the backend URL and re-run the deploy workflow. Until `API_URL` is set, the checkout offers Cash on Delivery only.
+
+## Database
+
+SQLite (file `jrlearners.db` in `DATA_DIR`, on the persistent disk, owner-only permissions). Tables: `users` (password hash, lock-out counters, role, profile), `orders` (belongs to a user), `inquiries`, `mail_outbox`, `audit_log`. Passwords are never stored in clear text. Back up the `/data` disk regularly.
+
+## Contact
+
+Help and support: help.jrlearners@gmail.com. YouTube: [@LetsGetEngagedin](https://www.youtube.com/@LetsGetEngagedin).
 
 ## Front end
 

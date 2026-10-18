@@ -59,9 +59,9 @@ export default function ProductsCatalog() {
   // Kit comparison matrix: one column per kit
   const comparisonProducts = products.map((p) => ({
     name: p.name.replace(/ Kit$/, ''),
-    focus: p.specifications['Level'] ?? '',
+    focus: p.specifications['Level'] ?? (p.specifications['Levels'] ? `All ${p.specifications['Levels']} levels` : ''),
     pieces: p.specifications['Total Pieces'] ?? '',
-    levelParts: p.specifications['Level-specific Parts'] ?? '',
+    levelParts: p.specifications['Level-specific Parts'] ?? (p.specifications['BOM Lines'] ? `${p.specifications['BOM Lines']} lines` : ''),
     projectsCount: p.specifications['Projects'] ?? '',
     addOnComponents: p.components.slice(12).map((c) => c.name).join(', '),
     projects: p.projects ?? [],
@@ -77,7 +77,7 @@ export default function ProductsCatalog() {
         <div>
           <span className="text-xs font-bold text-blue-400 uppercase tracking-widest">Business Catalog</span>
           <h1 className="text-3xl font-heading font-extrabold text-white mt-1 uppercase">JR Learners Arduino Kits</h1>
-          <p className="text-slate-400 text-xs mt-1">8 levels from first blink to a smart-systems capstone - 50 projects in every kit, 400 in total. Each kit includes its own Arduino UNO R3.</p>
+          <p className="text-slate-400 text-xs mt-1">8 levels from first blink to a smart-systems capstone - 50 projects in every kit, 400 in total - or get everything in the All-in-One kit. Each kit includes its own Arduino UNO R3.</p>
         </div>
         
         {/* Controls */}
@@ -169,12 +169,16 @@ export default function ProductsCatalog() {
                   <td className="p-3 font-semibold text-slate-450">Project List</td>
                   {comparisonProducts.map((p, idx) => (
                     <td key={idx} className="p-3 text-center">
-                      <button
-                        onClick={() => setSelectedKitsModal(p)}
-                        className="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-750 text-[10px] font-bold text-cyan-400 border border-slate-700 transition-all cursor-pointer shadow-md"
-                      >
-                        View 50 Projects
-                      </button>
+                      {p.projects.length > 0 ? (
+                        <button
+                          onClick={() => setSelectedKitsModal(p)}
+                          className="px-2.5 py-1 rounded bg-blue-600 hover:bg-blue-500 text-[10px] font-bold transition-all cursor-pointer shadow-md"
+                        >
+                          View {p.projects.length} projects
+                        </button>
+                      ) : (
+                        <Link href="/projects" className="px-2.5 py-1 rounded bg-blue-600 hover:bg-blue-500 text-[10px] font-bold inline-block">All 400 projects</Link>
+                      )}
                     </td>
                   ))}
                 </tr>
@@ -302,7 +306,7 @@ export default function ProductsCatalog() {
         {/* Products Grid Section */}
         <section className="lg:col-span-3 space-y-6">
           <div className="flex items-center justify-between text-xs text-slate-450">
-            <span>Showing {filteredProducts.length} of {products.length} kits</span>
+            <span>Showing {filteredProducts.length} of {products.length} (8 level kits + the All-in-One)</span>
             {selectedCategory !== 'All' && (
               <span className="px-2.5 py-1 rounded-full bg-slate-900 border border-slate-800 text-cyan-400 font-semibold">
                 {selectedCategory}
@@ -350,7 +354,7 @@ export default function ProductsCatalog() {
                         </p>
 
                         <div className="text-[10px] font-bold text-slate-500">
-                          SKU: JRL-ARD-L{product.id.split('-')[1]} · {product.specifications['Projects']}
+                          SKU: {product.id === 'prod-9' ? 'JRL-ARD-ALL' : `JRL-ARD-L${product.id.split('-')[1]}`} · {product.specifications['Projects']}
                         </div>
                       </div>
                     </div>

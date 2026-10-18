@@ -3266,5 +3266,348 @@ export const PRODUCTS_DATA: STEMProduct[] = [
       }
     ],
     "badge": "Capstone"
+  },
+  {
+    "id": "prod-9",
+    "name": "All-in-One Kit: all 8 levels",
+    "slug": "all-in-one-kit",
+    "category": "Arduino",
+    "price": 7665,
+    "originalPrice": 12833,
+    "rating": 4.8,
+    "reviewsCount": 0,
+    "stock": 100,
+    "badge": "Best value",
+    "image": "https://images.unsplash.com/photo-1553406830-ef2513450d76?w=600&auto=format&fit=crop&q=80",
+    "shortDesc": "Everything for all 8 levels in one box: one Arduino UNO R3 with the common core plus every level-specific part. All 400 projects. Save ₹5168 compared with buying the 8 kits separately.",
+    "description": "The complete JR Learners Arduino series in a single kit. It contains the common core once (Arduino UNO R3, USB cable, breadboard, jumper wires, resistor kit, push button and four LEDs) plus the level-specific parts of all 8 kits, 99 pieces on 71 BOM lines. That is enough to build every one of the 400 projects (50 per level: 10 Basic, 20 Intermediate, 20 Advanced). Price = BOM cost of the common core once plus all level-specific parts, plus 40 %. Parts that several levels use (such as relays, LCDs and servos) are included as many times as the levels need them.",
+    "learningObjectives": [
+      "Work through all 8 levels: Foundations, Sensing, Displays, Motion, Motors, Safety, Wireless and the Smart Systems Capstone",
+      "400 guided projects, each testable first in the ArduinoForge simulator",
+      "Move from first LED blink to RFID access control, data logging and power monitoring",
+      "One Arduino UNO R3 and one breadboard are shared by every project"
+    ],
+    "components": [
+      {
+        "name": "Arduino UNO R3 (clone, SMD)",
+        "quantity": 1
+      },
+      {
+        "name": "USB Type-A to B cable (Arduino)",
+        "quantity": 1
+      },
+      {
+        "name": "Breadboard 400 points",
+        "quantity": 1
+      },
+      {
+        "name": "Jumper Wires M-M (40pcs)",
+        "quantity": 1
+      },
+      {
+        "name": "Jumper Wires M-F (40pcs)",
+        "quantity": 1
+      },
+      {
+        "name": "Jumper Wires F-F (40pcs)",
+        "quantity": 1
+      },
+      {
+        "name": "Resistor Kit 1/4W assorted",
+        "quantity": 1
+      },
+      {
+        "name": "Push Button tactile 6x6",
+        "quantity": 1
+      },
+      {
+        "name": "LED 5mm Red",
+        "quantity": 1
+      },
+      {
+        "name": "LED 5mm Green",
+        "quantity": 1
+      },
+      {
+        "name": "LED 5mm Yellow",
+        "quantity": 1
+      },
+      {
+        "name": "LED 5mm Blue",
+        "quantity": 1
+      },
+      {
+        "name": "RGB LED common cathode 5mm",
+        "quantity": 1
+      },
+      {
+        "name": "Resistor 220 ohm 1/4W",
+        "quantity": 2
+      },
+      {
+        "name": "Potentiometer 10k (rotary)",
+        "quantity": 2
+      },
+      {
+        "name": "Buzzer Active 5V",
+        "quantity": 4
+      },
+      {
+        "name": "Piezo Passive Buzzer",
+        "quantity": 2
+      },
+      {
+        "name": "LDR Light Sensor Module",
+        "quantity": 2
+      },
+      {
+        "name": "Slide Switch SPDT",
+        "quantity": 1
+      },
+      {
+        "name": "DHT11 Temp & Humidity",
+        "quantity": 2
+      },
+      {
+        "name": "LM35 Temperature Sensor",
+        "quantity": 2
+      },
+      {
+        "name": "Thermistor NTC 10k",
+        "quantity": 1
+      },
+      {
+        "name": "Resistor 10k ohm 1/4W",
+        "quantity": 4
+      },
+      {
+        "name": "Soil Moisture Sensor",
+        "quantity": 2
+      },
+      {
+        "name": "Rain Sensor Module",
+        "quantity": 2
+      },
+      {
+        "name": "Sound Sensor Module",
+        "quantity": 1
+      },
+      {
+        "name": "16x2 LCD I2C",
+        "quantity": 4
+      },
+      {
+        "name": "0.96in OLED I2C SSD1306",
+        "quantity": 2
+      },
+      {
+        "name": "TM1637 4-digit 7-segment",
+        "quantity": 1
+      },
+      {
+        "name": "8x8 LED Matrix MAX7219",
+        "quantity": 1
+      },
+      {
+        "name": "Shift Register 74HC595",
+        "quantity": 1
+      },
+      {
+        "name": "Rotary Encoder KY-040",
+        "quantity": 1
+      },
+      {
+        "name": "Joystick Module",
+        "quantity": 1
+      },
+      {
+        "name": "HC-SR04 Ultrasonic",
+        "quantity": 1
+      },
+      {
+        "name": "PIR Motion HC-SR501",
+        "quantity": 1
+      },
+      {
+        "name": "IR Obstacle Sensor",
+        "quantity": 1
+      },
+      {
+        "name": "TCRT5000 Line Sensor",
+        "quantity": 1
+      },
+      {
+        "name": "VL53L0X ToF Distance",
+        "quantity": 1
+      },
+      {
+        "name": "Touch Sensor TTP223",
+        "quantity": 1
+      },
+      {
+        "name": "Hall Effect Sensor A3144",
+        "quantity": 1
+      },
+      {
+        "name": "SG90 Micro Servo",
+        "quantity": 4
+      },
+      {
+        "name": "DC Motor 6V",
+        "quantity": 1
+      },
+      {
+        "name": "BO Motor + wheel",
+        "quantity": 1
+      },
+      {
+        "name": "Motor Driver L293D",
+        "quantity": 1
+      },
+      {
+        "name": "Motor Driver Module L298N",
+        "quantity": 1
+      },
+      {
+        "name": "28BYJ-48 Stepper + ULN2003",
+        "quantity": 1
+      },
+      {
+        "name": "Relay Module 1 Channel 5V",
+        "quantity": 4
+      },
+      {
+        "name": "TIP122 Darlington",
+        "quantity": 2
+      },
+      {
+        "name": "MOSFET IRFZ44N",
+        "quantity": 1
+      },
+      {
+        "name": "Diode 1N4007",
+        "quantity": 2
+      },
+      {
+        "name": "Electrolytic Capacitor 100uF 25V",
+        "quantity": 2
+      },
+      {
+        "name": "AA 4-cell Battery Holder",
+        "quantity": 1
+      },
+      {
+        "name": "MQ-2 Gas Sensor",
+        "quantity": 1
+      },
+      {
+        "name": "MQ-135 Air Quality",
+        "quantity": 1
+      },
+      {
+        "name": "Flame Sensor Module",
+        "quantity": 1
+      },
+      {
+        "name": "DHT22 Temp & Humidity",
+        "quantity": 1
+      },
+      {
+        "name": "DS18B20 Waterproof Probe",
+        "quantity": 1
+      },
+      {
+        "name": "BMP280 Pressure Sensor",
+        "quantity": 1
+      },
+      {
+        "name": "Mini Water Pump 5V",
+        "quantity": 1
+      },
+      {
+        "name": "HC-05 Bluetooth",
+        "quantity": 1
+      },
+      {
+        "name": "NRF24L01 Radio",
+        "quantity": 2
+      },
+      {
+        "name": "AMS1117-3.3V Regulator",
+        "quantity": 1
+      },
+      {
+        "name": "IR Remote + Receiver",
+        "quantity": 1
+      },
+      {
+        "name": "ESP8266 NodeMCU V3",
+        "quantity": 1
+      },
+      {
+        "name": "Logic Level Converter 4ch",
+        "quantity": 1
+      },
+      {
+        "name": "MFRC522 RFID Kit",
+        "quantity": 1
+      },
+      {
+        "name": "RTC DS3231",
+        "quantity": 1
+      },
+      {
+        "name": "Load Cell + HX711",
+        "quantity": 1
+      },
+      {
+        "name": "INA219 Current Sensor",
+        "quantity": 1
+      },
+      {
+        "name": "MPU6050 IMU",
+        "quantity": 1
+      },
+      {
+        "name": "MAX30102 Pulse Oximeter",
+        "quantity": 1
+      }
+    ],
+    "specifications": {
+      "Levels": "All 8",
+      "Microcontroller": "ATmega328P (Arduino UNO R3)",
+      "Operating Voltage": "5V",
+      "Projects": "400 (8 x 50)",
+      "Total Pieces": "99",
+      "BOM Lines": "71",
+      "Simulator": "ArduinoForge (web and desktop)"
+    },
+    "assemblySteps": [
+      "Connect the Arduino UNO to your PC with the USB cable and install Arduino IDE 2.x (plus the CH340 driver for clone boards)",
+      "Open a project in the ArduinoForge simulator (/simulator) or from the Projects page and study the wiring and sketch",
+      "Build the same circuit on the breadboard using only the parts that project lists",
+      "Upload the sketch and compare the result with the simulator"
+    ],
+    "manualUrl": "/projects",
+    "datasheetUrl": "/downloads",
+    "videoUrl": "https://www.youtube.com/@LetsGetEngagedin",
+    "faqs": [
+      {
+        "question": "What is in the All-in-One kit?",
+        "answer": "The common core once plus the level-specific parts of all 8 kits. The complete list is under Components."
+      },
+      {
+        "question": "How is it priced?",
+        "answer": "Common core once + all level-specific parts, plus 40 %. That is ₹7665, which is ₹5168 less than the eight separate kits (₹12833)."
+      },
+      {
+        "question": "Can I build every project with it?",
+        "answer": "Yes. All 400 projects use only parts from their own kit, and the All-in-One contains every kit's parts."
+      },
+      {
+        "question": "Do I get the sketches?",
+        "answer": "Yes. Every project page has its Arduino sketch, and the Downloads page has a ZIP per level."
+      }
+    ]
   }
 ];

@@ -4,7 +4,7 @@ import { useApp } from '../context/AppContext';
 import { ShoppingCart, Trash2, Plus, Minus, ArrowRight, Tag, Gift, Award } from 'lucide-react';
 
 export default function CartPage() {
-  const { cart, products, removeFromCart, updateCartQuantity, validateCoupon } = useApp();
+  const { cart, products, addToCart, removeFromCart, updateCartQuantity, validateCoupon } = useApp();
   const [couponCode, setCouponCode] = useState('');
   const [appliedCoupon, setAppliedCoupon] = useState<string | null>(null);
   const [discountAmount, setDiscountAmount] = useState(0);

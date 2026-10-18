@@ -1,5 +1,7 @@
 """The 8-level JR Learners Arduino kit catalogue (single source of truth for prices on the server).
-Selling price = BOM component cost (incl. Arduino UNO + common core) + 40 %, rounded to the nearest rupee."""
+Selling price = BOM component cost (incl. Arduino UNO + common core) + 40 %, rounded to the nearest rupee.
+
+All-in-One kit: the common core ONCE (Rs 527.20) + the level-specific parts of all 8 kits (Rs 4,947.70) = Rs 5,474.90; +40 % = Rs 7,665."""
 
 MARKUP = 0.40
 
@@ -12,6 +14,7 @@ KITS = [
     {"id": "prod-6", "level": 6, "name": "Level 6: Smart Safety & Environment Kit", "bom_cost": 1377.68, "price": 1929, "stock": 100, "projects": 50},
     {"id": "prod-7", "level": 7, "name": "Level 7: Wireless & Remote Control Kit", "bom_cost": 1475.42, "price": 2066, "stock": 100, "projects": 50},
     {"id": "prod-8", "level": 8, "name": "Level 8: Smart Systems Capstone Kit", "bom_cost": 1828.76, "price": 2560, "stock": 100, "projects": 50},
+    {"id": "prod-9", "level": 0, "name": "All-in-One Kit: all 8 levels", "bom_cost": 5474.90, "price": 7665, "stock": 100, "projects": 400},
 ]
 
 KIT_BY_ID = {k["id"]: k for k in KITS}

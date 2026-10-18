@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { PRODUCTS_DATA, STEMProduct } from '../data/productsData';
-import { API_V1, paymentsConfigured } from '../utils/api';
+import { api, ApiError, clearToken, getToken, paymentsConfigured, setToken } from '../utils/api';
 
 // Types and Interfaces
 export interface CartItem {
@@ -18,13 +18,22 @@ export interface UserProfile {
   certificates: { id: string; courseTitle: string; issueDate: string }[];
 }
 
+export interface OrderItem {
+  productId: string;
+  productName: string;
+  price: number;
+  quantity: number;
+}
+
+// Orders come from the server (the database); this is the shape the pages use.
 export interface Order {
-  id: string;
-  items: CartItem[];
+  id: string;                                   // order reference (PayU transaction id)
+  items: OrderItem[];
   subtotal: number;
   shipping: number;
   discount: number;
   total: number;
+  customerEmail: string;
   shippingAddress: {
     name: string;
     email: string;
@@ -36,8 +45,36 @@ export interface Order {
     gstin?: string;
   };
   paymentMethod: string;
-  status: 'Ordered' | 'Packed' | 'Shipped' | 'Delivered';
+  paymentStatus: 'pending' | 'paid' | 'failed' | 'refunded' | 'placed';
+  status: 'Placed' | 'Processing' | 'Shipped' | 'Delivered';
   createdAt: string;
+}
+
+export interface RegisterData {
+  name: string;
+  email: string;
+  phone: string;
+  password: string;
+  role: 'student' | 'teacher' | 'school';
+  institution?: string;
+}
+
+const FULFILMENT_TO_STATUS: Record<string, Order['status']> = { Ordered: 'Placed', Packed: 'Processing', Shipped: 'Shipped', Delivered: 'Delivered' };
+const STATUS_TO_FULFILMENT: Record<Order['status'], string> = { Placed: 'Ordered', Processing: 'Packed', Shipped: 'Shipped', Delivered: 'Delivered' };
+
+export function mapServerOrder(o: any): Order {
+  const method = o.method === 'payu' ? `PayU${o.payment_mode ? ` (${o.payment_mode})` : ''}` : 'Cash on Delivery';
+  return {
+    id: o.txnid,
+    items: (o.items || []).map((i: any) => ({ productId: i.id, productName: i.name, price: i.price, quantity: i.quantity })),
+    subtotal: o.subtotal, shipping: o.shipping, discount: o.discount, total: o.amount,
+    customerEmail: o.customer?.email || o.user_email || '',
+    shippingAddress: o.customer,
+    paymentMethod: method,
+    paymentStatus: o.status,
+    status: FULFILMENT_TO_STATUS[o.fulfilment] || 'Placed',
+    createdAt: o.created_at,
+  };
 }
 
 export interface RFQ {
@@ -113,24 +150,16 @@ interface AppContextType {
   
   // Auth
   user: UserProfile | null;
-  login: (email: string, password: string, role?: string) => boolean;
-  adminLogin: (email: string, password: string) => Promise<boolean>;
+  authReady: boolean;
+  login: (email: string, password: string) => Promise<{ ok: boolean; message?: string }>;
   logout: () => void;
-  registerUser: (name: string, email: string, password: string, role: 'student' | 'teacher' | 'school') => boolean;
+  registerUser: (data: RegisterData) => Promise<{ ok: boolean; message?: string }>;
+  refreshOrders: () => Promise<void>;
   enrollCourse: (courseId: string) => void;
   
   // Orders Pipeline
   orders: Order[];
-  placeOrder: (
-    shippingAddress: Order['shippingAddress'],
-    paymentMethod: string,
-    subtotal: number,
-    shipping: number,
-    discount: number,
-    total: number,
-    orderId?: string
-  ) => Order | null;
-  updateOrderStatus: (orderId: string, status: Order['status']) => void;
+  updateOrderStatus: (orderId: string, status: Order['status']) => Promise<void>;
   
   // Bulk RFQs Quote System
   rfqs: RFQ[];
@@ -170,6 +199,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [cart, setCart] = useState<CartItem[]>([]);
   const [wishlist, setWishlist] = useState<STEMProduct[]>([]);
   const [user, setUser] = useState<UserProfile | null>(null);
+  const [authReady, setAuthReady] = useState(false);
   
   const [orders, setOrders] = useState<Order[]>([]);
   const [rfqs, setRfqs] = useState<RFQ[]>([]);
@@ -184,9 +214,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   useEffect(() => {
     try {
       // The catalogue changed to the 8-kit series: drop data saved by older versions (old product ids / prices)
-      if (localStorage.getItem('el_catalog_version') !== '8kits-v1') {
+      if (localStorage.getItem('el_catalog_version') !== '8kits-v2') {
         ['el_products', 'el_cart', 'el_wishlist', 'el_orders', 'el_rfqs'].forEach((k) => localStorage.removeItem(k));
-        localStorage.setItem('el_catalog_version', '8kits-v1');
+        localStorage.setItem('el_catalog_version', '8kits-v2');
       }
       // Products
       const savedProducts = localStorage.getItem('el_products');
@@ -204,40 +234,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const savedWishlist = localStorage.getItem('el_wishlist');
       if (savedWishlist) setWishlist(JSON.parse(savedWishlist));
       
-      // User Auth
-      const savedUser = localStorage.getItem('el_user');
-      if (savedUser) setUser(JSON.parse(savedUser));
-
-      // Orders
-      const savedOrders = localStorage.getItem('el_orders');
-      if (savedOrders) {
-        setOrders(JSON.parse(savedOrders));
-      } else {
-        const dummyOrders: Order[] = [
-          {
-            id: "EL000123",
-            items: [{ product: PRODUCTS_DATA[0], quantity: 1 }],
-            subtotal: PRODUCTS_DATA[0].price,
-            shipping: 50,
-            discount: Math.round(PRODUCTS_DATA[0].price * 0.1),
-            total: PRODUCTS_DATA[0].price + 50 - Math.round(PRODUCTS_DATA[0].price * 0.1),
-            shippingAddress: {
-              name: "Alex Learner",
-              email: "alex@learner.com",
-              phone: "9876543210",
-              address: "123 Innovation Street, Block B",
-              city: "Bangalore",
-              zip: "560001"
-            },
-            paymentMethod: "UPI / NetBanking",
-            status: "Shipped",
-            createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString()
-          }
-        ];
-        setOrders(dummyOrders);
-        localStorage.setItem('el_orders', JSON.stringify(dummyOrders));
-      }
-
       // RFQs
       const savedRfqs = localStorage.getItem('el_rfqs');
       if (savedRfqs) {
@@ -339,10 +335,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const setProductsWithSync = (val: STEMProduct[]) => {
     setProducts(val);
     localStorage.setItem('el_products', JSON.stringify(val));
-  };
-  const setOrdersWithSync = (val: Order[]) => {
-    setOrders(val);
-    localStorage.setItem('el_orders', JSON.stringify(val));
   };
   const setRfqsWithSync = (val: RFQ[]) => {
     setRfqs(val);
@@ -485,236 +477,100 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     });
   };
 
-  // Auth Operations
-  const login = (email: string, password: string, role = 'student'): boolean => {
-    // Administrator accounts are verified by the server (see adminLogin); no credentials live in this code.
-    if (role === 'admin' || role === 'store_manager' || role === 'support_agent' || role === 'content_manager') {
-      showNotification('Administrator sign-in is verified by the server. Use the Admin option on the sign-in page.');
-      return false;
-    }
+  // ---- Auth: accounts live in the server database; the browser only keeps a signed session token.
+  const toProfile = (u: any, purchased: string[] = []): UserProfile => ({
+    name: u.name,
+    email: u.email,
+    role: u.role,
+    institution: u.institution || undefined,
+    enrolledCourseIds: u.enrolledCourseIds || [],
+    purchasedProductIds: purchased,
+    certificates: u.certificates || [],
+  });
 
-    try {
-      const savedUsersStr = localStorage.getItem('el_registered_users');
-      const registeredUsers = savedUsersStr ? JSON.parse(savedUsersStr) : [];
-      const matchedUser = registeredUsers.find((u: any) => u.email.toLowerCase() === emailLower && u.password === password && u.role === role);
-      
-      if (matchedUser) {
-        const newUser: UserProfile = {
-          name: matchedUser.name,
-          email: matchedUser.email,
-          role: matchedUser.role,
-          institution: matchedUser.institution || "STEM Innovation Lab",
-          enrolledCourseIds: matchedUser.enrolledCourseIds || ["course-1"],
-          purchasedProductIds: matchedUser.purchasedProductIds || [],
-          certificates: matchedUser.certificates || []
-        };
-        setUser(newUser);
-        showNotification(`Welcome back, ${newUser.name}!`);
-        return true;
-      } else {
-        showNotification("Login Failed: Incorrect credentials.");
-        return false;
+  // restore the session on page load
+  useEffect(() => {
+    (async () => {
+      if (paymentsConfigured && getToken()) {
+        try {
+          const data = await api('/auth/me');
+          setUser(toProfile(data.user, data.purchasedProductIds));
+        } catch (e) {
+          if (e instanceof ApiError && e.status === 401) clearToken();
+        }
       }
+      setAuthReady(true);
+    })();
+  }, []);
+
+  const refreshOrders = async () => {
+    if (!user) { setOrders([]); return; }
+    try {
+      const data = await api(user.role === 'admin' ? '/admin/orders' : '/orders');
+      setOrders((data.orders || []).map(mapServerOrder));
     } catch (e) {
       console.error(e);
-      showNotification("Error during authentication.");
-      return false;
+    }
+  };
+  useEffect(() => { void refreshOrders(); }, [user?.email, user?.role]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const login = async (email: string, password: string): Promise<{ ok: boolean; message?: string }> => {
+    try {
+      const data = await api('/auth/login', { body: { email, password }, auth: false });
+      setToken(data.access_token);
+      const me = await api('/auth/me');
+      setUser(toProfile(me.user, me.purchasedProductIds));
+      showNotification(`Welcome back, ${data.user.name}!`);
+      return { ok: true };
+    } catch (e) {
+      return { ok: false, message: (e as Error).message };
     }
   };
 
-  // Admin sign-in: the backend checks the password against ADMIN_EMAIL / ADMIN_PASSWORD from its environment
-  const adminLogin = async (email: string, password: string): Promise<boolean> => {
-    if (!paymentsConfigured) {
-      showNotification('The server is not connected, so administrator sign-in is unavailable.');
-      return false;
-    }
+  const registerUser = async (d: RegisterData): Promise<{ ok: boolean; message?: string }> => {
     try {
-      const res = await fetch(`${API_V1}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, role: 'admin' }),
-      });
-      if (!res.ok) {
-        showNotification('Login Failed: Incorrect credentials.');
-        return false;
-      }
-      const data = await res.json();
-      try { sessionStorage.setItem('el_admin_token', data.access_token); } catch (e) { /* storage blocked */ }
-      const newUser: UserProfile = {
-        name: 'Administrator',
-        email,
-        role: 'admin',
-        institution: 'JR Learners Commerce Platform',
-        enrolledCourseIds: [],
-        purchasedProductIds: [],
-        certificates: [],
-      };
-      setUser(newUser);
-      addAuditLog(email.toLowerCase(), 'ADMIN_LOGIN', 'Logged in as admin');
-      showNotification('Welcome back, Administrator!');
-      return true;
+      const data = await api('/auth/register', { body: { name: d.name, email: d.email, phone: d.phone, password: d.password, role: d.role, institution: d.institution || null }, auth: false });
+      setToken(data.access_token);
+      setUser(toProfile(data.user, []));
+      showNotification(`Welcome to JR Learners, ${data.user.name}!`);
+      return { ok: true };
     } catch (e) {
-      showNotification('Could not reach the server. Please try again.');
-      return false;
-    }
-  };
-
-  const registerUser = (name: string, email: string, password: string, role: 'student' | 'teacher' | 'school'): boolean => {
-    try {
-      const savedUsersStr = localStorage.getItem('el_registered_users');
-      const registeredUsers = savedUsersStr ? JSON.parse(savedUsersStr) : [];
-      
-      if (registeredUsers.some((u: any) => u.email.toLowerCase() === email.toLowerCase())) {
-        showNotification("Registration Failed: Email already registered.");
-        return false;
-      }
-
-      const newUserRecord = {
-        name,
-        email,
-        password,
-        role,
-        institution: role === 'school' ? "Institutional Lab Partner" : "STEM Hub",
-        enrolledCourseIds: ["course-1"],
-        purchasedProductIds: [],
-        certificates: []
-      };
-
-      registeredUsers.push(newUserRecord);
-      localStorage.setItem('el_registered_users', JSON.stringify(registeredUsers));
-      
-      const newUserProfile: UserProfile = {
-        name,
-        email,
-        role,
-        institution: newUserRecord.institution,
-        enrolledCourseIds: ["course-1"],
-        purchasedProductIds: [],
-        certificates: []
-      };
-      setUser(newUserProfile);
-      showNotification(`Registered and Logged in as ${name}! Profile linked to Google Drive Database: (${email})`);
-      return true;
-    } catch (e) {
-      console.error(e);
-      showNotification("Error during registration.");
-      return false;
+      return { ok: false, message: (e as Error).message };
     }
   };
 
   const logout = () => {
-    if (user) {
-      addAuditLog(user.email, "LOGOUT", "User signed out.");
-    }
+    clearToken();
     setUser(null);
-    showNotification("Signed out successfully.");
+    setOrders([]);
+    showNotification('Signed out successfully.');
   };
 
   const enrollCourse = (courseId: string) => {
     if (!user) {
-      showNotification("Please login to enroll in courses.");
+      showNotification('Please sign in to enroll in courses.');
       return;
     }
     if (user.enrolledCourseIds.includes(courseId)) {
-      showNotification("You are already enrolled in this course.");
+      showNotification('You are already enrolled in this course.');
       return;
     }
-    const updatedUser = {
-      ...user,
-      enrolledCourseIds: [...user.enrolledCourseIds, courseId]
-    };
-    setUser(updatedUser);
+    const enrolled = [...user.enrolledCourseIds, courseId];
+    setUser({ ...user, enrolledCourseIds: enrolled });
+    api('/auth/profile', { method: 'PUT', body: { enrolled_courses: enrolled } }).catch((e) => console.error(e));
+    showNotification('Enrolled successfully! Happy learning.');
+  };
+
+  const updateOrderStatus = async (orderId: string, status: Order['status']) => {
     try {
-      const savedUsersStr = localStorage.getItem('el_registered_users');
-      if (savedUsersStr) {
-        const registeredUsers = JSON.parse(savedUsersStr);
-        const updatedUsers = registeredUsers.map((u: any) => 
-          u.email.toLowerCase() === user.email.toLowerCase()
-            ? { ...u, enrolledCourseIds: [...(u.enrolledCourseIds || []), courseId] }
-            : u
-        );
-        localStorage.setItem('el_registered_users', JSON.stringify(updatedUsers));
-      }
+      await api(`/admin/orders/${encodeURIComponent(orderId)}/fulfilment`, { body: { value: STATUS_TO_FULFILMENT[status] } });
+      setOrders((prev) => prev.map((o) => (o.id === orderId ? { ...o, status } : o)));
+      showNotification(`Order ${orderId} updated to ${status}.`);
     } catch (e) {
-      console.error(e);
+      showNotification((e as Error).message);
     }
-    showNotification("Enrolled successfully! Happy learning.");
   };
 
-  // Orders pipeline
-  const placeOrder = (
-    shippingAddress: Order['shippingAddress'],
-    paymentMethod: string,
-    subtotal: number,
-    shipping: number,
-    discount: number,
-    total: number,
-    orderId?: string
-  ): Order | null => {
-    if (cart.length === 0) return null;
-
-    // Order ID (online payments use the PayU transaction id)
-    const newOrderId = orderId || `EL000${Math.floor(100000 + Math.random() * 900000)}`;
-    const newOrder: Order = {
-      id: newOrderId,
-      items: [...cart],
-      subtotal,
-      shipping,
-      discount,
-      total,
-      shippingAddress,
-      paymentMethod,
-      status: 'Ordered',
-      createdAt: new Date().toISOString()
-    };
-
-    // Stock deduction & validation
-    const updatedProducts = products.map(p => {
-      const cartItem = cart.find(c => c.product.id === p.id);
-      if (cartItem) {
-        const remainingStock = Math.max(0, p.stock - cartItem.quantity);
-        return { ...p, stock: remainingStock };
-      }
-      return p;
-    });
-
-    setProductsWithSync(updatedProducts);
-    setOrdersWithSync([newOrder, ...orders]);
-    
-    // Add purchased product IDs to user profile to unlock digital downloads
-    if (user) {
-      const addedProductIds = cart.map(item => item.product.id);
-      const updatedUser: UserProfile = {
-        ...user,
-        purchasedProductIds: Array.from(new Set([...user.purchasedProductIds, ...addedProductIds]))
-      };
-      setUser(updatedUser);
-      // Sync user back to el_registered_users
-      const savedUsersStr = localStorage.getItem('el_registered_users');
-      if (savedUsersStr) {
-        const registeredUsers = JSON.parse(savedUsersStr);
-        const updatedUsers = registeredUsers.map((u: any) => 
-          u.email.toLowerCase() === user.email.toLowerCase() 
-            ? { ...u, purchasedProductIds: updatedUser.purchasedProductIds } 
-            : u
-        );
-        localStorage.setItem('el_registered_users', JSON.stringify(updatedUsers));
-      }
-    }
-
-    clearCart();
-    addAuditLog(user?.email || shippingAddress.email, "PLACE_ORDER", `Placed order ${newOrderId} (Total: ₹${total})`);
-    showNotification(`Order ${newOrderId} placed successfully!`);
-    return newOrder;
-  };
-
-  const updateOrderStatus = (orderId: string, status: Order['status']) => {
-    setOrdersWithSync(orders.map(o => o.id === orderId ? { ...o, status } : o));
-    addAuditLog(user?.email || "admin", "UPDATE_ORDER_STATUS", `Updated order ${orderId} status to ${status}`);
-    showNotification(`Order ${orderId} updated to ${status}.`);
-  };
-
-  // B2B Quotes
   const submitRFQ = (rfqData: Omit<RFQ, 'id' | 'status' | 'createdAt'>) => {
     const rfqId = `RFQ-${Math.floor(100 + Math.random() * 900)}`;
     const newRFQ: RFQ = {
@@ -724,7 +580,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       createdAt: new Date().toISOString()
     };
     setRfqsWithSync([newRFQ, ...rfqs]);
-    showNotification(`RFQ submitted successfully! Quotation ID: ${rfqId}`);
+    api('/inquiries', {
+      body: {
+        kind: 'quote', name: rfqData.contactPerson, email: rfqData.email, phone: rfqData.phone, subject: `Bulk quote ${rfqId} - ${rfqData.institutionName}`,
+        message: rfqData.requirements || 'Bulk quote request',
+        extra: { quote_id: rfqId, institution: rfqData.institutionName, type: rfqData.institutionType, products: rfqData.products.map((x) => `${x.quantity} x ${x.name}`).join('; '), required_by: rfqData.requiredDate, gst: rfqData.gstDetails },
+      },
+      auth: !!getToken(),
+    }).catch((e) => console.error(e));
+    showNotification(`Quote request sent! Reference: ${rfqId}. We will reply by e-mail.`);
   };
 
   const updateRFQStatus = (rfqId: string, status: RFQ['status']) => {
@@ -734,41 +598,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const convertRFQToOrder = (rfqId: string) => {
-    const rfq = rfqs.find(r => r.id === rfqId);
-    if (!rfq) return;
-
-    // Map RFQ products to actual products to build order items
-    const orderItems: CartItem[] = rfq.products.map(p => {
-      const match = products.find(prod => prod.name.toLowerCase().includes(p.name.toLowerCase())) || products[0];
-      return { product: match, quantity: p.quantity };
-    });
-
-    const newOrderId = `EL000${Math.floor(100000 + Math.random() * 900000)}`;
-    const newOrder: Order = {
-      id: newOrderId,
-      items: orderItems,
-      subtotal: rfq.estimatedValue,
-      shipping: 0,
-      discount: 0,
-      total: rfq.estimatedValue,
-      shippingAddress: {
-        name: rfq.contactPerson,
-        email: rfq.email,
-        phone: rfq.phone,
-        address: `${rfq.institutionName} Dept`,
-        city: "Institution Campus",
-        zip: "000000",
-        gstin: rfq.gstDetails
-      },
-      paymentMethod: "B2B Purchase Order Invoice",
-      status: 'Ordered',
-      createdAt: new Date().toISOString()
-    };
-
-    setOrdersWithSync([newOrder, ...orders]);
+    // Orders are created by customers through the checkout (server database); an approved quote is just marked here.
     setRfqsWithSync(rfqs.map(r => r.id === rfqId ? { ...r, status: 'Converted to Order' } : r));
-    addAuditLog(user?.email || "admin", "CONVERT_RFQ_TO_ORDER", `Converted RFQ ${rfqId} into Order ${newOrderId}`);
-    showNotification(`Converted RFQ ${rfqId} to Order ${newOrderId} successfully!`);
+    addAuditLog(user?.email || "admin", "CONVERT_RFQ_TO_ORDER", `Marked RFQ ${rfqId} as converted`);
+    showNotification(`RFQ ${rfqId} marked as converted. The customer places the order from the quote.`);
   };
 
   // Coupons
@@ -807,11 +640,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Tickets
   const createTicket = (subject: string, orderId: string | undefined, priority: SupportTicket['priority'], messageText: string) => {
+    if (!user) {
+      showNotification('Please sign in to create a support ticket, or e-mail help.jrlearners@gmail.com.');
+      return;
+    }
     const newId = `SUP${Math.floor(1000 + Math.random() * 9000)}`;
     const newTicket: SupportTicket = {
       id: newId,
-      customerName: user?.name || "Guest Customer",
-      email: user?.email || "guest@learner.com",
+      customerName: user.name,
+      email: user.email,
       subject,
       orderId,
       priority,
@@ -820,7 +657,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       createdAt: new Date().toISOString()
     };
     setTickets([newTicket, ...supportTickets]);
-    showNotification(`Support Ticket ${newId} created!`);
+    api('/inquiries', {
+      body: { kind: 'support', name: newTicket.customerName, email: user.email, subject: `[${newId}] ${subject}`, message: messageText, extra: { ticket: newId, priority, order: orderId || '-' } },
+      auth: !!getToken(),
+    }).catch((e) => console.error(e));
+    showNotification(`Support Ticket ${newId} created and sent to our team.`);
   };
 
   const replyToTicket = (ticketId: string, sender: 'customer' | 'admin', text: string) => {
@@ -880,12 +721,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         toggleWishlist,
         user,
         login,
-        adminLogin,
+        authReady,
+        refreshOrders,
         logout,
         registerUser,
         enrollCourse,
         orders,
-        placeOrder,
         updateOrderStatus,
         rfqs,
         submitRFQ,

@@ -24,11 +24,21 @@ class Settings:
     API_V1_STR: str = "/api/v1"
     SECRET_KEY: str = os.getenv("SECRET_KEY", "change-me-in-production")
     ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7  # 7 days
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 12      # sign-in lasts 12 hours
 
-    # Admin login (set both in the environment; there is no built-in default password)
+    # The administrator account is created / updated from these two variables at start-up (no built-in default password)
     ADMIN_EMAIL: str = os.getenv("ADMIN_EMAIL", "")
     ADMIN_PASSWORD: str = os.getenv("ADMIN_PASSWORD", "")
+
+    # Mail: every registration, order, contact form and quote request is e-mailed to ADMIN_NOTIFY_EMAIL.
+    ADMIN_NOTIFY_EMAIL: str = os.getenv("ADMIN_NOTIFY_EMAIL", "admin@jrlearners.com")
+    SMTP_HOST: str = os.getenv("SMTP_HOST", "")
+    SMTP_PORT: int = int(os.getenv("SMTP_PORT", "587"))
+    SMTP_USER: str = os.getenv("SMTP_USER", "")
+    SMTP_PASSWORD: str = os.getenv("SMTP_PASSWORD", "")
+    SMTP_FROM: str = os.getenv("SMTP_FROM", "")
+    SMTP_SECURITY: str = os.getenv("SMTP_SECURITY", "starttls").lower()   # starttls | ssl | none
+    TRUST_PROXY: bool = os.getenv("TRUST_PROXY", "0") == "1"             # read the client IP from X-Forwarded-For (set 1 behind Render / nginx)
 
     # Public URLs
     FRONTEND_URL: str = os.getenv("FRONTEND_URL", "https://jrlearners.com").rstrip("/")
@@ -43,6 +53,10 @@ class Settings:
     PAYU_ENV: str = os.getenv("PAYU_ENV", "test").lower()          # "test" or "live"
 
     DATA_DIR: str = os.getenv("DATA_DIR", str(Path(__file__).resolve().parents[2] / "data"))
+
+    @property
+    def MAIL_ENABLED(self) -> bool:
+        return bool(self.SMTP_HOST and (self.SMTP_FROM or self.SMTP_USER))
 
     @property
     def PAYU_PAYMENT_URL(self) -> str:

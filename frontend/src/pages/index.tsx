@@ -104,6 +104,30 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ALL-IN-ONE KIT */}
+      {products.find((p) => p.id === 'prod-9') && (() => {
+        const allKit = products.find((p) => p.id === 'prod-9')!;
+        return (
+          <section className="w-full py-14 relative z-10">
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="rounded-3xl bg-slate-900 p-8 md:p-10 grid md:grid-cols-3 gap-6 items-center shadow-2xl">
+                <div className="md:col-span-2 space-y-3">
+                  <span className="inline-block px-3 py-1 rounded-full bg-amber-400 text-xs font-bold uppercase tracking-wider">Best value</span>
+                  <h2 className="text-2xl md:text-3xl font-heading font-extrabold uppercase">All-in-One Kit</h2>
+                  <p className="text-sm text-slate-300">Every part for all 8 levels in one box: one Arduino UNO R3 and the common core, plus every level-specific part. All 400 projects.</p>
+                  <p className="text-xs text-slate-400">₹{allKit.originalPrice - allKit.price} less than buying the 8 kits separately.</p>
+                </div>
+                <div className="space-y-3 md:text-right">
+                  <div className="text-3xl font-heading font-extrabold">₹{allKit.price}</div>
+                  <div className="text-xs line-through text-slate-400">₹{allKit.originalPrice} as 8 separate kits</div>
+                  <Link href="/products/prod-9" className="inline-flex px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-bold items-center gap-2">See the kit <ArrowRight className="w-4 h-4" /></Link>
+                </div>
+              </div>
+            </div>
+          </section>
+        );
+      })()}
+
       {/* 3. BEST SELLING (Dark Contrast Section) */}
       <section className="w-full bg-[#000d21] text-white py-20 relative z-10 border-b border-slate-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
