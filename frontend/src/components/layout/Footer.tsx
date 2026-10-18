@@ -44,6 +44,7 @@ export const Footer: React.FC = () => {
               <li><Link href="/products?type=kits" className="hover:text-blue-400 transition-colors">Project Kits</Link></li>
               <li><Link href="/projects" className="hover:text-orange-400 transition-colors">Projects Library</Link></li>
               <li><Link href="/courses" className="hover:text-cyan-400 transition-colors">Online Courses</Link></li>
+              <li><a href="/arduinoforge/" className="hover:text-cyan-400 transition-colors">ArduinoForge Full Simulator</a></li>
             </ul>
           </div>
 
