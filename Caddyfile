@@ -1,0 +1,5 @@
+# Automatic HTTPS (Let's Encrypt) for the API. Point an A record for the API host (e.g. api.jrlearners.com) at this server first.
+{$API_DOMAIN:localhost} {
+	encode gzip
+	reverse_proxy backend:8000
+}

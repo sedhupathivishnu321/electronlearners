@@ -51,8 +51,7 @@ backend/                  FastAPI: catalogue, PayU payments, orders (SQLite)
   app/catalog.py          the 8 kits and their server-side prices
   app/payu.py             PayU hashes, verification, refunds
   app/main.py             API routes
-render.yaml               one-click backend hosting (Render blueprint)
-docker-compose.yml        local full stack (nginx front end + API)
+Caddyfile + docker-compose.yml   self-hosted API with automatic HTTPS (any VPS with Docker)
 ```
 
 ## PayU payments
@@ -61,18 +60,20 @@ Flow: the checkout page sends the cart and customer details to `POST /api/v1/pay
 
 ### Set it up
 
-1. **Backend** (needs a host that can run Python; `render.yaml` is ready for Render). Set these environment variables on the host, never in the repository:
+1. **Backend** (self-hosted on any VPS with Docker; no third-party platform needed). Set these environment variables on the host, never in the repository:
 
    | Variable | Value |
    |---|---|
    | `PAYU_KEY`, `PAYU_SALT` | from the PayU dashboard (Key Salt Details) |
    | `PAYU_ENV` | `live` or `test` (test keys only work with `test`) |
-   | `PUBLIC_API_URL` | the public URL of the backend, e.g. `https://jrlearners-api.onrender.com` |
+   | `PUBLIC_API_URL` | the public URL of the backend, e.g. `https://api.jrlearners.com` |
    | `FRONTEND_URL`, `CORS_ORIGINS` | `https://jrlearners.com` |
    | `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `SECRET_KEY` | the administrator account (created at start-up) and a long random string for signing tokens |
    | `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURITY`, `SMTP_USER`, `SMTP_PASSWORD`, `SMTP_FROM` | the mail server used to send notifications to `ADMIN_NOTIFY_EMAIL` (default `admin@jrlearners.com`). Until SMTP is set, messages wait in the `mail_outbox` table and are sent as soon as it is |
-   | `TRUST_PROXY` | `1` behind Render / nginx |
+   | `TRUST_PROXY` | `1` behind Caddy / nginx (set in the compose file's env) |
    | `PAYU_CLIENT_ID`, `PAYU_CLIENT_SECRET` | only for the payment-links / split-payment APIs (not used by hosted checkout) |
+
+   **Deploy on a VPS:** point an A record such as `api.jrlearners.com` at the server, install Docker, copy `backend/.env.example` to `backend/.env` and fill it in, then run `API_DOMAIN=api.jrlearners.com docker compose up -d --build`. Caddy gets a free HTTPS certificate automatically and the database lives in the `app_data` volume (back it up).
 
    For local work copy `backend/.env.example` to `backend/.env` (git-ignored) and run `cd backend && pip install -r requirements.txt && uvicorn app.main:app --reload`.
 
