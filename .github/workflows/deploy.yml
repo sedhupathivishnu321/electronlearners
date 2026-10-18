@@ -35,7 +35,7 @@ jobs:
 
       - name: Build Next.js Static Export
         env:
-          # public address of the payment backend (repository variable API_URL, e.g. https://api.jrlearners.com)
+          # public address of the payment backend (repository variable API_URL, e.g. https://jrlearners-api.YOURNAME.workers.dev)
           NEXT_PUBLIC_API_URL: ${{ vars.API_URL }}
         run: |
           cd frontend

@@ -47,11 +47,11 @@ frontend/                 Next.js (static export, GitHub Pages)
   public/downloads/kits/  sketch ZIP per kit
   src/data/               productsData (the 8 kits), kitProjects, courses, blog, youtube
   src/pages/              shop, checkout, checkout/result, projects, simulator, ...
-backend/                  FastAPI: catalogue, PayU payments, orders (SQLite)
+backend/                  Python (FastAPI) reference implementation of the same API, for self-hosting
   app/catalog.py          the 8 kits and their server-side prices
   app/payu.py             PayU hashes, verification, refunds
   app/main.py             API routes
-Caddyfile + docker-compose.yml   self-hosted API with automatic HTTPS (any VPS with Docker)
+worker/                   the live API: Cloudflare Workers + D1 (free, no server), see worker/README.md
 ```
 
 ## PayU payments
@@ -60,31 +60,13 @@ Flow: the checkout page sends the cart and customer details to `POST /api/v1/pay
 
 ### Set it up
 
-1. **Backend** (self-hosted on any VPS with Docker; no third-party platform needed). Set these environment variables on the host, never in the repository:
+The API runs on **Cloudflare Workers + D1** (free, no card, no server) and deploys from GitHub. Follow [worker/README.md](worker/README.md): a free Cloudflare account and token, a Google Apps Script for mail, the admin login, then run the deploy workflow and set the repository variable `API_URL`. Until `API_URL` is set, checkout shows "not connected" and only browsing works.
 
-   | Variable | Value |
-   |---|---|
-   | `PAYU_KEY`, `PAYU_SALT` | from the PayU dashboard (Key Salt Details) |
-   | `PAYU_ENV` | `live` or `test` (test keys only work with `test`) |
-   | `PUBLIC_API_URL` | the public URL of the backend, e.g. `https://api.jrlearners.com` |
-   | `FRONTEND_URL`, `CORS_ORIGINS` | `https://jrlearners.com` |
-   | `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `SECRET_KEY` | the administrator account (created at start-up) and a long random string for signing tokens |
-   | `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURITY`, `SMTP_USER`, `SMTP_PASSWORD`, `SMTP_FROM` | the mail server used to send notifications to `ADMIN_NOTIFY_EMAIL` (default `admin@jrlearners.com`). Until SMTP is set, messages wait in the `mail_outbox` table and are sent as soon as it is |
-   | `TRUST_PROXY` | `1` behind Caddy / nginx (set in the compose file's env) |
-   | `PAYU_CLIENT_ID`, `PAYU_CLIENT_SECRET` | only for the payment-links / split-payment APIs (not used by hosted checkout) |
-
-   **No server yet? Free VM (Oracle Cloud Always Free or Google Cloud e2-micro):** see [deploy/GO-LIVE.md](deploy/GO-LIVE.md) for the click-by-click steps. After a one-time `deploy/setup-vm.sh` on the VM, every push to `main` redeploys the API through GitHub Actions.
-
-   **Deploy on a VPS:** point an A record such as `api.jrlearners.com` at the server, install Docker, copy `backend/.env.example` to `backend/.env` and fill it in, then run `API_DOMAIN=api.jrlearners.com docker compose up -d --build`. Caddy gets a free HTTPS certificate automatically and the database lives in the `app_data` volume (back it up).
-
-   For local work copy `backend/.env.example` to `backend/.env` (git-ignored) and run `cd backend && pip install -r requirements.txt && uvicorn app.main:app --reload`.
-
-2. **PayU dashboard**: add the backend URL as the success / failure / webhook URL (`{PUBLIC_API_URL}/api/v1/payments/payu/callback` and `.../webhook`) if your account restricts return URLs.
-3. **Front end**: add a GitHub repository variable `API_URL` (Settings, Secrets and variables, Actions, Variables) with the backend URL and re-run the deploy workflow. Until `API_URL` is set, the checkout offers Cash on Delivery only.
+PayU values (key, salt, client id and secret) live only as GitHub / Cloudflare secrets, never in the repository.
 
 ## Database
 
-SQLite (file `jrlearners.db` in `DATA_DIR`, on the persistent disk, owner-only permissions). Tables: `users` (password hash, lock-out counters, role, profile), `orders` (belongs to a user), `inquiries`, `mail_outbox`, `audit_log`. Passwords are never stored in clear text. Back up the `/data` disk regularly.
+Cloudflare D1 (SQLite): `users` (password hash, lock-out counters, role, profile), `orders` (each belongs to a user), `inquiries`, `mail_outbox`, `audit_log`. Passwords are never stored in clear text. Schema: `worker/schema.sql`.
 
 ## Contact
 

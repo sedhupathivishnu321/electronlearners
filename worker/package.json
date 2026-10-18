@@ -1,0 +1,7 @@
+{
+  "name": "jrlearners-api",
+  "private": true,
+  "type": "module",
+  "scripts": { "dev": "wrangler dev --local", "test": "node test/api.test.mjs" },
+  "devDependencies": { "wrangler": "^3.100.0" }
+}

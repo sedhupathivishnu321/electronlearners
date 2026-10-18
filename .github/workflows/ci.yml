@@ -16,6 +16,19 @@ jobs:
       - name: Backend API tests (accounts, orders, PayU hashes, mail)
         run: python backend/tests/test_api.py
 
+  worker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Worker API end-to-end test (real workerd + local D1)
+        working-directory: worker
+        run: |
+          npm install --no-audit --no-fund
+          npm test
+
   frontend:
     runs-on: ubuntu-latest
     steps:

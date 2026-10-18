@@ -1,0 +1,78 @@
+name: Deploy API (Cloudflare Workers)
+
+# The shop API (accounts, orders, PayU, e-mail) runs free on Cloudflare Workers + D1. No server, no card.
+# One-time setup: add the repository secrets CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID (see worker/README.md).
+# Until they exist this job does nothing.
+on:
+  push:
+    branches: [main]
+    paths: ["worker/**", ".github/workflows/deploy-worker.yml"]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Is Cloudflare configured?
+        id: cf
+        env:
+          T: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          if [ -n "$T" ]; then echo "has=true" >> "$GITHUB_OUTPUT"; else echo "has=false" >> "$GITHUB_OUTPUT"; echo "No CLOUDFLARE_API_TOKEN secret yet - nothing to deploy. See worker/README.md."; fi
+      - uses: actions/checkout@v4
+        if: steps.cf.outputs.has == 'true'
+      - uses: actions/setup-node@v4
+        if: steps.cf.outputs.has == 'true'
+        with:
+          node-version: 20
+      - name: Install
+        if: steps.cf.outputs.has == 'true'
+        working-directory: worker
+        run: npm install --no-audit --no-fund
+      - name: Create or find the D1 database and apply the schema
+        if: steps.cf.outputs.has == 'true'
+        working-directory: worker
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          npx wrangler d1 create jrlearners || echo "(database already exists)"
+          npx wrangler d1 list --json > d1.json
+          ID=$(node -e "const x=JSON.parse(require('fs').readFileSync('d1.json','utf8')).find(d=>d.name==='jrlearners');console.log(x?x.uuid:'')")
+          test -n "$ID" || { echo "could not find the D1 database id"; exit 1; }
+          sed -i "s/REPLACE_BY_WORKFLOW/$ID/" wrangler.toml
+          npx wrangler d1 execute jrlearners --remote --file=schema.sql
+      - name: Deploy the Worker
+        if: steps.cf.outputs.has == 'true'
+        working-directory: worker
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npx wrangler deploy 2>&1 | tee deploy.log
+      - name: Set the Worker secrets
+        if: steps.cf.outputs.has == 'true'
+        working-directory: worker
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          PAYU_KEY: ${{ secrets.PAYU_KEY }}
+          PAYU_SALT: ${{ secrets.PAYU_SALT }}
+          PAYU_CLIENT_ID: ${{ secrets.PAYU_CLIENT_ID }}
+          PAYU_CLIENT_SECRET: ${{ secrets.PAYU_CLIENT_SECRET }}
+          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+          MAIL_WEBHOOK_URL: ${{ secrets.MAIL_WEBHOOK_URL }}
+          MAIL_WEBHOOK_SECRET: ${{ secrets.MAIL_WEBHOOK_SECRET }}
+        run: |
+          node -e "const names=['SECRET_KEY','PAYU_KEY','PAYU_SALT','PAYU_CLIENT_ID','PAYU_CLIENT_SECRET','ADMIN_EMAIL','ADMIN_PASSWORD','MAIL_WEBHOOK_URL','MAIL_WEBHOOK_SECRET'];const o={};for(const n of names)if(process.env[n])o[n]=process.env[n];require('fs').writeFileSync('secrets.json',JSON.stringify(o));console.log('setting:',Object.keys(o).join(', '))"
+          npx wrangler secret bulk secrets.json
+          rm -f secrets.json
+      - name: Show the API address
+        if: steps.cf.outputs.has == 'true'
+        working-directory: worker
+        run: |
+          URL=$(grep -o 'https://[^ ]*workers.dev' deploy.log | head -1)
+          echo "API address: $URL"
+          echo "### API address: $URL" >> "$GITHUB_STEP_SUMMARY"
+          echo "Set the repository variable API_URL to this value and re-run the Pages deploy." >> "$GITHUB_STEP_SUMMARY"
