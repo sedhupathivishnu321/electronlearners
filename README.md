@@ -73,6 +73,8 @@ Flow: the checkout page sends the cart and customer details to `POST /api/v1/pay
    | `TRUST_PROXY` | `1` behind Caddy / nginx (set in the compose file's env) |
    | `PAYU_CLIENT_ID`, `PAYU_CLIENT_SECRET` | only for the payment-links / split-payment APIs (not used by hosted checkout) |
 
+   **No server yet? Free VM (Oracle Cloud Always Free or Google Cloud e2-micro):** see [deploy/GO-LIVE.md](deploy/GO-LIVE.md) for the click-by-click steps. After a one-time `deploy/setup-vm.sh` on the VM, every push to `main` redeploys the API through GitHub Actions.
+
    **Deploy on a VPS:** point an A record such as `api.jrlearners.com` at the server, install Docker, copy `backend/.env.example` to `backend/.env` and fill it in, then run `API_DOMAIN=api.jrlearners.com docker compose up -d --build`. Caddy gets a free HTTPS certificate automatically and the database lives in the `app_data` volume (back it up).
 
    For local work copy `backend/.env.example` to `backend/.env` (git-ignored) and run `cd backend && pip install -r requirements.txt && uvicorn app.main:app --reload`.
