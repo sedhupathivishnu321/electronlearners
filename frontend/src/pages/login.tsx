@@ -6,15 +6,15 @@ import { Lock, Mail, Cpu, User } from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();
-  const { login } = useApp();
+  const { login, adminLogin } = useApp();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState<'student' | 'teacher' | 'school' | 'admin'>('student');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const success = login(email, password, role);
+    const success = role === 'admin' ? await adminLogin(email, password) : login(email, password, role);
     if (success) {
       if (role === 'admin') router.push('/admin');
       else if (role === 'teacher') router.push('/teachers');

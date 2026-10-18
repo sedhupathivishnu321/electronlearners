@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { PRODUCTS_DATA, STEMProduct } from '../data/productsData';
+import { API_V1, paymentsConfigured } from '../utils/api';
 
 // Types and Interfaces
 export interface CartItem {
@@ -30,6 +31,7 @@ export interface Order {
     phone: string;
     address: string;
     city: string;
+    state?: string;
     zip: string;
     gstin?: string;
   };
@@ -112,6 +114,7 @@ interface AppContextType {
   // Auth
   user: UserProfile | null;
   login: (email: string, password: string, role?: string) => boolean;
+  adminLogin: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
   registerUser: (name: string, email: string, password: string, role: 'student' | 'teacher' | 'school') => boolean;
   enrollCourse: (courseId: string) => void;
@@ -124,7 +127,8 @@ interface AppContextType {
     subtotal: number,
     shipping: number,
     discount: number,
-    total: number
+    total: number,
+    orderId?: string
   ) => Order | null;
   updateOrderStatus: (orderId: string, status: Order['status']) => void;
   
@@ -483,27 +487,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Auth Operations
   const login = (email: string, password: string, role = 'student'): boolean => {
-    // Support custom administrative roles and Super Admin
-    const emailLower = email.toLowerCase();
+    // Administrator accounts are verified by the server (see adminLogin); no credentials live in this code.
     if (role === 'admin' || role === 'store_manager' || role === 'support_agent' || role === 'content_manager') {
-      if (
-        (emailLower === 'sedhupathivishnu321@gmail.com' && password === 'JRLearners2026!') ||
-        (emailLower === 'learnersground2@gmail.com' && password === 'Vishnu@12354')
-      ) {
-        const newUser: UserProfile = {
-          name: emailLower === 'learnersground2@gmail.com' ? "Vishnu Administrator" : (role === 'admin' ? "SEDHU SUPER ADMIN" : `SEDHU ${role.toUpperCase()}`),
-          email,
-          role: 'admin',
-          institution: "JR Learners Commerce Platform",
-          enrolledCourseIds: [],
-          purchasedProductIds: [],
-          certificates: []
-        };
-        setUser(newUser);
-        addAuditLog(emailLower, "ADMIN_LOGIN", `Logged in with role: admin`);
-        showNotification(`Welcome back, ${newUser.name}!`);
-        return true;
-      }
+      showNotification('Administrator sign-in is verified by the server. Use the Admin option on the sign-in page.');
+      return false;
     }
 
     try {
@@ -531,6 +518,43 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     } catch (e) {
       console.error(e);
       showNotification("Error during authentication.");
+      return false;
+    }
+  };
+
+  // Admin sign-in: the backend checks the password against ADMIN_EMAIL / ADMIN_PASSWORD from its environment
+  const adminLogin = async (email: string, password: string): Promise<boolean> => {
+    if (!paymentsConfigured) {
+      showNotification('The server is not connected, so administrator sign-in is unavailable.');
+      return false;
+    }
+    try {
+      const res = await fetch(`${API_V1}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, role: 'admin' }),
+      });
+      if (!res.ok) {
+        showNotification('Login Failed: Incorrect credentials.');
+        return false;
+      }
+      const data = await res.json();
+      try { sessionStorage.setItem('el_admin_token', data.access_token); } catch (e) { /* storage blocked */ }
+      const newUser: UserProfile = {
+        name: 'Administrator',
+        email,
+        role: 'admin',
+        institution: 'JR Learners Commerce Platform',
+        enrolledCourseIds: [],
+        purchasedProductIds: [],
+        certificates: [],
+      };
+      setUser(newUser);
+      addAuditLog(email.toLowerCase(), 'ADMIN_LOGIN', 'Logged in as admin');
+      showNotification('Welcome back, Administrator!');
+      return true;
+    } catch (e) {
+      showNotification('Could not reach the server. Please try again.');
       return false;
     }
   };
@@ -624,12 +648,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     subtotal: number,
     shipping: number,
     discount: number,
-    total: number
+    total: number,
+    orderId?: string
   ): Order | null => {
     if (cart.length === 0) return null;
 
-    // Place order ID
-    const newOrderId = `EL000${Math.floor(100000 + Math.random() * 900000)}`;
+    // Order ID (online payments use the PayU transaction id)
+    const newOrderId = orderId || `EL000${Math.floor(100000 + Math.random() * 900000)}`;
     const newOrder: Order = {
       id: newOrderId,
       items: [...cart],
@@ -855,6 +880,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         toggleWishlist,
         user,
         login,
+        adminLogin,
         logout,
         registerUser,
         enrollCourse,

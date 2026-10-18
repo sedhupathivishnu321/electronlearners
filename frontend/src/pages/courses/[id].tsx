@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import type { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { COURSES_DATA, STEMCourse } from '../../data/coursesData';
@@ -308,3 +309,10 @@ export default function CourseDetail() {
   );
 }
 
+
+// Static export: pre-render every id and slug so direct links (and shared URLs) work on GitHub Pages
+export const getStaticPaths: GetStaticPaths = async () => ({
+  paths: COURSES_DATA.flatMap((x) => [{ params: { id: x.id } }, { params: { id: x.slug } }]),
+  fallback: false,
+});
+export const getStaticProps: GetStaticProps = async () => ({ props: {} });

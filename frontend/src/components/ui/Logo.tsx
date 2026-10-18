@@ -77,7 +77,7 @@ export const Logo: React.FC<LogoProps> = ({ className = '', size = 'md' }) => {
         <text 
           x="50%" 
           y="63%" 
-          fill="#FFFFFF" 
+          fill="#F5F8FF" 
           fontSize="28" 
           fontWeight="900" 
           fontFamily="'Poppins', 'Inter', sans-serif" 

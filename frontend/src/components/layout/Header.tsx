@@ -37,7 +37,7 @@ export const Header: React.FC = () => {
             <Link href="/products" className="hover:text-blue-400 transition-colors">Kits</Link>
             <Link href="/courses" className="hover:text-blue-400 transition-colors">Courses</Link>
             <Link href="/projects" className="hover:text-blue-400 transition-colors">Projects</Link>
-            <a href="/arduinoforge/" className="hover:text-blue-400 transition-colors">ArduinoForge</a>
+            <a href="/simulator/" className="hover:text-blue-400 transition-colors">Simulator</a>
             <Link href="/resources" className="hover:text-blue-400 transition-colors">Resources</Link>
             <Link href="/schools" className="hover:text-blue-400 transition-colors">For Schools</Link>
             
@@ -156,7 +156,7 @@ export const Header: React.FC = () => {
           <Link href="/products" onClick={() => setIsMobileMenuOpen(false)} className="block text-sm font-medium text-slate-200 py-1">Kits</Link>
           <Link href="/courses" onClick={() => setIsMobileMenuOpen(false)} className="block text-sm font-medium text-slate-200 py-1">Courses</Link>
           <Link href="/projects" onClick={() => setIsMobileMenuOpen(false)} className="block text-sm font-medium text-slate-200 py-1">Projects</Link>
-          <a href="/arduinoforge/" className="block text-sm font-medium text-slate-200 py-1">ArduinoForge</a>
+          <a href="/simulator/" className="block text-sm font-medium text-slate-200 py-1">Simulator</a>
           <Link href="/resources" onClick={() => setIsMobileMenuOpen(false)} className="block text-sm font-medium text-slate-200 py-1">Resources</Link>
           <Link href="/schools" onClick={() => setIsMobileMenuOpen(false)} className="block text-sm font-medium text-slate-200 py-1">For Schools</Link>
           <Link href="/dashboard" onClick={() => setIsMobileMenuOpen(false)} className="block text-sm font-medium text-slate-200 py-1">My Account</Link>

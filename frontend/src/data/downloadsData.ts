@@ -1,7 +1,7 @@
 export interface ResourceDownload {
   id: string;
   title: string;
-  category: 'PDF Manuals' | 'Circuit Diagrams' | 'Arduino Code' | 'Libraries' | 'Datasheets' | 'PCB Gerber' | '3D Models';
+  category: 'Arduino Code';
   fileType: string;
   size: string;
   downloadsCount: number;
@@ -9,65 +9,86 @@ export interface ResourceDownload {
   description: string;
 }
 
+// One sketch pack per kit (generated from the same sources as the ArduinoForge simulator projects).
 export const DOWNLOADS_DATA: ResourceDownload[] = [
   {
-    id: "dl-1",
-    title: "JR Learners Basic Embedded Systems Laboratory Manual (50 Experiments)",
-    category: "PDF Manuals",
-    fileType: "PDF",
-    size: "5.4 MB",
-    downloadsCount: 3420,
-    url: "/downloads/manuals/Arduino_Starter_Kit_Guide.pdf",
-    description: "Complete 302-page lab manual for the Arduino Starter Kit: 50 fully worked experiments (theory, circuit diagrams, algorithms, flowcharts, complete Arduino code, troubleshooting, and viva questions) across Simple, Average, and Advanced layers, plus 15 appendices."
+    "id": "dl-kit1",
+    "title": "Kit 1: Foundations - all 50 project sketches",
+    "category": "Arduino Code",
+    "fileType": "ZIP (.ino)",
+    "size": "60 KB",
+    "downloadsCount": 0,
+    "url": "/downloads/kits/JR_Arduino_Kit1_Foundations_Sketches.zip",
+    "description": "One folder per project (10 Basic, 20 Intermediate, 20 Advanced) with the Arduino sketch, parts list and circuit notes for Kit 1: Foundations."
   },
   {
-    id: "dl-2",
-    title: "ESP32 NodeMCU Pinout & Schematic Reference",
-    category: "Circuit Diagrams",
-    fileType: "PNG",
-    size: "2.8 MB",
-    downloadsCount: 4890,
-    url: "/downloads/schematics/ESP32_Pinout_HD.png",
-    description: "High-resolution pinout mapping for ESP32 WROOM-32 (GPIO, ADC, PWM, SPI, I2C, Touch)."
+    "id": "dl-kit2",
+    "title": "Kit 2: Sensing the World - all 50 project sketches",
+    "category": "Arduino Code",
+    "fileType": "ZIP (.ino)",
+    "size": "60 KB",
+    "downloadsCount": 0,
+    "url": "/downloads/kits/JR_Arduino_Kit2_Sensing_the_World_Sketches.zip",
+    "description": "One folder per project (10 Basic, 20 Intermediate, 20 Advanced) with the Arduino sketch, parts list and circuit notes for Kit 2: Sensing the World."
   },
   {
-    id: "dl-3",
-    title: "ATmega328P Microcontroller Official Microchip Datasheet",
-    category: "Datasheets",
-    fileType: "PDF",
-    size: "8.5 MB",
-    downloadsCount: 1950,
-    url: "/downloads/datasheets/ATmega328P_Datasheet.pdf",
-    description: "Full electrical characteristics, register maps, and pin configurations for ATmega328P."
+    "id": "dl-kit3",
+    "title": "Kit 3: Displays & Interfaces - all 50 project sketches",
+    "category": "Arduino Code",
+    "fileType": "ZIP (.ino)",
+    "size": "77 KB",
+    "downloadsCount": 0,
+    "url": "/downloads/kits/JR_Arduino_Kit3_Displays_and_Interfaces_Sketches.zip",
+    "description": "One folder per project (10 Basic, 20 Intermediate, 20 Advanced) with the Arduino sketch, parts list and circuit notes for Kit 3: Displays & Interfaces."
   },
   {
-    id: "dl-4",
-    title: "555 LED Flasher KiCad 8 Gerber Fabrication Files",
-    category: "PCB Gerber",
-    fileType: "ZIP",
-    size: "450 KB",
-    downloadsCount: 1240,
-    url: "/downloads/pcb/555_Flasher_Gerber.zip",
-    description: "Ready-to-order Gerber ZIP file compatible with JLCPCB, PCBWay, and PCB Power."
+    "id": "dl-kit4",
+    "title": "Kit 4: Motion & Distance - all 50 project sketches",
+    "category": "Arduino Code",
+    "fileType": "ZIP (.ino)",
+    "size": "72 KB",
+    "downloadsCount": 0,
+    "url": "/downloads/kits/JR_Arduino_Kit4_Motion_and_Distance_Sketches.zip",
+    "description": "One folder per project (10 Basic, 20 Intermediate, 20 Advanced) with the Arduino sketch, parts list and circuit notes for Kit 4: Motion & Distance."
   },
   {
-    id: "dl-5",
-    title: "2WD Robotic Chassis 3D Printable STL Files",
-    category: "3D Models",
-    fileType: "STL / ZIP",
-    size: "18.4 MB",
-    downloadsCount: 890,
-    url: "/downloads/3d/2WD_Robot_Chassis_STL.zip",
-    description: "3D printable replacement chassis, sensor brackets, and battery holder mounts."
+    "id": "dl-kit5",
+    "title": "Kit 5: Motors & Power Control - all 50 project sketches",
+    "category": "Arduino Code",
+    "fileType": "ZIP (.ino)",
+    "size": "80 KB",
+    "downloadsCount": 0,
+    "url": "/downloads/kits/JR_Arduino_Kit5_Motors_and_Power_Control_Sketches.zip",
+    "description": "One folder per project (10 Basic, 20 Intermediate, 20 Advanced) with the Arduino sketch, parts list and circuit notes for Kit 5: Motors & Power Control."
   },
   {
-    id: "dl-6",
-    title: "JR Learners Master Code Repository Bundle",
-    category: "Arduino Code",
-    fileType: "ZIP",
-    size: "24.1 MB",
-    downloadsCount: 6100,
-    url: "/downloads/code/JR Learners_All_Projects_Code.zip",
-    description: "Includes source code for the 8 Arduino kits, 100 Projects, and YouTube tutorials."
+    "id": "dl-kit6",
+    "title": "Kit 6: Smart Safety & Environment - all 50 project sketches",
+    "category": "Arduino Code",
+    "fileType": "ZIP (.ino)",
+    "size": "84 KB",
+    "downloadsCount": 0,
+    "url": "/downloads/kits/JR_Arduino_Kit6_Smart_Safety_and_Environment_Sketches.zip",
+    "description": "One folder per project (10 Basic, 20 Intermediate, 20 Advanced) with the Arduino sketch, parts list and circuit notes for Kit 6: Smart Safety & Environment."
+  },
+  {
+    "id": "dl-kit7",
+    "title": "Kit 7: Wireless & Remote Control - all 50 project sketches",
+    "category": "Arduino Code",
+    "fileType": "ZIP (.ino)",
+    "size": "100 KB",
+    "downloadsCount": 0,
+    "url": "/downloads/kits/JR_Arduino_Kit7_Wireless_and_Remote_Control_Sketches.zip",
+    "description": "One folder per project (10 Basic, 20 Intermediate, 20 Advanced) with the Arduino sketch, parts list and circuit notes for Kit 7: Wireless & Remote Control."
+  },
+  {
+    "id": "dl-kit8",
+    "title": "Kit 8: Smart Systems Capstone - all 50 project sketches",
+    "category": "Arduino Code",
+    "fileType": "ZIP (.ino)",
+    "size": "93 KB",
+    "downloadsCount": 0,
+    "url": "/downloads/kits/JR_Arduino_Kit8_Smart_Systems_Capstone_Sketches.zip",
+    "description": "One folder per project (10 Basic, 20 Intermediate, 20 Advanced) with the Arduino sketch, parts list and circuit notes for Kit 8: Smart Systems Capstone."
   }
 ];

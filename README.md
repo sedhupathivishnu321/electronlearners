@@ -1,131 +1,93 @@
 <div align="center">
-  <img src="frontend/public/logo.png" alt="JR Learners Logo" width="180" />
-  <h1>⚡ JR Learners Platform</h1>
+  <img src="frontend/public/logo.png" alt="JR Learners Logo" width="160" />
+  <h1>JR Learners</h1>
   <p><strong>Learn. Build. Innovate.</strong></p>
-  <p>Complete STEM Education & E-Commerce Platform with Physical Kits, Online Courses, YouTube Channel Integration (<a href="https://www.youtube.com/@LetsGetEngagedin">@LetsGetEngagedin</a>), Project Libraries, Institutional Portals, and Enterprise Admin Panel.</p>
+  <p>The JR Learners Arduino kit series: 8 levels, 50 guided projects per kit (400 in total), a free circuit simulator and an online shop with PayU payments.</p>
 </div>
 
 ---
 
-## 🌟 Features Overview
+## The 8 kits
 
-- **8 Arduino Kits (Level 1-8, 50 projects each = 400 projects)**: Foundations, Sensing the World, Displays & Interfaces, Motion & Distance, Motors & Power Control, Smart Safety & Environment, Wireless & Remote Control, Smart Systems Capstone. Price = BOM component cost + 40 %. Every project can be tried in the ArduinoForge simulator at `/arduinoforge/`.
-- **YouTube Tutorial Hub**: Direct integration with YouTube channel [@LetsGetEngagedin](https://www.youtube.com/@LetsGetEngagedin) with video player modal, source code downloads (`.ino`, `.py`, `.c`), and transcript summaries.
-- **15+ STEM Courses**: Electronics, Arduino, Embedded C, ESP32, STM32, PCB Design, IoT, Robotics, AI, Python, Machine Learning, Computer Vision, Raspberry Pi, Linux, Git.
-- **100 STEM Projects Library**: Circuit schematics, hardware bill of materials, source code, and step-by-step assembly guides across 8 STEM disciplines.
-- **100 Blog Articles**: SEO-optimized STEM tutorials, guides, and engineering articles.
-- **Dynamic Certificate System**: Verification ID generation, downloadable canvas certificate, and public verification page (`/verify-certificate/[id]`).
-- **Institutional Portals**: Dedicated **Student Dashboard**, **Teacher Portal**, and **School/Institution Management Portal**.
-- **Enterprise Admin Panel**: Real-time analytics, inventory tracker, user role control, order fulfillment, coupon engine, system logs.
-- **GitHub Pages Deployment**: 100% Client-side static export support (`output: 'export'`) with GitHub Actions workflow for zero-cost automated hosting.
-- **Full FastAPI Backend**: Python FastAPI REST API backend with PostgreSQL database schema and Docker Compose orchestration.
+Every kit contains an Arduino UNO R3, USB cable, breadboard, jumper wires, resistor kit, push button and LEDs, plus the level-specific parts. Each kit has **10 Basic, 20 Intermediate and 20 Advanced** projects, and every project uses only the parts of its own kit.
 
----
+| Level | Kit | Focus | Price |
+|---|---|---|---|
+| 1 | Foundations | digital I/O, PWM, analog read, serial | ₹848 |
+| 2 | Sensing the World | analog and digital sensors, thresholds, calibration | ₹1,092 |
+| 3 | Displays & Interfaces | LCD / OLED / 7-segment / matrix, shift registers, human input | ₹1,632 |
+| 4 | Motion & Distance | ranging, presence and position sensing, first servo | ₹1,259 |
+| 5 | Motors & Power Control | transistors, H-bridges, relays, steppers | ₹1,447 |
+| 6 | Smart Safety & Environment | hazard detection, data sensing, alarms | ₹1,929 |
+| 7 | Wireless & Remote Control | Bluetooth, 2.4 GHz radio, IR, Wi-Fi, 3.3 V interfacing | ₹2,066 |
+| 8 | Smart Systems Capstone | RFID access, RTC logging, load cell, INA219, MPU6050, MAX30102 | ₹2,560 |
 
-## 📁 Repository Structure
+**Pricing rule:** price = BOM component cost of the kit (including the common core) + 40 %, rounded to the nearest rupee. The server holds the same table in [backend/app/catalog.py](backend/app/catalog.py) and always recomputes the amount itself; the browser's total is never trusted.
+
+## Site features
+
+- **Shop** for the 8 kits: level filter, price filter, comparison table, parts list and the 50 projects on every kit page. Cart, wishlist, coupons, order history.
+- **400 project guides** (`/projects`): parts list, circuit notes, Arduino sketch (copy / download .ino), neighbour navigation and a one-click link into the simulator.
+- **ArduinoForge simulator** (`/simulator`, full screen at `/arduinoforge/`): breadboard circuit simulator with all 400 projects (`/arduinoforge/?example=k8-01-rfid-uid` opens one directly).
+- **Downloads**: one ZIP of sketches per kit.
+- **Payments** with PayU (UPI, cards, netbanking, wallets, EMI) or Cash on Delivery, with server-side price checking and signature-verified callbacks.
+- Courses, YouTube tutorials, blog, certificates with verification, school / teacher portals, support tickets, bulk quotes.
+- Accessible colour theme: no pure black or white text, every text/background pair is checked for contrast.
+
+## Repository layout
 
 ```
-JR Learners/
-├── backend/                  # Python FastAPI Backend
-│   ├── app/
-│   │   ├── api/v1/          # REST API Routes (Auth, Products, Courses, YouTube, Orders, Admin)
-│   │   ├── core/            # Security, JWT, Database Config
-│   │   ├── models/          # SQLAlchemy Database Models
-│   │   ├── schemas/         # Pydantic Request/Response Schemas
-│   │   └── main.py          # FastAPI Main Entry Point & OpenAPI Docs
-│   ├── schema.sql           # PostgreSQL DDL Schema Script
-│   ├── seed.py              # Sample Database Seeder
-│   └── requirements.txt     # Python Dependencies
-├── frontend/                 # Next.js 15 + React + TypeScript + Tailwind CSS Frontend
-│   ├── public/              # Static Assets & Icons
-│   ├── src/
-│   │   ├── components/      # UI, Header, Footer, Admin, Video Modal, Code Viewer
-│   │   ├── context/         # Application State & LocalStorage Persistence
-│   │   ├── data/            # Full Datasets (8 Arduino Kits x 50 projects, 100 Projects, 100 Blogs, Courses, Videos)
-│   │   └── pages/           # All Pages & Routes (Home, Products, YouTube Hub, Admin, Portals)
-│   ├── next.config.js       # Next.js Config with Static Export Support
-│   ├── tailwind.config.js   # Tailwind Configuration with Modern STEM Theme Palette
-│   └── package.json         # Frontend Dependencies
-├── .github/
-│   └── workflows/
-│       └── deploy.yml       # GitHub Actions Static Export Deployment to GitHub Pages
-├── docker-compose.yml       # Production Docker Stack (Nginx + Frontend + FastAPI + Postgres)
-├── Dockerfile.frontend      # Docker build for Next.js
-├── Dockerfile.backend       # Docker build for FastAPI
-├── nginx.conf               # Reverse Proxy & SSL Nginx Config
-└── README.md                # Platform Documentation
+frontend/                 Next.js (static export, GitHub Pages)
+  public/arduinoforge/    built ArduinoForge simulator (web app)
+  public/kit-projects/    index.json + kit1..kit8.json (400 projects: parts, circuit notes, sketches)
+  public/downloads/kits/  sketch ZIP per kit
+  src/data/               productsData (the 8 kits), kitProjects, courses, blog, youtube
+  src/pages/              shop, checkout, checkout/result, projects, simulator, ...
+backend/                  FastAPI: catalogue, PayU payments, orders (SQLite)
+  app/catalog.py          the 8 kits and their server-side prices
+  app/payu.py             PayU hashes, verification, refunds
+  app/main.py             API routes
+render.yaml               one-click backend hosting (Render blueprint)
+docker-compose.yml        local full stack (nginx front end + API)
 ```
 
----
+## PayU payments
 
-## 🎨 Color Palette & Design System
+Flow: the checkout page sends the cart and customer details to `POST /api/v1/payments/payu/initiate`. The backend prices the cart from its own catalogue, stores a pending order, signs the PayU request with the **salt (which never leaves the server)** and returns the form fields. The browser posts them to PayU's hosted page. PayU sends the customer back to `POST /api/v1/payments/payu/callback`; the backend verifies PayU's response hash and the amount, marks the order `paid` or `failed` and redirects to `/checkout/result/`. A webhook (`/payments/payu/webhook`), a status re-check (`/payments/payu/verify/{txnid}`) and an admin refund endpoint are included.
 
-| Element | Color | Hex |
-| :--- | :--- | :--- |
-| **Primary** | Royal Blue | `#2563EB` |
-| **Secondary** | Cyan | `#06B6D4` |
-| **Accent** | Orange | `#F97316` |
-| **Success** | Emerald | `#10B981` |
-| **Background** | Light Gray | `#F8FAFC` |
-| **Dark Surface** | Slate | `#0F172A` |
+### Set it up
 
----
+1. **Backend** (needs a host that can run Python; `render.yaml` is ready for Render). Set these environment variables on the host, never in the repository:
 
-## 🚀 Quick Start (Frontend & Static / GitHub Pages Mode)
+   | Variable | Value |
+   |---|---|
+   | `PAYU_KEY`, `PAYU_SALT` | from the PayU dashboard (Key Salt Details) |
+   | `PAYU_ENV` | `live` or `test` (test keys only work with `test`) |
+   | `PUBLIC_API_URL` | the public URL of the backend, e.g. `https://jrlearners-api.onrender.com` |
+   | `FRONTEND_URL`, `CORS_ORIGINS` | `https://jrlearners.com` |
+   | `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `SECRET_KEY` | admin login for the admin panel and a long random string |
+   | `PAYU_CLIENT_ID`, `PAYU_CLIENT_SECRET` | only for the payment-links / split-payment APIs (not used by hosted checkout) |
+
+   For local work copy `backend/.env.example` to `backend/.env` (git-ignored) and run `cd backend && pip install -r requirements.txt && uvicorn app.main:app --reload`.
+
+2. **PayU dashboard**: add the backend URL as the success / failure / webhook URL (`{PUBLIC_API_URL}/api/v1/payments/payu/callback` and `.../webhook`) if your account restricts return URLs.
+3. **Front end**: add a GitHub repository variable `API_URL` (Settings, Secrets and variables, Actions, Variables) with the backend URL and re-run the deploy workflow. Until `API_URL` is set, the checkout offers Cash on Delivery only.
+
+## Front end
 
 ```bash
-# Navigate to frontend directory
 cd frontend
-
-# Install dependencies
-npm install
-
-# Run local development server
-npm run dev
-
-# Open browser at http://localhost:3000
+npm install --legacy-peer-deps
+npm run dev      # http://localhost:3000
+npm run build    # static export to frontend/out
 ```
 
-### Export for GitHub Pages Static Hosting
-```bash
-# Build static site to /out directory
-npm run build
+Deployed to GitHub Pages by `.github/workflows/deploy.yml` on every push to `main` (custom domain in `frontend/public/CNAME`).
 
-# The output folder `out` can be pushed to gh-pages branch or served statically
-```
+## Colour theme
+
+`frontend/src/styles/globals.css` ends with a generated contrast theme (generated by `frontend/scripts/gen_theme.py`): every surface (light, dark, saturated, bright) sets CSS variables for its text colours so a text utility such as `text-white` or `text-blue-400` resolves to a readable colour on the surface it sits on. Form fields are always a pale field with navy text.
 
 ---
 
-## 🐍 Quick Start (FastAPI Backend Server)
-
-```bash
-# Navigate to backend directory
-cd backend
-
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install requirements
-pip install -r requirements.txt
-
-# Run FastAPI Dev Server with Swagger UI
-uvicorn app.main:app --reload --port 8000
-
-# Swagger Documentation: http://localhost:8000/docs
-```
-
----
-
-## 🐳 Docker Deployment
-
-```bash
-# Launch entire stack (PostgreSQL + FastAPI + Next.js + Nginx)
-docker-compose up --build -d
-```
-
----
-
-## 📜 License
-Licensed under the MIT License. Developed for **JR Learners** — *Learn. Build. Innovate.*
-
+YouTube: [@LetsGetEngagedin](https://www.youtube.com/@LetsGetEngagedin)

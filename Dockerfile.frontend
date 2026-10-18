@@ -3,6 +3,7 @@ WORKDIR /app
 COPY frontend/package*.json ./
 RUN npm install
 COPY frontend/ ./
+ENV NEXT_PUBLIC_API_URL=same-origin
 RUN npm run build
 
 FROM nginx:alpine

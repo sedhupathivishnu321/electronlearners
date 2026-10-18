@@ -6,7 +6,7 @@ export default function DownloadsPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-  const categories = ['All', 'PDF Manuals', 'Circuit Diagrams', 'Arduino Code', 'Datasheets', 'PCB Gerber', '3D Models'];
+  const categories = ['All', 'Arduino Code'];
 
   const filtered = DOWNLOADS_DATA.filter((d) => {
     const matchesCat = selectedCategory === 'All' || d.category === selectedCategory;
@@ -22,7 +22,7 @@ export default function DownloadsPage() {
         <div>
           <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest">Resource Hub</span>
           <h1 className="text-3xl font-heading font-extrabold text-white mt-1">Downloads & Open Source Resources</h1>
-          <p className="text-slate-400 text-xs mt-1">Download assembly PDF manuals, high-res pinout diagrams, Gerber PCB files, and complete code repositories.</p>
+          <p className="text-slate-400 text-xs mt-1">Download the Arduino sketches of every project in the 8 kits (50 projects per kit).</p>
         </div>
 
         <div className="relative w-full sm:w-64">
@@ -63,7 +63,6 @@ export default function DownloadsPage() {
                 <span className="px-2.5 py-1 rounded bg-emerald-500/10 text-emerald-400 text-[10px] font-bold uppercase">
                   {item.fileType} • {item.size}
                 </span>
-                <span className="text-[11px] text-slate-400">{item.downloadsCount} downloads</span>
               </div>
               <h3 className="text-base font-bold text-white">{item.title}</h3>
               <p className="text-slate-400 text-xs leading-relaxed">{item.description}</p>

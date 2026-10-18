@@ -188,7 +188,7 @@ export default function CartPage() {
 
               {/* Action */}
               <Link
-                href={`/checkout?subtotal=${subtotal}&shipping=${finalShipping}&discount=${discountAmount}&total=${total}&coupon=${appliedCoupon || ''}`}
+                href={`/checkout?coupon=${appliedCoupon || ''}`}
                 className="w-full py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs flex items-center justify-center space-x-2 shadow-lg shadow-blue-600/20 transition-all uppercase tracking-wider"
               >
                 <span>Proceed to Checkout</span>

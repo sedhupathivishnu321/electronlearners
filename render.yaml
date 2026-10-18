@@ -1,0 +1,25 @@
+# One-click backend hosting on Render (https://render.com): New > Blueprint > pick this repo.
+# Secret values are NOT stored here: enter them in the Render dashboard (sync: false).
+services:
+  - type: web
+    name: jrlearners-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile.backend
+    plan: starter
+    healthCheckPath: /health
+    disk:
+      name: orders
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      - { key: PAYU_ENV, value: live }
+      - { key: FRONTEND_URL, value: https://jrlearners.com }
+      - { key: CORS_ORIGINS, value: https://jrlearners.com }
+      - { key: PUBLIC_API_URL, sync: false }     # e.g. https://jrlearners-api.onrender.com
+      - { key: PAYU_KEY, sync: false }
+      - { key: PAYU_SALT, sync: false }
+      - { key: PAYU_CLIENT_ID, sync: false }
+      - { key: PAYU_CLIENT_SECRET, sync: false }
+      - { key: ADMIN_EMAIL, sync: false }
+      - { key: ADMIN_PASSWORD, sync: false }
+      - { key: SECRET_KEY, generateValue: true }

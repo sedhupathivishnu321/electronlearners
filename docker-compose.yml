@@ -1,44 +1,27 @@
 version: '3.8'
 
 services:
-  postgres:
-    image: postgres:15-alpine
-    container_name: JR Learners-postgres
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgrespassword
-      POSTGRES_DB: JR Learners_db
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./backend/schema.sql:/docker-entrypoint-initdb.d/schema.sql
-
   backend:
     build:
       context: .
       dockerfile: Dockerfile.backend
-    container_name: JR Learners-api
-    environment:
-      - POSTGRES_SERVER=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgrespassword
-      - POSTGRES_DB=JR Learners_db
+    container_name: jrlearners-api
+    env_file:
+      - backend/.env          # PayU key / salt, admin login ... (see backend/.env.example)
+    volumes:
+      - orders_data:/data
     ports:
       - "8000:8000"
-    depends_on:
-      - postgres
 
   frontend:
     build:
       context: .
       dockerfile: Dockerfile.frontend
-    container_name: JR Learners-web
+    container_name: jrlearners-web
     ports:
       - "80:80"
     depends_on:
       - backend
 
 volumes:
-  postgres_data:
-
+  orders_data:
