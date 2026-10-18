@@ -34,8 +34,7 @@ export const Header: React.FC = () => {
           {/* Desktop Navigation Links */}
           <nav className="hidden lg:flex items-center space-x-6 text-sm font-medium text-slate-300">
             <Link href="/" className="hover:text-blue-400 transition-colors">Home</Link>
-            <Link href="/products" className="hover:text-blue-400 transition-colors">Shop</Link>
-            <Link href="/products?type=kits" className="hover:text-blue-400 transition-colors">Project Kits</Link>
+            <Link href="/products" className="hover:text-blue-400 transition-colors">Kits</Link>
             <Link href="/courses" className="hover:text-blue-400 transition-colors">Courses</Link>
             <Link href="/projects" className="hover:text-blue-400 transition-colors">Projects</Link>
             <a href="/arduinoforge/" className="hover:text-blue-400 transition-colors">ArduinoForge</a>
@@ -154,8 +153,7 @@ export const Header: React.FC = () => {
             />
           </div>
           <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="block text-sm font-medium text-slate-200 py-1">Home</Link>
-          <Link href="/products" onClick={() => setIsMobileMenuOpen(false)} className="block text-sm font-medium text-slate-200 py-1">Shop</Link>
-          <Link href="/products?type=kits" onClick={() => setIsMobileMenuOpen(false)} className="block text-sm font-medium text-slate-200 py-1">Project Kits</Link>
+          <Link href="/products" onClick={() => setIsMobileMenuOpen(false)} className="block text-sm font-medium text-slate-200 py-1">Kits</Link>
           <Link href="/courses" onClick={() => setIsMobileMenuOpen(false)} className="block text-sm font-medium text-slate-200 py-1">Courses</Link>
           <Link href="/projects" onClick={() => setIsMobileMenuOpen(false)} className="block text-sm font-medium text-slate-200 py-1">Projects</Link>
           <a href="/arduinoforge/" className="block text-sm font-medium text-slate-200 py-1">ArduinoForge</a>

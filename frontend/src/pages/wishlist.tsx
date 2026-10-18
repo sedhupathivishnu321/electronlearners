@@ -20,7 +20,7 @@ export default function WishlistPage() {
           <h2 className="text-xl font-bold text-white">Your Wishlist is Empty</h2>
           <p className="text-slate-400 text-xs">Save your favorite hardware kits for later.</p>
           <Link href="/products" className="inline-block px-6 py-3 rounded-xl bg-blue-600 text-white text-xs font-semibold">
-            Explore 20 STEM Kits
+            Explore the 8 Arduino Kits
           </Link>
         </div>
       ) : (

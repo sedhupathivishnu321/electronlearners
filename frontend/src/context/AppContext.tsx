@@ -179,6 +179,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Load state on mount
   useEffect(() => {
     try {
+      // The catalogue changed to the 8-kit series: drop data saved by older versions (old product ids / prices)
+      if (localStorage.getItem('el_catalog_version') !== '8kits-v1') {
+        ['el_products', 'el_cart', 'el_wishlist', 'el_orders', 'el_rfqs'].forEach((k) => localStorage.removeItem(k));
+        localStorage.setItem('el_catalog_version', '8kits-v1');
+      }
       // Products
       const savedProducts = localStorage.getItem('el_products');
       if (savedProducts) {
@@ -208,10 +213,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           {
             id: "EL000123",
             items: [{ product: PRODUCTS_DATA[0], quantity: 1 }],
-            subtotal: 1499,
+            subtotal: PRODUCTS_DATA[0].price,
             shipping: 50,
-            discount: 150,
-            total: 1399,
+            discount: Math.round(PRODUCTS_DATA[0].price * 0.1),
+            total: PRODUCTS_DATA[0].price + 50 - Math.round(PRODUCTS_DATA[0].price * 0.1),
             shippingAddress: {
               name: "Alex Learner",
               email: "alex@learner.com",
@@ -243,14 +248,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             phone: "9988776655",
             institutionType: "college",
             products: [
-              { name: "Arduino Starter Kit", quantity: 50 },
-              { name: "IoT ESP32 Starter Kit", quantity: 25 }
+              { name: "Level 1: Foundations Kit", quantity: 50 },
+              { name: "Level 7: Wireless & Remote Control Kit", quantity: 25 }
             ],
             requiredDate: "2026-09-10",
             gstDetails: "29ABCDE1234F1Z5",
             requirements: "Require custom calibration lab instruction sheet for students.",
             status: "New",
-            estimatedValue: 122425,
+            estimatedValue: 94050,
             createdAt: new Date().toISOString()
           }
         ];

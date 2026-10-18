@@ -47,7 +47,7 @@ export default function AboutPage() {
           </div>
           <div className="flex items-start gap-4">
             <span className="px-3 py-1 rounded bg-amber-500 text-slate-950 font-bold font-mono">2026</span>
-            <p className="pt-0.5">Expanded to 20 product kits, 100 STEM projects, certified online courses, and QR verification.</p>
+            <p className="pt-0.5">Expanded to the 8-level Arduino kit series (400 guided projects), 100 STEM projects, certified online courses, and QR verification.</p>
           </div>
         </div>
       </div>

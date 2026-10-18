@@ -54,7 +54,7 @@ export const COURSES_DATA: STEMCourse[] = [
       "Build astable multi-vibrators using NE555 Timer ICs",
       "Read circuit diagrams and configure multi-meters safely"
     ],
-    recommendedHardwareId: "prod-2",
+    recommendedHardwareId: "prod-1",
     modules: [
       {
         id: "mod-1",
@@ -136,7 +136,7 @@ export const COURSES_DATA: STEMCourse[] = [
       "Read distance using Ultrasonic HC-SR04 sound timing",
       "Design alert systems utilizing active sensors and buzzers"
     ],
-    recommendedHardwareId: "prod-5",
+    recommendedHardwareId: "prod-2",
     modules: [
       {
         id: "mod-1",
@@ -175,7 +175,7 @@ export const COURSES_DATA: STEMCourse[] = [
       "Implement PWM configurations for high-speed motor steering",
       "Analyze signals using logic analyzers and serial debuggers"
     ],
-    recommendedHardwareId: "prod-7",
+    recommendedHardwareId: "prod-3",
     modules: [
       {
         id: "mod-1",
@@ -207,7 +207,7 @@ export const COURSES_DATA: STEMCourse[] = [
       "Publish sensor logs to thingspeak over MQTT telemetry client",
       "Integrate voice alarms with Sinric Pro & Google Home"
     ],
-    recommendedHardwareId: "prod-6",
+    recommendedHardwareId: "prod-7",
     modules: [
       {
         id: "mod-1",

@@ -168,7 +168,7 @@ void setup() {
 
 ## Conclusion
 
-By applying these practical guidelines, your electronics and robotics projects will achieve greater reliability and performance. Explore our 20 STEM Product Kits and YouTube channel [@LetsGetEngagedin](https://www.youtube.com/@LetsGetEngagedin) for full video walkthroughs!
+By applying these practical guidelines, your electronics and robotics projects will achieve greater reliability and performance. Explore our 8 Arduino Product Kits and YouTube channel [@LetsGetEngagedin](https://www.youtube.com/@LetsGetEngagedin) for full video walkthroughs!
 `
   };
 });

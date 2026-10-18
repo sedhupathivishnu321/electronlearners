@@ -141,7 +141,7 @@ void setup() {
 void loop() {
   server.handleClient();
 }`,
-    relatedProductId: "prod-6"
+    relatedProductId: "prod-7"
   },
   {
     id: "yt-3",
@@ -190,7 +190,7 @@ void loop() {
   
   setMotorSpeeds(leftSpeed, rightSpeed);
 }`,
-    relatedProductId: "prod-9"
+    relatedProductId: "prod-4"
   },
   {
     id: "yt-4",
@@ -223,7 +223,7 @@ void loop() {
 3. F.Mask & B.Mask Solder Mask
 4. Edge.Cuts Board Outline
 5. Excellon Drill File (.drl)`,
-    relatedProductId: "prod-14"
+    relatedProductId: "prod-1"
   },
   {
     id: "yt-5",
@@ -275,6 +275,6 @@ while True:
         break
 
 cv2.destroyAllWindows()`,
-    relatedProductId: "prod-12"
+    relatedProductId: "prod-7"
   }
 ];

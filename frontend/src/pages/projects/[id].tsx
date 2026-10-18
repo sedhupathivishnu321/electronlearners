@@ -26,10 +26,10 @@ export default function ProjectDetail() {
   // Find corresponding kit for the project category
   const getProjectKitLink = (category: string) => {
     if (category === 'Arduino') return products.find(p => p.id === 'prod-1') || products[0];
-    if (category === 'Electronics') return products.find(p => p.id === 'prod-2') || products[1];
-    if (category === 'IoT') return products.find(p => p.id === 'prod-6') || products[5];
-    if (category === 'Robotics') return products.find(p => p.id === 'prod-8') || products[7];
-    if (category === 'AI') return products.find(p => p.id === 'prod-12') || products[11];
+    if (category === 'Electronics') return products.find(p => p.id === 'prod-1') || products[0];
+    if (category === 'IoT') return products.find(p => p.id === 'prod-7') || products[6];
+    if (category === 'Robotics') return products.find(p => p.id === 'prod-5') || products[4];
+    if (category === 'AI') return products.find(p => p.id === 'prod-8') || products[7];
     return products.find(p => p.category === category) || products[0];
   };
 

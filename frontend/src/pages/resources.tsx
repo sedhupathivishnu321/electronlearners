@@ -59,9 +59,8 @@ export default function ResourcesHub() {
       summary: "Understand how Light Dependent Resistors (LDRs) work with transistors to trigger relays automatically.",
       content: `Light Dependent Resistors (LDRs), or photoresistors, decrease their electrical resistance as light intensity increases. By creating a simple voltage divider circuit with a 10kΩ resistor and feeding the junction into the base of a BC547 NPN transistor, you can create an automatic switch. When it gets dark, the LDR resistance rises, pulling the transistor base voltage high enough to turn it on, which subsequently triggers an LED or activates a 5V relay pin.`,
       components: [
-        { name: "LDR Sensor Module", price: 15, id: "prod-5" },
-        { name: "Arduino UNO Board", price: 599, id: "prod-1" },
-        { name: "Electronics Fundamentals Kit", price: 999, id: "prod-2" }
+        { name: "Level 1: Foundations Kit", price: 848, id: "prod-1" },
+        { name: "Level 2: Sensing the World Kit", price: 1092, id: "prod-2" }
       ],
       kitId: "prod-2",
       videoUrl: "https://www.youtube.com/watch?v=8q-p09yI6bM"
@@ -73,10 +72,10 @@ export default function ResourcesHub() {
       summary: "Master motor speed steering and LED brightness control utilizing digital pin pulse cycles.",
       content: `Pulse Width Modulation (PWM) is a technique for getting analog-like results with digital outputs. Microcontrollers can only switch digital pins between 0V and 5V. By switching the pin ON and OFF extremely fast, you create an average voltage. The percentage of time the signal is high is called the 'Duty Cycle'. A 50% duty cycle outputs an average of 2.5V. This is used extensively to run DC motors via H-Bridges or dim RGB LEDs.`,
       components: [
-        { name: "Arduino UNO Board", price: 599, id: "prod-1" },
-        { name: "Robotics Beginner Kit", price: 1999, id: "prod-8" }
+        { name: "Level 1: Foundations Kit", price: 848, id: "prod-1" },
+        { name: "Level 5: Motors & Power Control Kit", price: 1447, id: "prod-5" }
       ],
-      kitId: "prod-8",
+      kitId: "prod-5",
       videoUrl: "https://www.youtube.com/watch?v=v_k4_v5v9yM"
     },
     {
@@ -86,10 +85,10 @@ export default function ResourcesHub() {
       summary: "A detailed comparison of hardware speed, core counts, Wi-Fi connections, and power savings.",
       content: `Arduino UNO is an 8-bit board running at 16MHz, perfect for basic sensor projects and absolute beginners. However, it lacks built-in connectivity. The ESP32 is a dual-core 32-bit chip running at 240MHz with onboard Wi-Fi, Bluetooth LE, and 4MB flash. If your project requires cloud database uploads, Blynk connectivity, or hosting local web control pages, the ESP32 is the correct choice.`,
       components: [
-        { name: "IoT ESP32 Starter Kit", price: 1899, id: "prod-6" },
-        { name: "Arduino Starter Kit", price: 1499, id: "prod-1" }
+        { name: "Level 7: Wireless & Remote Control Kit", price: 2066, id: "prod-7" },
+        { name: "Level 1: Foundations Kit", price: 848, id: "prod-1" }
       ],
-      kitId: "prod-6",
+      kitId: "prod-7",
       videoUrl: "https://www.youtube.com/watch?v=3q-v_q3rXqY"
     }
   ];

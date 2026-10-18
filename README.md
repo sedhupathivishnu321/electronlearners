@@ -9,7 +9,7 @@
 
 ## 🌟 Features Overview
 
-- **20 Complete STEM Kits**: Detailed product catalog with datasheets, assembly guides, code downloads, component lists, and video tutorials.
+- **8 Arduino Kits (Level 1-8, 50 projects each = 400 projects)**: Foundations, Sensing the World, Displays & Interfaces, Motion & Distance, Motors & Power Control, Smart Safety & Environment, Wireless & Remote Control, Smart Systems Capstone. Price = BOM component cost + 40 %. Every project can be tried in the ArduinoForge simulator at `/arduinoforge/`.
 - **YouTube Tutorial Hub**: Direct integration with YouTube channel [@LetsGetEngagedin](https://www.youtube.com/@LetsGetEngagedin) with video player modal, source code downloads (`.ino`, `.py`, `.c`), and transcript summaries.
 - **15+ STEM Courses**: Electronics, Arduino, Embedded C, ESP32, STM32, PCB Design, IoT, Robotics, AI, Python, Machine Learning, Computer Vision, Raspberry Pi, Linux, Git.
 - **100 STEM Projects Library**: Circuit schematics, hardware bill of materials, source code, and step-by-step assembly guides across 8 STEM disciplines.
@@ -41,7 +41,7 @@ JR Learners/
 │   ├── src/
 │   │   ├── components/      # UI, Header, Footer, Admin, Video Modal, Code Viewer
 │   │   ├── context/         # Application State & LocalStorage Persistence
-│   │   ├── data/            # Full Datasets (20 Kits, 100 Projects, 100 Blogs, Courses, Videos)
+│   │   ├── data/            # Full Datasets (8 Arduino Kits x 50 projects, 100 Projects, 100 Blogs, Courses, Videos)
 │   │   └── pages/           # All Pages & Routes (Home, Products, YouTube Hub, Admin, Portals)
 │   ├── next.config.js       # Next.js Config with Static Export Support
 │   ├── tailwind.config.js   # Tailwind Configuration with Modern STEM Theme Palette

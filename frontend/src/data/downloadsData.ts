@@ -68,6 +68,6 @@ export const DOWNLOADS_DATA: ResourceDownload[] = [
     size: "24.1 MB",
     downloadsCount: 6100,
     url: "/downloads/code/JR Learners_All_Projects_Code.zip",
-    description: "Includes source code for all 20 STEM Kits, 100 Projects, and YouTube tutorials."
+    description: "Includes source code for the 8 Arduino kits, 100 Projects, and YouTube tutorials."
   }
 ];

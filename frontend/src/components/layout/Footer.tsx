@@ -41,7 +41,6 @@ export const Footer: React.FC = () => {
             <h4 className="text-white text-xs font-semibold uppercase tracking-wider mb-4 font-heading">Shop & Build</h4>
             <ul className="space-y-2.5 text-xs">
               <li><Link href="/products" className="hover:text-blue-400 transition-colors">Shop Catalog</Link></li>
-              <li><Link href="/products?type=kits" className="hover:text-blue-400 transition-colors">Project Kits</Link></li>
               <li><Link href="/projects" className="hover:text-orange-400 transition-colors">Projects Library</Link></li>
               <li><Link href="/courses" className="hover:text-cyan-400 transition-colors">Online Courses</Link></li>
               <li><a href="/arduinoforge/" className="hover:text-cyan-400 transition-colors">ArduinoForge Full Simulator</a></li>

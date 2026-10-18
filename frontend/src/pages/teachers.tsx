@@ -36,7 +36,7 @@ export default function TeacherPortal() {
             <Package className="w-5 h-5" />
           </div>
           <h3 className="text-base font-bold text-white">Bulk Lab Kit Requisitions</h3>
-          <p className="text-slate-400 text-xs leading-relaxed">Request institutional discounts on 20+ Arduino, Robotics, and IoT physical hardware kits.</p>
+          <p className="text-slate-400 text-xs leading-relaxed">Request institutional discounts on the 8-level JR Learners Arduino kit series.</p>
           <Link href="/contact" className="inline-block text-xs font-semibold text-orange-400 hover:underline">Request Quotation →</Link>
         </div>
       </div>

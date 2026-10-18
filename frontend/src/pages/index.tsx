@@ -7,14 +7,10 @@ export default function Home() {
   const { products, addToCart, toggleWishlist, wishlist } = useApp();
 
   // Filter best selling (highest rating & reviews)
-  const bestSellers = [...products]
-    .sort((a, b) => b.rating - a.rating || b.reviewsCount - a.reviewsCount)
-    .slice(0, 4);
+  const bestSellers = products.slice(0, 4);                         // Levels 1-4
 
   // Filter project kits (category is Robotics, IoT, or Arduino)
-  const projectKits = products
-    .filter(p => p.category === 'Robotics' || p.category === 'IoT' || p.category === 'Arduino')
-    .slice(0, 4);
+  const projectKits = products.slice(4, 8);                         // Levels 5-8
 
   return (
     <div className="min-h-screen text-slate-900 bg-transparent flex flex-col w-full">
@@ -80,23 +76,24 @@ export default function Home() {
       <section className="w-full bg-white text-[#000B1C] py-20 border-y border-slate-200 z-10 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-12 space-y-2">
-            <h2 className="text-2xl sm:text-3xl font-heading font-bold text-[#000B1C] uppercase tracking-tight">Shop By Category</h2>
-            <p className="text-slate-500 text-sm">Find curated components and comprehensive learning kits tailored to your level.</p>
+            <h2 className="text-2xl sm:text-3xl font-heading font-bold text-[#000B1C] uppercase tracking-tight">Shop By Level</h2>
+            <p className="text-slate-500 text-sm">8 kits, 50 projects each: pick the level that matches where you are.</p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { name: "Electronics", icon: Wrench, query: "category=Electronics" },
-              { name: "Arduino", icon: Cpu, query: "category=Arduino" },
-              { name: "Sensors", icon: Zap, query: "category=Sensors" },
-              { name: "Robotics", icon: Sparkles, query: "category=Robotics" },
-              { name: "Project Kits", icon: BookOpen, query: "type=kits" },
-              { name: "Components", icon: Award, query: "category=Components" },
-              { name: "Learning Kits", icon: Users, query: "category=Learning Kits" }
+              { name: "Level 1 · Foundations", icon: Wrench, query: "prod-1" },
+              { name: "Level 2 · Sensing", icon: Cpu, query: "prod-2" },
+              { name: "Level 3 · Displays", icon: BookOpen, query: "prod-3" },
+              { name: "Level 4 · Motion", icon: Zap, query: "prod-4" },
+              { name: "Level 5 · Motors", icon: Sparkles, query: "prod-5" },
+              { name: "Level 6 · Safety", icon: Award, query: "prod-6" },
+              { name: "Level 7 · Wireless", icon: Users, query: "prod-7" },
+              { name: "Level 8 · Capstone", icon: Award, query: "prod-8" }
             ].map((cat, idx) => (
               <Link
                 key={idx}
-                href={`/products?${cat.query}`}
+                href={`/products/${cat.query}`}
                 className="p-6 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200 hover:-translate-y-1 transition-all text-center space-y-3 block shadow-sm"
               >
                 <cat.icon className="w-7 h-7 mx-auto text-[#000B1C]" />
@@ -112,8 +109,8 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between mb-10 border-b border-slate-800 pb-6">
             <div>
-              <span className="text-xs font-bold text-[#FBBF24] uppercase tracking-wider">Top Rated Hardware</span>
-              <h2 className="text-2xl sm:text-3xl font-heading font-bold text-white mt-1 uppercase">Best Selling Kits</h2>
+              <span className="text-xs font-bold text-[#FBBF24] uppercase tracking-wider">Levels 1 - 4</span>
+              <h2 className="text-2xl sm:text-3xl font-heading font-bold text-white mt-1 uppercase">Arduino Kits: Foundations to Displays</h2>
             </div>
             <Link href="/products" className="text-xs font-semibold text-[#FBBF24] hover:text-[#F59E0B] flex items-center gap-1">
               Browse All <ArrowRight className="w-4 h-4" />
@@ -176,11 +173,11 @@ export default function Home() {
           <div className="flex items-end justify-between mb-10 border-b border-slate-200 pb-6">
             <div>
               <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">All-in-One Solutions</span>
-              <h2 className="text-2xl sm:text-3xl font-heading font-bold text-[#000B1C] mt-1 uppercase">Project Kits</h2>
-              <p className="text-slate-500 text-xs mt-1">Build a complete electronics project from one kit. Everything you need in one box.</p>
+              <h2 className="text-2xl sm:text-3xl font-heading font-bold text-[#000B1C] mt-1 uppercase">Arduino Kits: Motion to Capstone</h2>
+              <p className="text-slate-500 text-xs mt-1">Levels 5 - 8: every kit has its own Arduino UNO R3 and 50 guided projects.</p>
             </div>
-            <Link href="/products?type=kits" className="text-xs font-semibold text-[#000B1C] hover:text-slate-600 flex items-center gap-1">
-              View Project Kits <ArrowRight className="w-4 h-4" />
+            <Link href="/products" className="text-xs font-semibold text-[#000B1C] hover:text-slate-600 flex items-center gap-1">
+              View All 8 Kits <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
 

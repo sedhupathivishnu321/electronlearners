@@ -71,10 +71,14 @@ def get_all_products():
         "count": 20,
         "message": "Successfully fetched 20 STEM Product Kits catalog",
         "sample": [
-          {"id": "prod-1", "name": "1. Arduino Starter Kit", "price": 1499, "category": "Arduino"},
-          {"id": "prod-2", "name": "2. Electronics Fundamentals Kit", "price": 999, "category": "Electronics"},
-          {"id": "prod-6", "name": "6. IoT ESP32 Starter Kit", "price": 1899, "category": "IoT"},
-          {"id": "prod-12", "name": "12. AI Vision Kit", "price": 4999, "category": "AI"}
+          {"id": "prod-1", "name": "Level 1: Foundations Kit", "price": 848, "category": "Arduino"},
+          {"id": "prod-2", "name": "Level 2: Sensing the World Kit", "price": 1092, "category": "Arduino"},
+          {"id": "prod-3", "name": "Level 3: Displays & Interfaces Kit", "price": 1632, "category": "Arduino"},
+          {"id": "prod-4", "name": "Level 4: Motion & Distance Kit", "price": 1259, "category": "Arduino"},
+          {"id": "prod-5", "name": "Level 5: Motors & Power Control Kit", "price": 1447, "category": "Arduino"},
+          {"id": "prod-6", "name": "Level 6: Smart Safety & Environment Kit", "price": 1929, "category": "Arduino"},
+          {"id": "prod-7", "name": "Level 7: Wireless & Remote Control Kit", "price": 2066, "category": "Arduino"},
+          {"id": "prod-8", "name": "Level 8: Smart Systems Capstone Kit", "price": 2560, "category": "Arduino"}
         ]
     }
 

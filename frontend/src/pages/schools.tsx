@@ -11,7 +11,7 @@ export default function SchoolPortal() {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [institutionType, setInstitutionType] = useState<'school' | 'college' | 'university' | 'training_center'>('school');
-  const [selectedProduct, setSelectedProduct] = useState('Arduino Starter Kit');
+  const [selectedProduct, setSelectedProduct] = useState('Level 1: Foundations Kit');
   const [quantity, setQuantity] = useState(10);
   const [requiredDate, setRequiredDate] = useState('');
   const [gstDetails, setGstDetails] = useState('');
@@ -174,11 +174,14 @@ export default function SchoolPortal() {
                   onChange={(e) => setSelectedProduct(e.target.value)}
                   className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-350 focus:outline-none focus:border-blue-500"
                 >
-                  <option value="Arduino Starter Kit">Arduino Starter Kit</option>
-                  <option value="Electronics Fundamentals Kit">Electronics Fundamentals Kit</option>
-                  <option value="Sensor Explorer Kit">Sensor Explorer Kit</option>
-                  <option value="IoT ESP32 Starter Kit">IoT ESP32 Starter Kit</option>
-                  <option value="Robotics Beginner Kit">Robotics Beginner Kit</option>
+<option value="Level 1: Foundations Kit">Level 1: Foundations Kit</option>
+                  <option value="Level 2: Sensing the World Kit">Level 2: Sensing the World Kit</option>
+                  <option value="Level 3: Displays &amp; Interfaces Kit">Level 3: Displays &amp; Interfaces Kit</option>
+                  <option value="Level 4: Motion &amp; Distance Kit">Level 4: Motion &amp; Distance Kit</option>
+                  <option value="Level 5: Motors &amp; Power Control Kit">Level 5: Motors &amp; Power Control Kit</option>
+                  <option value="Level 6: Smart Safety &amp; Environment Kit">Level 6: Smart Safety &amp; Environment Kit</option>
+                  <option value="Level 7: Wireless &amp; Remote Control Kit">Level 7: Wireless &amp; Remote Control Kit</option>
+                  <option value="Level 8: Smart Systems Capstone Kit">Level 8: Smart Systems Capstone Kit</option>
                 </select>
               </div>
               <div>

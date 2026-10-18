@@ -52,7 +52,7 @@ export default function CartPage() {
         <div className="text-center py-20 space-y-4 glass-card border border-slate-800 rounded-3xl">
           <ShoppingCart className="w-16 h-16 text-slate-650 mx-auto" />
           <h2 className="text-lg font-bold text-white uppercase tracking-wider">Your Cart is Empty</h2>
-          <p className="text-slate-400 text-xs max-w-sm mx-auto">Build the future! Explore our 20 hardware kits and complete projects tutorials.</p>
+          <p className="text-slate-400 text-xs max-w-sm mx-auto">Build the future! Explore our 8 Arduino kits (50 guided projects each).</p>
           <Link href="/products" className="inline-block px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow shadow-blue-600/10">
             Browse STEM Kits
           </Link>

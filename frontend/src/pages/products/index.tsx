@@ -12,10 +12,8 @@ export default function ProductsCatalog() {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [priceRange, setPriceRange] = useState<string>('All');
-  const [selectedPlatform, setSelectedPlatform] = useState<string>('All');
-  const [selectedDifficulty, setSelectedDifficulty] = useState<string>('All');
   const [selectedAvailability, setSelectedAvailability] = useState<string>('All');
-  const [sortBy, setSortBy] = useState<'rating' | 'price-asc' | 'price-desc'>('rating');
+  const [sortBy, setSortBy] = useState<'level' | 'price-asc' | 'price-desc'>('level');
   const [showComparison, setShowComparison] = useState<boolean>(true);
   const [selectedKitsModal, setSelectedKitsModal] = useState<any | null>(null);
 
@@ -25,192 +23,51 @@ export default function ProductsCatalog() {
     if (router.query.category) {
       setSelectedCategory(router.query.category as string);
     }
-    if (router.query.type === 'kits') {
-      setSelectedCategory('Learning Kits');
-    }
     if (router.query.search) {
       setSearchQuery(router.query.search as string);
     }
   }, [router.isReady, router.query]);
 
-  // Categories list based on products data
-  const categories = ['All', 'Arduino', 'Electronics', 'Robotics', 'IoT', 'Raspberry Pi', 'AI', 'PCB', 'Embedded', 'Learning Kits'];
-  const platforms = ['All', 'Arduino', 'ESP32', 'Raspberry Pi', 'STM32', 'None'];
-  const difficulties = ['All', 'Beginner', 'Intermediate', 'Advanced'];
+  // The shop sells exactly 8 kits (Level 1 - Level 8); the sidebar filters by level
+  const categories = ['All', ...products.map((p) => p.name)];
 
-  // Apply filters
   const filteredProducts = products.filter((product) => {
-    // Category match
-    let matchesCategory = true;
-    if (selectedCategory !== 'All') {
-      if (selectedCategory === 'Learning Kits') {
-        matchesCategory = product.category === 'Arduino' || product.category === 'Robotics' || product.category === 'IoT' || product.badge === 'Bestseller';
-      } else {
-        matchesCategory = product.category.toLowerCase() === selectedCategory.toLowerCase();
-      }
-    }
+    const matchesCategory = selectedCategory === 'All' || product.name === selectedCategory;
+    const q = searchQuery.toLowerCase();
+    const matchesSearch = q === '' ||
+      product.name.toLowerCase().includes(q) ||
+      product.shortDesc.toLowerCase().includes(q) ||
+      product.components.some((c) => c.name.toLowerCase().includes(q)) ||
+      (product.projects ?? []).some((pr) => pr.name.toLowerCase().includes(q));
 
-    // Search match
-    const matchesSearch = searchQuery === '' || 
-      product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      product.shortDesc.toLowerCase().includes(searchQuery.toLowerCase());
-
-    // Price range match
     let matchesPrice = true;
-    if (priceRange === 'under-1500') matchesPrice = product.price < 1500;
-    else if (priceRange === '1500-3000') matchesPrice = product.price >= 1500 && product.price <= 3000;
-    else if (priceRange === 'over-3000') matchesPrice = product.price > 3000;
+    if (priceRange === 'under-1000') matchesPrice = product.price < 1000;
+    else if (priceRange === '1000-2000') matchesPrice = product.price >= 1000 && product.price <= 2000;
+    else if (priceRange === 'over-2000') matchesPrice = product.price > 2000;
 
-    // Platform match
-    let matchesPlatform = true;
-    if (selectedPlatform !== 'All') {
-      if (selectedPlatform === 'Arduino') matchesPlatform = product.name.toLowerCase().includes('arduino') || product.specifications?.['Microcontroller']?.includes('ATmega');
-      else if (selectedPlatform === 'ESP32') matchesPlatform = product.name.toLowerCase().includes('esp32');
-      else if (selectedPlatform === 'Raspberry Pi') matchesPlatform = product.name.toLowerCase().includes('raspberry');
-      else if (selectedPlatform === 'None') matchesPlatform = !product.name.toLowerCase().match(/arduino|esp32|raspberry/);
-    }
-
-    // Difficulty match
-    let matchesDifficulty = true;
-    if (selectedDifficulty !== 'All') {
-      matchesDifficulty = product.learningObjectives?.some(o => o.toLowerCase().includes(selectedDifficulty.toLowerCase())) || 
-                          product.shortDesc.toLowerCase().includes(selectedDifficulty.toLowerCase()) ||
-                          (selectedDifficulty === 'Beginner' && product.price < 1500);
-    }
-
-    // Availability match
     let matchesAvailability = true;
     if (selectedAvailability === 'in-stock') matchesAvailability = product.stock > 0;
     else if (selectedAvailability === 'out-of-stock') matchesAvailability = product.stock === 0;
 
-    return matchesCategory && matchesSearch && matchesPrice && matchesPlatform && matchesDifficulty && matchesAvailability;
+    return matchesCategory && matchesSearch && matchesPrice && matchesAvailability;
   }).sort((a, b) => {
     if (sortBy === 'price-asc') return a.price - b.price;
     if (sortBy === 'price-desc') return b.price - a.price;
-    return b.rating - a.rating;
+    return a.id.localeCompare(b.id, undefined, { numeric: true });   // default: Level 1 -> Level 8
   });
 
-  // Comparison Matrix Data (Arduino UNO vs Nano vs Mega)
-  const unoItem = products.find(p => p.id === 'prod-1') || products[0];
-  const comparisonProducts = [
-    {
-      name: "Arduino UNO R3 Starter Kit",
-      digitalIO: "14 pins",
-      analogInputs: "6 pins",
-      flash: "32 KB",
-      usb: "Type-B",
-      beginner: "Yes (Excellent)",
-      projectsCount: "30+ Lab Projects",
-      addOnComponents: "I2C 16x2 LCD display, SG90 servo motor, DHT11 humidity unit, HC-SR04 ultrasonic sound sensor, 5V digital relay, Active buzzer, Light LDR sensors",
-      experiments: [
-        "Experiment 1: LED Blink (GPIO State Control)",
-        "Experiment 2: Traffic Light Sequence Controller",
-        "Experiment 3: LDR Intelligent Automatic Street Light",
-        "Experiment 4: Analog Sensor Calibration & Plotting",
-        "Experiment 5: RGB Color Mixing Mood Lamp",
-        "Experiment 6: SG90 Servo Sweep & Sweep Speed Controls",
-        "Experiment 7: 16x2 LCD Character Welcome Terminal",
-        "Experiment 8: DHT11 Digital Thermometer Log Display",
-        "Experiment 9: HC-SR04 Sound Distance Alert system",
-        "Experiment 10: 5V Home Appliance Relay Switching",
-        "Experiment 11: Button State Interrupt Toggle LED",
-        "Experiment 12: Potentiometer Analog Voltage Meter",
-        "Experiment 13: Active Buzzer Melody Player",
-        "Experiment 14: Passive Buzzer Tone Generator",
-        "Experiment 15: 7-Segment Single Digit Counter",
-        "Experiment 16: 4-Digit 7-Segment Display Multiplexing",
-        "Experiment 17: Shift Register 74HC595 LED Chaser",
-        "Experiment 18: IR Remote Control Receiver & Decoder",
-        "Experiment 19: PIR Motion Sensor Alarm System",
-        "Experiment 20: Stepper Motor Speed and Direction Sweep",
-        "Experiment 21: DC Motor Speed Control with L293D",
-        "Experiment 22: Sound Sensor Microphonic Switch",
-        "Experiment 23: Flame Sensor Fire Alarm Interrupter",
-        "Experiment 24: Rain Drop Sensor Auto Wiper",
-        "Experiment 25: EEPROM Local Data Logging Terminal"
-      ],
-      price: unoItem?.price || 1499,
-      product: unoItem
-    },
-    {
-      name: "Arduino Nano V3 Starter Kit",
-      digitalIO: "22 pins",
-      analogInputs: "8 pins",
-      flash: "32 KB",
-      usb: "Mini-USB",
-      beginner: "Yes (Breadboard)",
-      projectsCount: "15+ Prototyping Projects",
-      addOnComponents: "Breadboard breakout interface, MPU6050 Accelerometer Gyro, HC-05 Bluetooth transceivers, NRF24L01 RF communications module, Infrared IR receiver card",
-      experiments: [
-        "Experiment 1: Breadboard Blink & Multi-LED Arrays",
-        "Experiment 2: MPU6050 Motion Angles Angle Plotting",
-        "Experiment 3: Bluetooth Serial Remote Controls",
-        "Experiment 4: RF Transmitter-Receiver Telemetry Loop",
-        "Experiment 5: Infrared Remote Controller Command Decoder",
-        "Experiment 6: Ambient Light Sensor Sleep Mode Alarm",
-        "Experiment 7: SPI Digital Resistor Calibration",
-        "Experiment 8: Analog Comparator Interrupt Control",
-        "Experiment 9: I2C Scanner Address Detector",
-        "Experiment 10: Rotary Encoder Direction Encoder",
-        "Experiment 11: 8x8 Dot Matrix Character Scroll",
-        "Experiment 12: Sound Detection clap switch",
-        "Experiment 13: Real-Time Telemetry over Serial Stream",
-        "Experiment 14: Ultra-Low Power Deep Sleep Wakeup",
-        "Experiment 15: External Hardware Interrupt Debouncer",
-        "Experiment 16: Watchdog Timer Safe System Reset",
-        "Experiment 17: Capacitive Touch Sensor Panel",
-        "Experiment 18: Hall Effect Magnetic Sensor Alert",
-        "Experiment 19: Linear Slide Potentiometer Controller",
-        "Experiment 20: Digital Temperature Probe DS18B20 Logger",
-        "Experiment 21: Barometric Pressure BMP180 Altitude Sensor",
-        "Experiment 22: HC-05 Bluetooth Password Lock",
-        "Experiment 23: NRF24L01 Wireless Joystick Controller",
-        "Experiment 24: RGB Breathing LED PWM Controller",
-        "Experiment 25: Custom Hardware Serial Terminal Interface"
-      ],
-      price: Math.round((unoItem?.price || 1499) * 0.6),
-      product: unoItem // fallback for add to cart
-    },
-    {
-      name: "Arduino Mega 2560 Starter Kit",
-      digitalIO: "54 pins",
-      analogInputs: "16 pins",
-      flash: "256 KB",
-      usb: "Type-B",
-      beginner: "Medium (Complex)",
-      projectsCount: "50+ Enterprise Projects",
-      addOnComponents: "3.2 inch TFT touch-screen shield, RC522 RFID Card Scanner, DS1307 Real Time Clock, Stepper motor + ULN2003 driver, Soil moisture probe, Gas sensor",
-      experiments: [
-        "Experiment 1: Bare-metal Multi-pin Register Masking",
-        "Experiment 2: 3.2\" TFT Screen UI Layout Layouts",
-        "Experiment 3: RFID Gate Security Card Verification",
-        "Experiment 4: DS1307 RTC Clock Time Alarm Alert",
-        "Experiment 5: Stepper Motor Step Driver Calibrations",
-        "Experiment 6: Soil Moisture Irrigation Water Relay System",
-        "Experiment 7: Gas Concentration Alarms with Buzzer",
-        "Experiment 8: FreeRTOS Task Scheduling & Multitasking",
-        "Experiment 9: Multi-bus UART Telemetry Console Logs",
-        "Experiment 10: Matrix Keypad Lock Password Verification",
-        "Experiment 11: SD Card Module File Reader/Writer",
-        "Experiment 12: GPS Module Neo-6M Coordinate Plotter",
-        "Experiment 13: Water Level Sensor Sump Alarm",
-        "Experiment 14: Joystick Shield Pan-Tilt Camera control",
-        "Experiment 15: ADXL345 3-Axis Digital Accelerometer",
-        "Experiment 16: DHT22 High-Precision Thermo-Hygrometer",
-        "Experiment 17: MQ-2 Gas and Smoke Sensor Leak Detector",
-        "Experiment 18: SG90 Dual Servo Robotic Arm Controller",
-        "Experiment 19: Rotary Keypad Security Alarm Lock",
-        "Experiment 20: 4x4 Keypad Calculator Console",
-        "Experiment 21: DS3231 High-Precision Real-Time Clock",
-        "Experiment 22: HC-SR04 Radar Simulator Sweep radar",
-        "Experiment 23: RFID Card Writing and Sector Access",
-        "Experiment 24: TFT LCD Touch Screen Paint Application",
-        "Experiment 25: Industrial Modbus RTU Simulator"
-      ],
-      price: Math.round((unoItem?.price || 1499) * 1.8),
-      product: products.find(p => p.name.includes('Mega')) || unoItem
-    }
-  ];
+  // Kit comparison matrix: one column per kit
+  const comparisonProducts = products.map((p) => ({
+    name: p.name.replace(/ Kit$/, ''),
+    focus: p.specifications['Level'] ?? '',
+    pieces: p.specifications['Total Pieces'] ?? '',
+    levelParts: p.specifications['Level-specific Parts'] ?? '',
+    projectsCount: p.specifications['Projects'] ?? '',
+    addOnComponents: p.components.slice(12).map((c) => c.name).join(', '),
+    projects: p.projects ?? [],
+    price: p.price,
+    product: p,
+  }));
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12">
@@ -219,8 +76,8 @@ export default function ProductsCatalog() {
       <div className="border-b border-slate-800 pb-6 flex flex-col lg:flex-row lg:items-end justify-between gap-6">
         <div>
           <span className="text-xs font-bold text-blue-400 uppercase tracking-widest">Business Catalog</span>
-          <h1 className="text-3xl font-heading font-extrabold text-white mt-1 uppercase">Shop Products & Kits</h1>
-          <p className="text-slate-400 text-xs mt-1">High-quality development boards, sensors, electronics components, and all-in-one project kits.</p>
+          <h1 className="text-3xl font-heading font-extrabold text-white mt-1 uppercase">JR Learners Arduino Kits</h1>
+          <p className="text-slate-400 text-xs mt-1">8 levels from first blink to a smart-systems capstone - 50 projects in every kit, 400 in total. Each kit includes its own Arduino UNO R3.</p>
         </div>
         
         {/* Controls */}
@@ -241,7 +98,7 @@ export default function ProductsCatalog() {
             onChange={(e) => setSortBy(e.target.value as any)}
             className="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2.5 text-xs text-slate-300 focus:outline-none focus:border-blue-500 w-full sm:w-auto"
           >
-            <option value="rating">Sort by Rating</option>
+            <option value="level">Sort by Level</option>
             <option value="price-asc">Price: Low to High</option>
             <option value="price-desc">Price: High to Low</option>
           </select>
@@ -252,7 +109,7 @@ export default function ProductsCatalog() {
               showComparison ? 'bg-blue-600/10 border-blue-500 text-blue-400' : 'bg-slate-900 border-slate-800 text-slate-450 hover:text-white'
             }`}
           >
-            <Layers className="w-4 h-4" /> Compare Boards
+            <Layers className="w-4 h-4" /> Compare Kits
           </button>
         </div>
       </div>
@@ -266,8 +123,8 @@ export default function ProductsCatalog() {
                 <Cpu className="w-4 h-4" />
               </span>
               <div>
-                <h3 className="text-sm font-bold text-white uppercase tracking-wide">Developer Boards Comparison Matrix</h3>
-                <p className="text-[10px] text-slate-400">Compare specifications of popular Arduino boards to pick the correct one for your project.</p>
+                <h3 className="text-sm font-bold text-white uppercase tracking-wide">Kit Comparison - Level 1 to Level 8</h3>
+                <p className="text-[10px] text-slate-400">Every kit contains an Arduino UNO R3, breadboard, jumper wires, resistors, button and LEDs plus the level-specific parts.</p>
               </div>
             </div>
             <button onClick={() => setShowComparison(false)} className="text-xs text-slate-500 hover:text-white">Hide</button>
@@ -285,66 +142,44 @@ export default function ProductsCatalog() {
               </thead>
               <tbody className="divide-y divide-slate-800">
                 <tr>
-                  <td className="p-3 font-semibold text-slate-450">Digital I/O</td>
+                  <td className="p-3 font-semibold text-slate-450">Level</td>
                   {comparisonProducts.map((p, idx) => (
-                    <td key={idx} className="p-3 text-center font-mono">{p.digitalIO}</td>
+                    <td key={idx} className="p-3 text-center text-[10px] text-slate-300">{p.focus}</td>
                   ))}
                 </tr>
                 <tr>
-                  <td className="p-3 font-semibold text-slate-450">Analog Inputs</td>
-                  {comparisonProducts.map((p, idx) => (
-                    <td key={idx} className="p-3 text-center font-mono">{p.analogInputs}</td>
-                  ))}
-                </tr>
-                <tr>
-                  <td className="p-3 font-semibold text-slate-450">Flash Memory</td>
-                  {comparisonProducts.map((p, idx) => (
-                    <td key={idx} className="p-3 text-center font-mono">{p.flash}</td>
-                  ))}
-                </tr>
-                <tr>
-                  <td className="p-3 font-semibold text-slate-450">USB Connection</td>
-                  {comparisonProducts.map((p, idx) => (
-                    <td key={idx} className="p-3 text-center">{p.usb}</td>
-                  ))}
-                </tr>
-                <tr>
-                  <td className="p-3 font-semibold text-slate-450">Beginner Friendly</td>
-                  {comparisonProducts.map((p, idx) => (
-                    <td key={idx} className="p-3 text-center">
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                        p.beginner.includes('Yes') ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400'
-                      }`}>{p.beginner}</span>
-                    </td>
-                  ))}
-                </tr>
-                <tr>
-                  <td className="p-3 font-semibold text-slate-450">Projects Supported</td>
+                  <td className="p-3 font-semibold text-slate-450">Projects</td>
                   {comparisonProducts.map((p, idx) => (
                     <td key={idx} className="p-3 text-center font-semibold text-blue-300">{p.projectsCount}</td>
                   ))}
                 </tr>
                 <tr>
-                  <td className="p-3 font-semibold text-slate-450">Add-on Modules</td>
+                  <td className="p-3 font-semibold text-slate-450">Total Pieces</td>
                   {comparisonProducts.map((p, idx) => (
-                    <td key={idx} className="p-3 text-center text-[10px] text-slate-450 max-w-[200px] leading-relaxed mx-auto">{p.addOnComponents}</td>
+                    <td key={idx} className="p-3 text-center font-mono">{p.pieces}</td>
                   ))}
                 </tr>
                 <tr>
-                  <td className="p-3 font-semibold text-slate-450">Syllabus / Lab Guides</td>
+                  <td className="p-3 font-semibold text-slate-450">Level-specific Parts</td>
+                  {comparisonProducts.map((p, idx) => (
+                    <td key={idx} className="p-3 text-center font-mono">{p.levelParts}</td>
+                  ))}
+                </tr>
+                <tr>
+                  <td className="p-3 font-semibold text-slate-450">Project List</td>
                   {comparisonProducts.map((p, idx) => (
                     <td key={idx} className="p-3 text-center">
                       <button
                         onClick={() => setSelectedKitsModal(p)}
                         className="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-750 text-[10px] font-bold text-cyan-400 border border-slate-700 transition-all cursor-pointer shadow-md"
                       >
-                        View Experiments List
+                        View 50 Projects
                       </button>
                     </td>
                   ))}
                 </tr>
                 <tr>
-                  <td className="p-3 font-bold text-white">Estimated Price</td>
+                  <td className="p-3 font-bold text-white">Price</td>
                   {comparisonProducts.map((p, idx) => (
                     <td key={idx} className="p-3 text-center font-extrabold text-blue-450 text-sm">₹{p.price}</td>
                   ))}
@@ -354,11 +189,7 @@ export default function ProductsCatalog() {
                   {comparisonProducts.map((p, idx) => (
                     <td key={idx} className="p-3 text-center">
                       <button
-                        onClick={() => {
-                          if (p.product) {
-                            addToCart(p.product);
-                          }
-                        }}
+                        onClick={() => addToCart(p.product)}
                         className="px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-[10px] font-bold transition-all shadow-md shadow-blue-600/10"
                       >
                         Add to Cart
@@ -384,8 +215,8 @@ export default function ProductsCatalog() {
 
           {/* Category Filter */}
           <div className="space-y-2">
-            <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Category</label>
-            <div className="flex flex-col gap-1.5 max-h-48 overflow-y-auto pr-1">
+            <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Kit Level</label>
+            <div className="flex flex-col gap-1.5 max-h-72 overflow-y-auto pr-1">
               {categories.map((cat) => (
                 <button
                   key={cat}
@@ -409,9 +240,9 @@ export default function ProductsCatalog() {
             <div className="flex flex-col gap-1.5 text-xs">
               {[
                 { key: 'All', label: 'All Prices' },
-                { key: 'under-1500', label: 'Under ₹1,500' },
-                { key: '1500-3000', label: '₹1,500 - ₹3,000' },
-                { key: 'over-3000', label: 'Over ₹3,000' }
+                { key: 'under-1000', label: 'Under ₹1,000' },
+                { key: '1000-2000', label: '₹1,000 - ₹2,000' },
+                { key: 'over-2000', label: 'Over ₹2,000' }
               ].map((range) => (
                 <button
                   key={range.key}
@@ -424,48 +255,6 @@ export default function ProductsCatalog() {
                 >
                   <span>{range.label}</span>
                   {priceRange === range.key && <Check className="w-3.5 h-3.5" />}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Platform Filter */}
-          <div className="space-y-2">
-            <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Platform Board</label>
-            <div className="flex flex-col gap-1.5 text-xs">
-              {platforms.map((plat) => (
-                <button
-                  key={plat}
-                  onClick={() => setSelectedPlatform(plat)}
-                  className={`text-left px-2.5 py-1.5 rounded-lg transition-all flex items-center justify-between ${
-                    selectedPlatform === plat
-                      ? 'bg-blue-600/15 border-l-2 border-blue-500 text-blue-400 font-semibold'
-                      : 'text-slate-400 hover:text-white hover:bg-slate-800'
-                  }`}
-                >
-                  <span>{plat}</span>
-                  {selectedPlatform === plat && <Check className="w-3.5 h-3.5" />}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Difficulty Filter */}
-          <div className="space-y-2">
-            <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Difficulty</label>
-            <div className="flex flex-col gap-1.5 text-xs">
-              {difficulties.map((diff) => (
-                <button
-                  key={diff}
-                  onClick={() => setSelectedDifficulty(diff)}
-                  className={`text-left px-2.5 py-1.5 rounded-lg transition-all flex items-center justify-between ${
-                    selectedDifficulty === diff
-                      ? 'bg-blue-600/15 border-l-2 border-blue-500 text-blue-400 font-semibold'
-                      : 'text-slate-400 hover:text-white hover:bg-slate-800'
-                  }`}
-                >
-                  <span>{diff}</span>
-                  {selectedDifficulty === diff && <Check className="w-3.5 h-3.5" />}
                 </button>
               ))}
             </div>
@@ -501,8 +290,6 @@ export default function ProductsCatalog() {
             onClick={() => {
               setSelectedCategory('All');
               setPriceRange('All');
-              setSelectedPlatform('All');
-              setSelectedDifficulty('All');
               setSelectedAvailability('All');
               setSearchQuery('');
             }}
@@ -515,10 +302,10 @@ export default function ProductsCatalog() {
         {/* Products Grid Section */}
         <section className="lg:col-span-3 space-y-6">
           <div className="flex items-center justify-between text-xs text-slate-450">
-            <span>Showing {filteredProducts.length} hardware products</span>
+            <span>Showing {filteredProducts.length} of {products.length} kits</span>
             {selectedCategory !== 'All' && (
               <span className="px-2.5 py-1 rounded-full bg-slate-900 border border-slate-800 text-cyan-400 font-semibold">
-                Category: {selectedCategory}
+                {selectedCategory}
               </span>
             )}
           </div>
@@ -563,7 +350,7 @@ export default function ProductsCatalog() {
                         </p>
 
                         <div className="text-[10px] font-bold text-slate-500">
-                          SKU: {product.specifications?.['Microcontroller'] ? `ARD-UNO-${product.id.split('-')[1] || '01'}` : `COMP-${product.id.split('-')[1] || '02'}`}
+                          SKU: JRL-ARD-L{product.id.split('-')[1]} · {product.specifications['Projects']}
                         </div>
                       </div>
                     </div>
@@ -607,7 +394,7 @@ export default function ProductsCatalog() {
           ) : (
             <div className="p-12 text-center border border-slate-800 rounded-2xl glass-card text-slate-400 space-y-3">
               <HelpCircle className="w-10 h-10 mx-auto text-slate-650" />
-              <h3 className="text-sm font-semibold text-white">No products found</h3>
+              <h3 className="text-sm font-semibold text-white">No kits found</h3>
               <p className="text-xs">Try adjusting your filters or search terms to find what you are looking for.</p>
             </div>
           )}
@@ -617,7 +404,7 @@ export default function ProductsCatalog() {
       {/* Experiments List Modal */}
       {selectedKitsModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-          <div className="bg-[#0F172A] border border-slate-800 rounded-2xl max-w-md w-full max-h-[80vh] flex flex-col overflow-hidden shadow-2xl">
+          <div className="bg-[#0F172A] border border-slate-800 rounded-2xl max-w-xl w-full max-h-[80vh] flex flex-col overflow-hidden shadow-2xl">
             {/* Modal Header */}
             <div className="p-5 border-b border-slate-800 flex items-center justify-between">
               <div>
@@ -635,19 +422,19 @@ export default function ProductsCatalog() {
             {/* Modal Content */}
             <div className="p-6 overflow-y-auto space-y-5 text-xs text-slate-300">
               <div className="space-y-1">
-                <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Included Add-On Components</h4>
+                <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Level-specific Components</h4>
                 <p className="bg-slate-950/60 p-3 rounded-xl border border-slate-900 leading-relaxed text-slate-200">
                   {selectedKitsModal.addOnComponents}
                 </p>
               </div>
 
               <div className="space-y-2">
-                <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">List of Practical Experiments</h4>
+                <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">The 50 Projects</h4>
                 <div className="space-y-1.5">
-                  {selectedKitsModal.experiments?.map((exp: string, idx: number) => (
+                  {selectedKitsModal.projects?.map((pr: { tier: string; name: string; desc: string }, idx: number) => (
                     <div key={idx} className="flex items-start gap-2.5 p-2 rounded-lg bg-slate-900/40 border border-slate-850">
                       <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5 shrink-0"></span>
-                      <span>{exp}</span>
+                      <span><span className="text-slate-100 font-semibold">{pr.name}</span> <span className="text-[10px] text-cyan-400">({pr.tier})</span><br /><span className="text-slate-400">{pr.desc}</span></span>
                     </div>
                   ))}
                 </div>

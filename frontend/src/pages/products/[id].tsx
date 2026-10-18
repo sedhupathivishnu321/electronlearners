@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import type { GetStaticPaths, GetStaticProps } from 'next';
 import { useApp } from '../../context/AppContext';
-import { PROJECTS_DATA } from '../../data/projectsData';
+import { PRODUCTS_DATA } from '../../data/productsData';
 import { ShoppingCart, Heart, Star, Download, Play, CheckCircle, Shield, FileText, Cpu, ArrowLeft, Plus, Minus, Send } from 'lucide-react';
 
 export default function ProductDetail() {
@@ -11,6 +12,7 @@ export default function ProductDetail() {
   const { products, addToCart, toggleWishlist, wishlist } = useApp();
 
   const [quantity, setQuantity] = useState<number>(1);
+  const [activeImageIdx, setActiveImageIdx] = useState<number>(0);
   const [activeTab, setActiveTab] = useState<'desc' | 'specs' | 'included' | 'compat' | 'how' | 'projects' | 'docs' | 'qna'>('desc');
 
   // Find product by id or slug
@@ -33,17 +35,13 @@ export default function ProductDetail() {
     "https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&auto=format&fit=crop&q=80",
     "https://images.unsplash.com/photo-1608564697071-ddf911d81370?w=600&auto=format&fit=crop&q=80"
   ];
-  const [activeImageIdx, setActiveImageIdx] = useState<number>(0);
 
-  // Dynamic projects using this product
-  const relatedProjects = PROJECTS_DATA.filter(proj => 
-    proj.category.toLowerCase() === product.category.toLowerCase() ||
-    proj.shortDescription.toLowerCase().includes(product.name.toLowerCase().split(' ')[0])
-  );
+  // The 50 guided projects that belong to this kit
+  const kitProjects = product.projects ?? [];
 
   // Related products
   const relatedProducts = products
-    .filter((p) => p.category === product.category && p.id !== product.id)
+    .filter((p) => p.id !== product.id)
     .slice(0, 4);
 
   const handleBuyNow = () => {
@@ -57,7 +55,7 @@ export default function ProductDetail() {
       {/* Back Link */}
       <Link href="/products" className="inline-flex items-center space-x-2 text-xs font-semibold text-slate-400 hover:text-white transition-colors">
         <ArrowLeft className="w-4 h-4" />
-        <span>Back to STEM Catalog</span>
+        <span>Back to all 8 kits</span>
       </Link>
 
       {/* Main product card */}
@@ -190,7 +188,7 @@ export default function ProductDetail() {
             { key: 'included', label: "What's Included" },
             { key: 'compat', label: 'Compatibility' },
             { key: 'how', label: 'How to Use' },
-            { key: 'projects', label: `Projects (${relatedProjects.length})` },
+            { key: 'projects', label: `Projects (${kitProjects.length})` },
             { key: 'docs', label: 'Documentation' },
             { key: 'qna', label: 'Q&A' }
           ].map((tab) => (
@@ -258,14 +256,13 @@ export default function ProductDetail() {
 
           {activeTab === 'compat' && (
             <div className="space-y-3 text-xs text-slate-350 leading-relaxed">
-              <h3 className="text-sm font-bold text-white uppercase tracking-wide">Cross-Platform Compatibility</h3>
-              <p>This kit utilizes standardized headers and signal lines, offering direct compatibility with:</p>
+              <h3 className="text-sm font-bold text-white uppercase tracking-wide">Software & Simulator</h3>
+              <p>All 50 projects of this kit run on the Arduino UNO R3 included in the box and can be tried first in the free ArduinoForge simulator:</p>
               <ul className="list-disc list-inside space-y-1.5 pl-2 text-slate-300">
-                <li>Arduino IDE (C++ programming)</li>
-                <li>ESP32 / ESP8266 NodeMCU microcontrollers</li>
-                <li>Raspberry Pi OS Python GPIO libraries</li>
-                <li>Standard 3.3V and 5V logic signal levels</li>
-                <li>Solderless breadboards (0.1" pitch components)</li>
+                <li>Arduino IDE 2.x (C++ sketches, libraries named in each project)</li>
+                <li><a href="/arduinoforge/" className="text-blue-400 hover:underline">ArduinoForge web simulator</a> (Examples menu, group "{product.name.split(':')[0]}") and the Windows desktop app</li>
+                <li>Windows, macOS and Linux (Arduino IDE)</li>
+                <li>Solderless breadboard wiring (0.1&quot; pitch), no soldering needed</li>
               </ul>
             </div>
           )}
@@ -286,23 +283,26 @@ export default function ProductDetail() {
 
           {activeTab === 'projects' && (
             <div className="space-y-4">
-              <h3 className="text-sm font-bold text-white uppercase tracking-wide">Guided Projects Using This Product</h3>
-              {relatedProjects.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {relatedProjects.map((proj) => (
-                    <div key={proj.id} className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2 flex flex-col justify-between">
-                      <div>
-                        <h4 className="text-xs font-bold text-white uppercase">{proj.title}</h4>
-                        <p className="text-[11px] text-slate-400 line-clamp-2">{proj.shortDescription}</p>
+              <h3 className="text-sm font-bold text-white uppercase tracking-wide">The {kitProjects.length} Projects in This Kit</h3>
+              {kitProjects.length > 0 ? (
+                <div className="space-y-5">
+                  {(['Basic', 'Intermediate', 'Advanced'] as const).map((tier) => (
+                    <div key={tier} className="space-y-2">
+                      <h4 className="text-[11px] font-bold text-cyan-400 uppercase tracking-widest">{tier} ({kitProjects.filter((k) => k.tier === tier).length})</h4>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {kitProjects.filter((k) => k.tier === tier).map((proj) => (
+                          <div key={proj.name} className="p-3 rounded-xl bg-slate-950 border border-slate-800">
+                            <h5 className="text-xs font-bold text-white">{proj.name}</h5>
+                            <p className="text-[11px] text-slate-400">{proj.desc}</p>
+                          </div>
+                        ))}
                       </div>
-                      <Link href={`/projects/${proj.id}`} className="text-xs font-semibold text-blue-400 hover:underline flex items-center gap-1 pt-2">
-                        View Project Guide <ArrowRight className="w-3 h-3" />
-                      </Link>
                     </div>
                   ))}
+                  <a href="/arduinoforge/" className="inline-block text-xs font-semibold text-blue-400 hover:underline">Open these projects in the ArduinoForge simulator &rarr;</a>
                 </div>
               ) : (
-                <p className="text-xs text-slate-500">No project tutorials registered for this exact kit yet. Check back soon!</p>
+                <p className="text-xs text-slate-500">No projects registered for this kit.</p>
               )}
             </div>
           )}
@@ -388,7 +388,7 @@ export default function ProductDetail() {
       {/* Related Products */}
       {relatedProducts.length > 0 && (
         <section className="border-t border-slate-850 pt-10 space-y-6">
-          <h3 className="text-lg font-bold text-white uppercase tracking-tight font-heading">Related Hardware Kits</h3>
+          <h3 className="text-lg font-bold text-white uppercase tracking-tight font-heading">Other Kits in the Series</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {relatedProducts.map((p) => (
               <div key={p.id} className="glass-card glass-card-hover rounded-2xl overflow-hidden border border-slate-800 flex flex-col justify-between shadow-md">
@@ -420,3 +420,10 @@ export default function ProductDetail() {
   );
 }
 
+
+// Static export: pre-render one page per kit (by id and by slug) so direct links work on GitHub Pages
+export const getStaticPaths: GetStaticPaths = async () => ({
+  paths: PRODUCTS_DATA.flatMap((p) => [{ params: { id: p.id } }, { params: { id: p.slug } }]),
+  fallback: false,
+});
+export const getStaticProps: GetStaticProps = async () => ({ props: {} });
