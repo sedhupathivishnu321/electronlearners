@@ -64,4 +64,4 @@ jobs:
           ssh -i ~/.ssh/id "$T" "cd ~/jrlearners && API_DOMAIN=${API_DOMAIN} docker compose up -d --build"
       - name: Skipped
         if: steps.srv.outputs.has != 'true'
-        run: echo "No SSH_HOST secret yet: nothing to deploy to. See the comments at the top of this file."
+        run: echo "No SSH_HOST secret yet - nothing to deploy to. See the comments at the top of this file."
