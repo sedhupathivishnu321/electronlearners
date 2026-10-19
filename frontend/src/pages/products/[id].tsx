@@ -129,10 +129,10 @@ export default function ProductDetail() {
 
           {/* Quantity Selector & Action Buttons */}
           <div className="flex flex-col sm:flex-row items-center gap-4 border-t border-slate-800 pt-6">
-            <div className="flex items-center border border-slate-700 rounded-xl bg-slate-950">
+            <div className="flex items-center border border-slate-300 rounded-xl bg-white">
               <button
                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                className="p-3 text-slate-400 hover:text-white transition-colors"
+                className="p-3 text-slate-600 hover:text-blue-600 transition-colors"
                 disabled={product.stock === 0}
               >
                 <Minus className="w-3.5 h-3.5" />
@@ -140,7 +140,7 @@ export default function ProductDetail() {
               <span className="px-4 text-sm font-bold text-white w-8 text-center">{quantity}</span>
               <button
                 onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
-                className="p-3 text-slate-400 hover:text-white transition-colors"
+                className="p-3 text-slate-600 hover:text-blue-600 transition-colors"
                 disabled={product.stock === 0}
               >
                 <Plus className="w-3.5 h-3.5" />

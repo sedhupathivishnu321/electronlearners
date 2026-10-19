@@ -11,25 +11,16 @@ type Method = 'payu' | 'cod';
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { cart, user, authReady, validateCoupon, clearCart, refreshOrders } = useApp();
-
-  const [coupon, setCoupon] = useState('');
+  const { cart, user, authReady, clearCart, refreshOrders } = useApp();
   const [state, setState] = useState('');
   const stateName = state;
-  useEffect(() => {
-    if (router.isReady) setCoupon(String(router.query.coupon || '').toUpperCase());
-  }, [router.isReady, router.query]);
+
 
   // Display totals (the server recomputes everything from the catalogue before charging)
   const totals = useMemo(() => {
     const subtotal = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
-    let discount = 0;
-    if (coupon) {
-      const res = validateCoupon(coupon, subtotal);
-      if (res.success && res.discountAmount !== undefined) discount = res.discountAmount;
-    }
-    return computeTotals(subtotal, discount, stateName);
-  }, [cart, coupon, validateCoupon, stateName]);
+    return computeTotals(subtotal, 0, stateName);
+  }, [cart, stateName]);
 
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -51,7 +42,7 @@ export default function CheckoutPage() {
     setBusy(true);
     setError('');
     try {
-      const data = await api('/payments/payu/initiate', { body: { items: cart.map((x) => ({ id: x.product.id, quantity: x.quantity })), coupon: coupon || null, customer } });
+      const data = await api('/payments/payu/initiate', { body: { items: cart.map((x) => ({ id: x.product.id, quantity: x.quantity })), customer } });
       // PayU's hosted checkout expects a normal form POST from the browser
       const form = document.createElement('form');
       form.method = 'POST';
@@ -75,7 +66,7 @@ export default function CheckoutPage() {
     setBusy(true);
     setError('');
     try {
-      await api('/orders/cod', { body: { items: cart.map((x) => ({ id: x.product.id, quantity: x.quantity })), coupon: coupon || null, customer } });
+      await api('/orders/cod', { body: { items: cart.map((x) => ({ id: x.product.id, quantity: x.quantity })), customer } });
       clearCart();
       await refreshOrders();
       router.push('/dashboard?tab=orders');
@@ -100,7 +91,7 @@ export default function CheckoutPage() {
   }
 
   if (!user) {
-    const here = `/checkout/${coupon ? `?coupon=${encodeURIComponent(coupon)}` : ''}`;
+    const here = '/checkout/';
     return (
       <div className="max-w-lg mx-auto px-4 py-16">
         <div className="p-8 rounded-2xl glass-card text-center space-y-4">
@@ -224,9 +215,7 @@ export default function CheckoutPage() {
             </ul>
             <div className="space-y-2.5 text-xs border-t border-slate-300 pt-3">
               <div className="flex justify-between"><span>Subtotal</span><span className="font-semibold">₹{totals.subtotal}</span></div>
-              {totals.discount > 0 && (
-                <div className="flex justify-between text-emerald-500"><span>Discount ({coupon})</span><span>-₹{totals.discount}</span></div>
-              )}
+
               <div className="flex justify-between"><span>GST (18%)</span><span>₹{totals.tax}</span></div>
               <div className="flex justify-between">
                 <span>Shipping {!state ? '(select your state)' : totals.shipping === SHIPPING_PUDUCHERRY ? '(within Puducherry)' : ''}</span>

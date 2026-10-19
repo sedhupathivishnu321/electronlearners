@@ -25,9 +25,8 @@ export const POLICIES: Policy[] = [
         'We may suspend or close an account that is used for fraud, abuse or in breach of these terms.'] },
       { id: 'orders', title: '4. Products, prices and orders', body: [
         'We sell the eight JR Learners Arduino kits (Level 1 to Level 8) and the All-in-One kit. Each kit lists its parts on its product page. Photographs and the simulator are illustrations; minor differences in the colour, make or model of equivalent components can occur.',
-        'Prices on the site are in Indian rupees (INR) and do not include GST. At checkout 18% GST is added on the kit price (after any coupon discount), then shipping. The amount you pay is shown before you confirm: kit price, coupon discount, GST, shipping and the total. We recalculate every order on our servers, so the total shown at payment is the amount that applies.',
-        'An order is accepted when we confirm it by e-mail. We may cancel an order (with a full refund) if an item is unavailable, a price was shown wrongly, or we suspect fraud.',
-        'Coupons are single-use offers with their own conditions (minimum spend, maximum discount, expiry). They cannot be combined unless stated and have no cash value.'] },
+        'Prices on the site are in Indian rupees (INR) and do not include GST. At checkout 18% GST is added on the kit price, then shipping. The amount you pay is shown before you confirm: kit price, GST, shipping and the total. We recalculate every order on our servers, so the total shown at payment is the amount that applies.',
+        'An order is accepted when we confirm it by e-mail. We may cancel an order (with a full refund) if an item is unavailable, a price was shown wrongly, or we suspect fraud.'] },
       { id: 'payment', title: '5. Payment', body: [
         'You can pay online through our payment partner PayU (UPI, cards, netbanking, wallets, EMI) or choose Cash on Delivery where offered. Card and bank details are entered on PayU\'s secure page; we never see or store them.',
         'An online order is confirmed only after PayU confirms the payment. If money is deducted but the order shows as failed or pending, it is normally returned automatically by the bank; contact us with your order reference if it is not.'] },
@@ -47,7 +46,7 @@ export const POLICIES: Policy[] = [
         { list: [
           'Do not attempt to break into, overload or disrupt the site, its accounts or its payment flow.',
           'Do not use automated tools to scrape the site or place orders.',
-          'Do not submit false orders, misuse coupons, or post unlawful, abusive or infringing content in forms and tickets.'] }] },
+          'Do not submit false orders, or post unlawful, abusive or infringing content in forms and tickets.'] }] },
       { id: 'liability', title: '9. No warranty, and limits of liability', body: [
         'Our kits, guides, code and the simulator are provided "as is". We do not give a separate product warranty. We do stand behind the delivery problems and defects described in our Refund & Cancellation Policy.',
         'To the extent the law allows, we are not liable for indirect or consequential loss, loss of data, or damage caused by using a kit in a way the guides do not describe (for example wrong voltage, or wiring to mains). Our total liability for any claim about an order is limited to the amount you paid for that order.',

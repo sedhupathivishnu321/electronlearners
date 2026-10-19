@@ -5,32 +5,12 @@ import { useApp } from '../context/AppContext';
 import { ShoppingCart, Trash2, Plus, Minus, ArrowRight, Tag, Gift, Award } from 'lucide-react';
 
 export default function CartPage() {
-  const { cart, products, addToCart, removeFromCart, updateCartQuantity, validateCoupon } = useApp();
-  const [couponCode, setCouponCode] = useState('');
-  const [appliedCoupon, setAppliedCoupon] = useState<string | null>(null);
-  const [discountAmount, setDiscountAmount] = useState(0);
-  const [couponMessage, setCouponMessage] = useState('');
+  const { cart, products, addToCart, removeFromCart, updateCartQuantity } = useApp();
 
   const subtotal = cart.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
 
-  const handleApplyCoupon = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!couponCode.trim()) return;
-
-    const res = validateCoupon(couponCode, subtotal);
-    if (res.success && res.discountAmount !== undefined) {
-      setAppliedCoupon(couponCode.toUpperCase());
-      setDiscountAmount(res.discountAmount);
-      setCouponMessage(res.message);
-    } else {
-      setAppliedCoupon(null);
-      setDiscountAmount(0);
-      setCouponMessage(res.message);
-    }
-  };
-
-  // GST 18 % is added on the kits after any coupon; shipping is Rs 100 (Rs 50 inside Puducherry), fixed at checkout from the delivery state
-  const t = computeTotals(subtotal, discountAmount, '');
+  // GST 18 % is added on the kits; shipping is Rs 100 (Rs 50 inside Puducherry), fixed at checkout from the delivery state
+  const t = computeTotals(subtotal, 0, '');
   const gst = t.tax;
   const finalShipping = t.shipping;
   const total = t.total;
@@ -78,12 +58,12 @@ export default function CartPage() {
 
                   <div className="flex items-center space-x-6">
                     {/* Quantity Selector */}
-                    <div className="flex items-center space-x-2 bg-slate-950 border border-slate-850 rounded-xl p-1">
-                      <button onClick={() => updateCartQuantity(item.product.id, item.quantity - 1)} className="p-1.5 text-slate-400 hover:text-white transition-colors">
+                    <div className="flex items-center space-x-2 bg-white border border-slate-300 rounded-xl p-1">
+                      <button onClick={() => updateCartQuantity(item.product.id, item.quantity - 1)} className="p-1.5 text-slate-600 hover:text-blue-600 transition-colors">
                         <Minus className="w-3.5 h-3.5" />
                       </button>
                       <span className="w-8 text-center text-xs font-bold text-white">{item.quantity}</span>
-                      <button onClick={() => updateCartQuantity(item.product.id, item.quantity + 1)} className="p-1.5 text-slate-400 hover:text-white transition-colors">
+                      <button onClick={() => updateCartQuantity(item.product.id, item.quantity + 1)} className="p-1.5 text-slate-600 hover:text-blue-600 transition-colors">
                         <Plus className="w-3.5 h-3.5" />
                       </button>
                     </div>
@@ -130,45 +110,13 @@ export default function CartPage() {
             <div className="p-6 rounded-2xl glass-card border border-slate-800 space-y-5 shadow-xl">
               <h3 className="text-xs font-bold text-white uppercase tracking-wider border-b border-slate-800 pb-3">Checkout Summary</h3>
 
-              {/* Coupon Form */}
-              <div className="space-y-2">
-                <form onSubmit={handleApplyCoupon} className="flex gap-2">
-                  <input
-                    type="text"
-                    placeholder="Enter Coupon Code"
-                    value={couponCode}
-                    onChange={(e) => setCouponCode(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-850 rounded-xl px-3 py-2 text-xs text-white uppercase placeholder-slate-600 focus:outline-none focus:border-blue-500"
-                  />
-                  <button type="submit" className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-750 text-xs text-white font-semibold transition-all">
-                    Apply
-                  </button>
-                </form>
-                {couponMessage && (
-                  <div className={`text-[10px] font-bold ${appliedCoupon ? 'text-emerald-450' : 'text-red-400'}`}>
-                    {couponMessage}
-                  </div>
-                )}
-                {/* Coupon Tip Box */}
-                {!appliedCoupon && (
-                  <div className="p-2.5 rounded-lg bg-slate-950 text-[10px] text-slate-500 leading-relaxed border border-slate-900">
-                    💡 Try <strong className="text-slate-400">WELCOME10</strong> (10% off, min spend ₹500) or <strong className="text-slate-400">STUDENT20</strong> (20% off, min spend ₹800) for discounts!
-                  </div>
-                )}
-              </div>
-
               {/* Pricing breakdown */}
               <div className="space-y-2.5 text-xs text-slate-350 border-t border-slate-850 pt-4">
                 <div className="flex justify-between">
                   <span>Cart Subtotal</span>
                   <span className="font-semibold text-white">₹{subtotal}</span>
                 </div>
-                {discountAmount > 0 && (
-                  <div className="flex justify-between text-emerald-405">
-                    <span>Discount ({appliedCoupon})</span>
-                    <span>-₹{discountAmount}</span>
-                  </div>
-                )}
+
                 <div className="flex justify-between">
                   <span>GST (18%)</span>
                   <span>₹{gst}</span>
@@ -188,7 +136,7 @@ export default function CartPage() {
 
               {/* Action */}
               <Link
-                href={`/checkout?coupon=${appliedCoupon || ''}`}
+                href="/checkout"
                 className="w-full py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs flex items-center justify-center space-x-2 shadow-lg shadow-blue-600/20 transition-all uppercase tracking-wider"
               >
                 <span>Proceed to Checkout</span>

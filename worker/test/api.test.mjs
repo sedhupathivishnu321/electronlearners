@@ -79,12 +79,12 @@ try {
   r = await call(A + '/orders/cod', { method: 'POST', body: aio, token: tok });
   ok(r.status === 201 && r.data.subtotal === 7665 && r.data.tax === 1380 && r.data.shipping === 100 && r.data.amount === 9145, 'All-in-One COD order: 7665 + 18% GST 1380 + shipping 100 = Rs 9145');
   ok((await call(A + '/orders/cod', { method: 'POST', body: { ...aio, items: [{ id: 'prod-99', quantity: 1 }] }, token: tok })).status === 400, 'unknown product refused');
-  ok((await call(A + '/orders/cod', { method: 'POST', body: { ...aio, coupon: 'NOPE' }, token: tok })).status === 400, 'bad coupon refused');
+  ok((await call(A + '/orders/cod', { method: 'POST', body: { ...aio, coupon: 'WELCOME10' }, token: tok })).status === 400, 'coupons are refused (the offer was withdrawn)');
   ok((await call(A + '/orders/cod', { method: 'POST', body: { ...aio, customer: { ...cust, zip: '12' } }, token: tok })).status === 422, 'bad pincode refused');
 
-  const two = { items: [{ id: 'prod-1', quantity: 1 }, { id: 'prod-2', quantity: 1 }], coupon: 'welcome10', customer: cust };
+  const two = { items: [{ id: 'prod-1', quantity: 1 }, { id: 'prod-2', quantity: 1 }], coupon: null, customer: cust };
   r = await call(A + '/payments/payu/initiate', { method: 'POST', body: two, token: tok });
-  ok(r.status === 200 && r.data.totals.discount === 194 && r.data.totals.tax === 314 && r.data.totals.shipping === 100 && r.data.totals.total === 2160, 'PayU initiate: (1940 - 194 coupon) + GST 314 + shipping 100 = Rs 2160');
+  ok(r.status === 200 && r.data.totals.discount === 0 && r.data.totals.tax === 349 && r.data.totals.shipping === 100 && r.data.totals.total === 2389, 'PayU initiate: 1940 + GST 349 + shipping 100 = Rs 2389');
   const f = r.data.fields;
   const expect = sha512(['k_test', f.txnid, f.amount, f.productinfo, f.firstname, f.email, '', '', '', '', '', '', '', '', '', '', 'salt_test'].join('|'));
   ok(f.hash === expect, 'PayU request hash is correct');
@@ -117,7 +117,7 @@ try {
   r = await call(A + `/admin/orders/${f.txnid}/fulfilment`, { method: 'POST', body: { value: 'Shipped' }, token: ad.data.access_token });
   ok(r.data.fulfilment === 'Shipped', 'admin can update delivery status');
   r = await call(A + '/admin/analytics', { token: ad.data.access_token });
-  ok(r.data.orders === 2 && r.data.revenue === 11305 && r.data.users === 3, 'analytics: 2 orders, Rs 11305, 3 users');
+  ok(r.data.orders === 2 && r.data.revenue === 11534 && r.data.users === 3, 'analytics: 2 orders, Rs 11534, 3 users');
   for (const st of ['Puducherry', 'pondicherry', ' PUDUCHERRY (UT) ']) {
     r = await call(A + '/payments/payu/initiate', { method: 'POST', body: { items: [{ id: 'prod-9', quantity: 1 }], coupon: null, customer: { ...cust, state: st } }, token: tok });
     ok(r.status === 200 && r.data.totals.shipping === 50 && r.data.totals.total === 7665 + 1380 + 50, `delivery to "${st.trim()}": shipping Rs 50, total Rs 9095`);

@@ -1,6 +1,6 @@
 // Display-side copy of the pricing rules. The server (worker/src/index.js) recalculates every order itself,
 // so these numbers only preview what will be charged. Keep both in step.
-export const GST_RATE = 0.18;               // added on the kit price after any coupon discount
+export const GST_RATE = 0.18;               // added on the kit price
 export const SHIPPING_PUDUCHERRY = 50;      // delivery inside Puducherry (Pondicherry)
 export const SHIPPING_STANDARD = 100;       // everywhere else in India
 

@@ -8,14 +8,14 @@ import {
 
 export default function AdminDashboard() {
   const { 
-    user, products, orders, rfqs, supportTickets, reviews, auditLogs, coupons,
-    updateProductStock, addProduct, deleteProduct, updateRFQStatus, updateTicketStatus, replyToTicket, approveReview, deleteReview, addCoupon, deleteCoupon, clearAuditLogs 
+    user, products, orders, rfqs, supportTickets, reviews, auditLogs,
+    updateProductStock, addProduct, deleteProduct, updateRFQStatus, updateTicketStatus, replyToTicket, approveReview, deleteReview, clearAuditLogs 
   } = useApp();
 
   // Role verification
   const isAuthorized = user && ['admin', 'store_manager', 'support_agent', 'content_manager'].includes(user.role);
   
-  const [activeTab, setActiveTab] = useState<'analytics' | 'products' | 'rfqs' | 'tickets' | 'reviews' | 'coupons' | 'logs'>('analytics');
+  const [activeTab, setActiveTab] = useState<'analytics' | 'products' | 'rfqs' | 'tickets' | 'reviews' | 'logs'>('analytics');
 
   // Product CRUD states
   const [showAddModal, setShowAddModal] = useState(false);
@@ -28,11 +28,6 @@ export default function AdminDashboard() {
   // Ticket Response states
   const [selectedTicketId, setSelectedTicketId] = useState<string | null>(null);
   const [ticketReplyText, setTicketReplyText] = useState('');
-
-  // Coupon Manager states
-  const [newCouponCode, setNewCouponCode] = useState('');
-  const [newCouponDiscount, setNewCouponDiscount] = useState(15);
-  const [newCouponMinSpend, setNewCouponMinSpend] = useState(500);
 
   if (!isAuthorized) {
     return (
@@ -52,7 +47,7 @@ export default function AdminDashboard() {
   // Role permissions filtering helper
   const hasTabAccess = (tab: typeof activeTab) => {
     if (user.role === 'admin') return true;
-    if (user.role === 'store_manager') return ['analytics', 'products', 'coupons', 'logs'].includes(tab);
+    if (user.role === 'store_manager') return ['analytics', 'products', 'logs'].includes(tab);
     if (user.role === 'support_agent') return ['tickets', 'reviews'].includes(tab);
     if (user.role === 'content_manager') return ['products', 'reviews'].includes(tab);
     return false;
@@ -93,21 +88,6 @@ export default function AdminDashboard() {
     setNewProdDesc('');
     setShowAddModal(false);
     alert("New STEM product kit successfully added to index catalog!");
-  };
-
-  const handleAddCoupon = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newCouponCode.trim()) return;
-
-    addCoupon({
-      code: newCouponCode.toUpperCase(),
-      discountPercent: Number(newCouponDiscount),
-      minSpend: Number(newCouponMinSpend),
-      description: `${newCouponDiscount}% Discount on store purchases above ₹${newCouponMinSpend}`
-    });
-
-    setNewCouponCode('');
-    alert(`Coupon "${newCouponCode.toUpperCase()}" added successfully!`);
   };
 
   const handleSendTicketReply = (e: React.FormEvent) => {
@@ -151,7 +131,6 @@ export default function AdminDashboard() {
           { key: 'products', label: `Products (${products.length})`, icon: Cpu },
           { key: 'rfqs', label: `B2B RFQs (${rfqs.length})`, icon: ClipboardCheck },
           { key: 'tickets', label: `Tickets (${supportTickets.length})`, icon: MessageSquare },
-          { key: 'coupons', label: 'Coupons Manager', icon: Tag },
           { key: 'logs', label: 'Audit Log Desk', icon: Activity }
         ].map((tab) => {
           const visible = hasTabAccess(tab.key as any);
@@ -431,79 +410,6 @@ export default function AdminDashboard() {
                   Select an active support ticket from the log index to reply.
                 </div>
               )}
-            </div>
-
-          </div>
-        )}
-
-        {/* 6. COUPONS MANAGER */}
-        {activeTab === 'coupons' && hasTabAccess('coupons') && (
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
-            
-            {/* Create Coupon */}
-            <div className="md:col-span-5 p-6 rounded-2xl bg-slate-950 border border-slate-850 space-y-4">
-              <h3 className="text-xs font-bold text-white uppercase tracking-wider">Create Discount Rule</h3>
-              <form onSubmit={handleAddCoupon} className="space-y-4 text-xs">
-                <div>
-                  <label className="block text-[10px] uppercase font-bold text-slate-400 mb-1">Coupon Code *</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. MONSOON20"
-                    value={newCouponCode}
-                    onChange={(e) => setNewCouponCode(e.target.value)}
-                    className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-slate-250 focus:outline-none focus:border-blue-500"
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-[10px] uppercase font-bold text-slate-400 mb-1">Discount % *</label>
-                    <input
-                      type="number"
-                      required
-                      min={1}
-                      max={100}
-                      value={newCouponDiscount}
-                      onChange={(e) => setNewCouponDiscount(Number(e.target.value))}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:outline-none"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-[10px] uppercase font-bold text-slate-400 mb-1">Min Spend *</label>
-                    <input
-                      type="number"
-                      required
-                      min={0}
-                      value={newCouponMinSpend}
-                      onChange={(e) => setNewCouponMinSpend(Number(e.target.value))}
-                      className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:outline-none"
-                    />
-                  </div>
-                </div>
-
-                <button type="submit" className="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold transition-all">
-                  Add Coupon Code
-                </button>
-              </form>
-            </div>
-
-            {/* Active Coupons List */}
-            <div className="md:col-span-7 p-6 rounded-2xl glass-card border border-slate-800 space-y-4">
-              <h3 className="text-xs font-bold text-white uppercase tracking-wider">Active Store Coupon List</h3>
-              
-              <div className="space-y-3 text-xs">
-                {coupons.map((c) => (
-                  <div key={c.code} className="p-4 rounded-xl bg-slate-950 border border-slate-850 flex items-center justify-between">
-                    <div>
-                      <span className="font-mono font-bold text-emerald-450 text-sm">{c.code}</span>
-                      <div className="text-slate-400 text-[10px]">{c.description}</div>
-                    </div>
-                    <button onClick={() => deleteCoupon(c.code)} className="p-2 text-slate-500 hover:text-red-500 transition-colors">
-                      <Trash2 className="w-4.5 h-4.5" />
-                    </button>
-                  </div>
-                ))}
-              </div>
             </div>
 
           </div>

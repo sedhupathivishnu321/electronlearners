@@ -188,13 +188,7 @@ function address(a) {
 }
 
 // ------------------------------------------------------------------------------------------------ pricing
-const COUPONS = {
-  WELCOME10: { percent: 10, min_spend: 500, max_discount: 200 },
-  STUDENT20: { percent: 20, min_spend: 800, max_discount: 500 },
-  BULK15: { percent: 15, min_spend: 5000, max_discount: 2000 },
-  FESTIVE25: { percent: 25, min_spend: 1500, max_discount: 600 },
-};
-const GST_RATE = 0.18;                                   // added on the kit price after any coupon discount
+const GST_RATE = 0.18;                                   // added on the kit price
 const SHIPPING_PUDUCHERRY = 50;                         // delivery inside Puducherry (Pondicherry)
 const SHIPPING_STANDARD = 100;                          // everywhere else in India
 function isPuducherry(state) {
@@ -213,14 +207,8 @@ function priceCart(items, couponIn, state) {
     lines.push({ id: kit.id, name: kit.name, price: kit.price, quantity: q });
     subtotal += kit.price * q;
   }
-  let discount = 0;
-  const code = String(couponIn || '').trim().toUpperCase();
-  if (code) {
-    const c = COUPONS[code];
-    if (!c) throw new HttpError(400, 'Invalid coupon code');
-    if (subtotal < c.min_spend) throw new HttpError(400, `Coupon ${code} needs a minimum spend of Rs ${c.min_spend}`);
-    discount = Math.min(Math.round((subtotal * c.percent) / 100), c.max_discount);
-  }
+  if (String(couponIn || '').trim()) throw new HttpError(400, 'Coupons are no longer available');
+  const discount = 0, code = '';
   const taxable = Math.max(0, subtotal - discount);
   const tax = Math.round(taxable * GST_RATE);
   const shipping = isPuducherry(state) ? SHIPPING_PUDUCHERRY : SHIPPING_STANDARD;
@@ -274,7 +262,7 @@ function orderMail(o, u, headline) {
   if (c.gstin) lines.push(`  GSTIN         : ${c.gstin}`);
   lines.push('', 'SHIP TO', `  ${c.address}`, `  ${c.city}, ${c.state} ${c.zip}`, '', 'ITEMS');
   for (const it of items) lines.push(`  ${it.quantity} x ${it.name}  @ Rs ${it.price}  = Rs ${it.quantity * it.price}`);
-  lines.push('', `  Subtotal : Rs ${o.subtotal}`, `  Discount : Rs ${o.discount}${o.coupon ? '  (' + o.coupon + ')' : ''}`, `  GST 18%  : Rs ${o.tax || 0}`, `  Shipping : Rs ${o.shipping}${isPuducherry(c.state) ? '  (Puducherry)' : ''}`, `  TOTAL    : Rs ${o.amount}`);
+  lines.push('', `  Subtotal : Rs ${o.subtotal}`, `  GST 18%  : Rs ${o.tax || 0}`, `  Shipping : Rs ${o.shipping}${isPuducherry(c.state) ? '  (Puducherry)' : ''}`, `  TOTAL    : Rs ${o.amount}`);
   return lines.join('\n');
 }
 async function announceOrder(env, txnid, what) {

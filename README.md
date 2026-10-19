@@ -24,13 +24,13 @@ Every kit contains an Arduino UNO R3, USB cable, breadboard, jumper wires, resis
 
 **All-in-One Kit (₹7,665):** the common core once (₹527.20) + the level-specific parts of all 8 kits (₹4,947.70) = ₹5,474.90, plus 40 %. That is ₹5,168 less than the eight kits bought separately (₹12,833).
 
-**GST and shipping at checkout:** the prices above are before tax. **18% GST** is added on the kit price after any coupon discount. **Shipping is a flat Rs 100** per order across India and **Rs 50 for delivery inside Puducherry** (decided by the state chosen in the delivery address). There is no free-shipping threshold. Example: Level 1 (Rs 848) = 848 + GST 153 + shipping 100 = Rs 1,101, or Rs 1,051 inside Puducherry.
+**GST and shipping at checkout:** the prices above are before tax. **18% GST** is added on the kit price. **Shipping is a flat Rs 100** per order across India and **Rs 50 for delivery inside Puducherry** (decided by the state chosen in the delivery address). There is no free-shipping threshold. Example: Level 1 (Rs 848) = 848 + GST 153 + shipping 100 = Rs 1,101, or Rs 1,051 inside Puducherry.
 
 **Pricing rule:** price = BOM component cost of the kit (including the common core) + 40 %, rounded to the nearest rupee. The server holds the same table in [backend/app/catalog.py](backend/app/catalog.py) and always recomputes the amount itself; the browser's total is never trusted.
 
 ## Site features
 
-- **Shop** for the 8 kits: level filter, price filter, comparison table, parts list and the 50 projects on every kit page. Cart, wishlist, coupons, order history.
+- **Shop** for the 8 kits: level filter, price filter, comparison table, parts list and the 50 projects on every kit page. Cart, wishlist, order history.
 - **400 project guides** (`/projects`): parts list, circuit notes, Arduino sketch (copy / download .ino), neighbour navigation and a one-click link into the simulator.
 - **ArduinoForge simulator** (`/simulator`, full screen at `/arduinoforge/`): breadboard circuit simulator with all 400 projects (`/arduinoforge/?example=k8-01-rfid-uid` opens one directly).
 - **Customized projects** (`/custom-project`, button on the home page): a form for custom builds with optional PDF / TXT / DOC / DOCX / PPT / PPTX upload (2 MB) or a link; the details and the file are e-mailed to learnersjr@gmail.com and sedhupathivishnu2@gmail.com and the sender gets a confirmation with a reference.

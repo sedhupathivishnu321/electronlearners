@@ -94,15 +94,6 @@ export interface RFQ {
   createdAt: string;
 }
 
-export interface Coupon {
-  code: string;
-  discountPercent: number;
-  minSpend: number;
-  maxDiscount: number;
-  usageLimit: number;
-  usedCount: number;
-  validUntil: string;
-}
 
 export interface SupportTicket {
   id: string;
@@ -168,11 +159,6 @@ interface AppContextType {
   updateRFQStatus: (rfqId: string, status: RFQ['status']) => void;
   convertRFQToOrder: (rfqId: string) => void;
   
-  // Coupon Validation Code
-  coupons: Coupon[];
-  createCoupon: (coupon: Coupon) => void;
-  validateCoupon: (code: string, subtotal: number) => { success: boolean; discountAmount?: number; message: string };
-  
   // Support Center
   supportTickets: SupportTicket[];
   createTicket: (subject: string, orderId: string | undefined, priority: SupportTicket['priority'], messageText: string) => void;
@@ -204,7 +190,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   
   const [orders, setOrders] = useState<Order[]>([]);
   const [rfqs, setRfqs] = useState<RFQ[]>([]);
-  const [coupons, setCoupons] = useState<Coupon[]>([]);
   const [supportTickets, setSupportTickets] = useState<SupportTicket[]>([]);
   const [reviews, setReviews] = useState<ProductReview[]>([]);
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
@@ -262,21 +247,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         ];
         setRfqs(dummyRfqs);
         localStorage.setItem('el_rfqs', JSON.stringify(dummyRfqs));
-      }
-
-      // Coupons
-      const savedCoupons = localStorage.getItem('el_coupons');
-      if (savedCoupons) {
-        setCoupons(JSON.parse(savedCoupons));
-      } else {
-        const dummyCoupons: Coupon[] = [
-          { code: "WELCOME10", discountPercent: 10, minSpend: 500, maxDiscount: 200, usageLimit: 500, usedCount: 15, validUntil: "2026-12-31" },
-          { code: "STUDENT20", discountPercent: 20, minSpend: 800, maxDiscount: 500, usageLimit: 500, usedCount: 42, validUntil: "2026-12-31" },
-          { code: "BULK15", discountPercent: 15, minSpend: 5000, maxDiscount: 2000, usageLimit: 500, usedCount: 5, validUntil: "2026-12-31" },
-          { code: "FESTIVE25", discountPercent: 25, minSpend: 1500, maxDiscount: 600, usageLimit: 300, usedCount: 8, validUntil: "2026-12-31" }
-        ];
-        setCoupons(dummyCoupons);
-        localStorage.setItem('el_coupons', JSON.stringify(dummyCoupons));
       }
 
       // Tickets
@@ -340,10 +310,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const setRfqsWithSync = (val: RFQ[]) => {
     setRfqs(val);
     localStorage.setItem('el_rfqs', JSON.stringify(val));
-  };
-  const setCouponsWithSync = (val: Coupon[]) => {
-    setCoupons(val);
-    localStorage.setItem('el_coupons', JSON.stringify(val));
   };
   const setTickets = (val: SupportTicket[]) => {
     setSupportTickets(val);
@@ -605,40 +571,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     showNotification(`RFQ ${rfqId} marked as converted. The customer places the order from the quote.`);
   };
 
-  // Coupons
-  const createCoupon = (c: Coupon) => {
-    setCouponsWithSync([c, ...coupons]);
-    addAuditLog(user?.email || "admin", "CREATE_COUPON", `Created coupon code: ${c.code}`);
-    showNotification(`Coupon ${c.code} created!`);
-  };
-
-  const validateCoupon = (code: string, subtotal: number) => {
-    const c = coupons.find(x => x.code.toUpperCase() === code.toUpperCase());
-    if (!c) {
-      return { success: false, message: "Invalid coupon code." };
-    }
-    
-    // Validate rules
-    if (subtotal < c.minSpend) {
-      return { success: false, message: `Minimum spend of ₹${c.minSpend} required.` };
-    }
-    if (c.usedCount >= c.usageLimit) {
-      return { success: false, message: "Coupon usage limit reached." };
-    }
-    if (new Date(c.validUntil) < new Date()) {
-      return { success: false, message: "Coupon has expired." };
-    }
-
-    const calculatedDiscount = Math.round((subtotal * c.discountPercent) / 100);
-    const finalDiscount = Math.min(calculatedDiscount, c.maxDiscount);
-
-    return {
-      success: true,
-      discountAmount: finalDiscount,
-      message: `Coupon "${c.code}" applied! Save ₹${finalDiscount}`
-    };
-  };
-
   // Tickets
   const createTicket = (subject: string, orderId: string | undefined, priority: SupportTicket['priority'], messageText: string) => {
     if (!user) {
@@ -733,9 +665,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         submitRFQ,
         updateRFQStatus,
         convertRFQToOrder,
-        coupons,
-        createCoupon,
-        validateCoupon,
         supportTickets,
         createTicket,
         replyToTicket,
