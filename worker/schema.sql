@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS inquiries (
 CREATE TABLE IF NOT EXISTS mail_outbox (
   id INTEGER PRIMARY KEY AUTOINCREMENT, to_addr TEXT NOT NULL, subject TEXT NOT NULL, body TEXT NOT NULL,
   status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','sent','failed')),
-  attempts INTEGER NOT NULL DEFAULT 0, last_error TEXT, created_at TEXT NOT NULL, sent_at TEXT
+  attempts INTEGER NOT NULL DEFAULT 0, last_error TEXT, created_at TEXT NOT NULL, sent_at TEXT, attach_id INTEGER
 );
 CREATE TABLE IF NOT EXISTS audit_log (
   id INTEGER PRIMARY KEY AUTOINCREMENT, ts TEXT NOT NULL, user_id INTEGER, action TEXT NOT NULL, ip TEXT, detail TEXT
@@ -41,3 +41,9 @@ CREATE TABLE IF NOT EXISTS audit_log (
 CREATE TABLE IF NOT EXISTS rate_hits (key TEXT NOT NULL, ts INTEGER NOT NULL);
 CREATE INDEX IF NOT EXISTS idx_rate ON rate_hits(key, ts);
 CREATE TABLE IF NOT EXISTS meta (k TEXT PRIMARY KEY, v TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS custom_requests (
+  id INTEGER PRIMARY KEY AUTOINCREMENT, reference TEXT NOT NULL, user_id INTEGER, name TEXT NOT NULL, email TEXT NOT NULL, phone TEXT NOT NULL,
+  organisation TEXT, project_type TEXT, title TEXT NOT NULL, description TEXT NOT NULL, platform TEXT, budget TEXT, deadline TEXT, link TEXT,
+  file_name TEXT, file_mime TEXT, file_size INTEGER, ip TEXT, created_at TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS attachment_chunks (request_id INTEGER NOT NULL, idx INTEGER NOT NULL, data TEXT NOT NULL, PRIMARY KEY (request_id, idx));

@@ -47,6 +47,13 @@ export default function Home() {
             >
               <span>Explore Projects</span>
             </Link>
+            <Link
+              href="/custom-project"
+              className="w-full sm:w-auto px-8 py-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 font-bold shadow-lg shadow-emerald-600/20 flex items-center justify-center space-x-2 transition-all"
+            >
+              <Wrench className="w-4 h-4" />
+              <span>For Customized Projects</span>
+            </Link>
           </div>
 
           {/* Simple Trust Elements */}

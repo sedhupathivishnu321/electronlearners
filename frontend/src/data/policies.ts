@@ -73,6 +73,7 @@ export const POLICIES: Policy[] = [
           'Account data: name, e-mail, phone number, role (student, teacher, school), institution (optional) and a salted hash of your password. We never store your password itself.',
           'Order data: items, amounts, payment status and method, delivery name, address, pincode, phone, e-mail and GSTIN if you give one. PayU processes your card, UPI or bank details; we receive only the payment result, mode and reference.',
           'Messages: what you write in the contact form, support tickets and bulk-quote requests, with your name and e-mail.',
+          'Customised project requests: your name, e-mail, phone, organisation, the project details you describe and any document you attach (PDF, TXT, DOC, DOCX, PPT or PPTX, up to 2 MB). The request and the file are e-mailed to our team; the file is removed from our database once that e-mail has been delivered.',
           'Security data: your IP address and time of sign-in, registration and order events, kept in an audit log and used for rate limiting and fraud prevention.',
           'Course progress you save on your account (enrolled courses, certificates).'] },
         'We do not collect data from children knowingly without a parent or guardian\'s consent. Accounts are for adults (18+); learners under 18 use the site through a parent, teacher or school account.'] },

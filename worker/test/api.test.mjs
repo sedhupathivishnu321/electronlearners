@@ -26,7 +26,7 @@ await new Promise((r) => mailServer.listen(MAIL_PORT, '127.0.0.1', r));
 // ---- secrets for the local worker
 fs.writeFileSync(path.join(root, '.dev.vars'), [
   'SECRET_KEY=test-secret-key-test-secret-key-1234', 'ADMIN_EMAIL=boss@test.com', 'ADMIN_PASSWORD=AdminPass123',
-  'PAYU_KEY=k_test', 'PAYU_SALT=salt_test', 'PAYU_ENV=test', `MAIL_WEBHOOK_URL=http://127.0.0.1:${MAIL_PORT}/`, 'MAIL_WEBHOOK_SECRET=mail-secret',
+  'PAYU_KEY=k_test', 'PAYU_SALT=salt_test', 'PAYU_ENV=test', `MAIL_WEBHOOK_URL=http://127.0.0.1:${MAIL_PORT}/`, 'MAIL_WEBHOOK_SECRET=mail-secret', 'CUSTOM_REQUEST_TO=learnersjr@gmail.com,sedhupathivishnu2@gmail.com', 'CUSTOM_RATE_LIMIT=100',
 ].join('\n'));
 
 const sh = (args) => spawnSync('npx', ['wrangler', ...args], { cwd: root, shell: true, encoding: 'utf8' });
@@ -129,13 +129,39 @@ try {
   ok(r.status === 200, 'password change works');
   ok((await call(A + '/auth/me', { token: tok })).status === 401, 'old token is revoked after a password change');
 
+  // ---- customised project requests with a file
+  const b64 = (str) => Buffer.from(str, 'binary').toString('base64');
+  const req0 = { name: 'Priya Nair', email: 'priya@example.com', phone: '9876543210', title: 'Smart plant watering box', description: 'A box that waters three plants by soil moisture and sends a daily report.', projectType: 'Student project', platform: 'ESP32', budget: 'Rs 3,000 - 5,000', deadline: '2026-12-01', organisation: 'ABC College', consent: true };
+  r = await call(A + '/custom-requests', { method: 'POST', body: { ...req0, file: { name: 'brief.pdf', data: b64('%PDF-1.4\n% test brief\n') } } });
+  ok(r.status === 201 && /^CP-/.test(r.data.reference), 'custom request with a PDF is accepted');
+  const ref = r.data.reference;
+  ok((await call(A + '/custom-requests', { method: 'POST', body: req0 })).status === 201, 'custom request without a file is accepted');
+  ok((await call(A + '/custom-requests', { method: 'POST', body: { ...req0, consent: false } })).status === 422, 'consent is required');
+  ok((await call(A + '/custom-requests', { method: 'POST', body: { ...req0, file: { name: 'virus.exe', data: b64('MZ\x90\x00') } } })).status === 422, '.exe upload refused');
+  ok((await call(A + '/custom-requests', { method: 'POST', body: { ...req0, file: { name: 'fake.pdf', data: b64('hello, not a pdf') } } })).status === 422, 'a .pdf whose content is not a PDF is refused');
+  ok((await call(A + '/custom-requests', { method: 'POST', body: { ...req0, link: 'javascript:alert(1)' } })).status === 422, 'only http(s) links accepted');
+  const big = Buffer.alloc(2 * 1024 * 1024 + 10, 65); big.write('%PDF', 0);
+  ok([413, 422].includes((await call(A + '/custom-requests', { method: 'POST', body: { ...req0, file: { name: 'big.pdf', data: big.toString('base64') } } })).status), 'a file over 2 MB is refused');
+  await call(A + '/custom-requests', { method: 'POST', body: { ...req0, website: 'http://spam.example' } });
+  for (const [name, magic] of [['a.docx', 'PK\x03\x04rest'], ['b.pptx', 'PK\x03\x04rest'], ['c.txt', 'plain text'], ['d.doc', '\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1'], ['e.ppt', '\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1']]) {
+    const rr = await call(A + '/custom-requests', { method: 'POST', body: { ...req0, email: 'multi@example.com', file: { name, data: b64(magic) } } });
+    ok(rr.status === 201, `${name} accepted`);
+  }
+
   // mail: wait for the background sends
-  for (let i = 0; i < 20 && mails.length < 10; i++) await new Promise((x) => setTimeout(x, 500));
+  for (let i = 0; i < 30 && mails.length < 24; i++) await new Promise((x) => setTimeout(x, 500));
   const toAdmin = mails.filter((m) => m.to === 'admin@jrlearners.com');
   const text = toAdmin.map((m) => m.subject + '\n' + m.body).join('\n');
   ok(toAdmin.length >= 5, `admin received ${toAdmin.length} notification mails`);
   for (const n of ['New account: Asha Kumar', 'New COD order', 'Paid order', 'Contact from Visitor', '12 Main Street', 'All-in-One Kit', 'asha@example.com']) ok(text.includes(n), `admin mail contains "${n}"`);
   ok(!text.includes('spam.example'), 'honeypot enquiry sent no mail');
+  const customMail = mails.find((m) => /Custom project request/.test(m.subject) && m.subject.includes(ref));
+  ok(!!customMail && customMail.to === 'learnersjr@gmail.com,sedhupathivishnu2@gmail.com', 'custom request mailed to both team addresses');
+  ok(customMail.attachment && customMail.attachment.name === 'brief.pdf' && customMail.attachment.mime === 'application/pdf' && Buffer.from(customMail.attachment.data, 'base64').toString().startsWith('%PDF-1.4'), 'the PDF travels with the mail intact');
+  ok(/Smart plant watering box/.test(customMail.body) && /ESP32/.test(customMail.body) && /priya@example.com/.test(customMail.body) && /9876543210/.test(customMail.body) && /ABC College/.test(customMail.body), 'mail body carries all details and contact info');
+  ok(mails.some((m) => m.to === 'priya@example.com' && m.subject.includes(ref)), 'sender gets a confirmation with the reference');
+  const noFile = mails.find((m) => /Custom project request/.test(m.subject) && !m.attachment && m.to.includes('learnersjr'));
+  ok(!!noFile, 'a request without a file is mailed without an attachment');
   ok(mails.some((m) => m.to === 'asha@example.com' && /Your JR Learners order/.test(m.subject)), 'customer got an order confirmation');
   console.log(`\nALL OK (${passed} checks)`);
 } catch (e) {

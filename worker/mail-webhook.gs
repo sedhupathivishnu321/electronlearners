@@ -4,14 +4,20 @@
 //  2. Project Settings (gear) -> Script properties -> Add: name SECRET, value = the MAIL_WEBHOOK_SECRET you were given.
 //  3. Deploy -> New deployment -> type "Web app" -> Execute as: Me -> Who has access: Anyone -> Deploy -> authorise when asked.
 //  4. Copy the "Web app" URL (ends with /exec) and save it as the GitHub secret MAIL_WEBHOOK_URL.
-// Free Gmail accounts can send about 100 mails per day this way.
+// Already deployed an older version of this file? Paste this one over it, then Deploy -> Manage deployments -> pencil -> Version: New version -> Deploy.
+// Free Gmail accounts can send about 100 mails per day this way. Attachments (customised-project files) are supported.
 function doPost(e) {
   try {
     var d = JSON.parse(e.postData.contents);
     var secret = PropertiesService.getScriptProperties().getProperty('SECRET');
     if (!secret || d.secret !== secret) return out({ ok: false, error: 'forbidden' });
     if (!d.to || !d.subject || !d.body) return out({ ok: false, error: 'missing fields' });
-    MailApp.sendEmail({ to: d.to, subject: d.subject, body: d.body, name: 'JR Learners', replyTo: 'help.jrlearners@gmail.com' });
+    var opts = { to: d.to, subject: d.subject, body: d.body, name: 'JR Learners', replyTo: 'help.jrlearners@gmail.com' };
+    if (d.attachment && d.attachment.data) {
+      var bytes = Utilities.base64Decode(d.attachment.data);
+      opts.attachments = [Utilities.newBlob(bytes, d.attachment.mime || 'application/octet-stream', d.attachment.name || 'attachment')];
+    }
+    MailApp.sendEmail(opts);       // "to" may hold several comma-separated addresses
     return out({ ok: true });
   } catch (err) {
     return out({ ok: false, error: String(err) });

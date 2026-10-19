@@ -33,6 +33,7 @@ Every kit contains an Arduino UNO R3, USB cable, breadboard, jumper wires, resis
 - **Shop** for the 8 kits: level filter, price filter, comparison table, parts list and the 50 projects on every kit page. Cart, wishlist, coupons, order history.
 - **400 project guides** (`/projects`): parts list, circuit notes, Arduino sketch (copy / download .ino), neighbour navigation and a one-click link into the simulator.
 - **ArduinoForge simulator** (`/simulator`, full screen at `/arduinoforge/`): breadboard circuit simulator with all 400 projects (`/arduinoforge/?example=k8-01-rfid-uid` opens one directly).
+- **Customized projects** (`/custom-project`, button on the home page): a form for custom builds with optional PDF / TXT / DOC / DOCX / PPT / PPTX upload (2 MB) or a link; the details and the file are e-mailed to learnersjr@gmail.com and sedhupathivishnu2@gmail.com and the sender gets a confirmation with a reference.
 - **Downloads**: one ZIP of sketches per kit.
 - **Accounts and orders**: users register and sign in (server-side, scrypt password hashes, signed 12-hour tokens, lock-out after 5 wrong passwords, rate limits); an account is required to order. Orders, accounts and enquiries live in the backend database.
 - **E-mail**: every registration, order (paid or COD), contact form, support ticket and bulk quote is e-mailed to `admin@jrlearners.com`; customers get a confirmation copy.

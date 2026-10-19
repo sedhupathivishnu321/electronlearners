@@ -99,6 +99,13 @@ async function ensureSchema(env) {
   if (schemaChecked) return;
   const col = await one(env, "SELECT COUNT(*) n FROM pragma_table_info('orders') WHERE name='tax'");
   if (col && col.n === 0) await run(env, 'ALTER TABLE orders ADD COLUMN tax REAL NOT NULL DEFAULT 0');
+  const att = await one(env, "SELECT COUNT(*) n FROM pragma_table_info('mail_outbox') WHERE name='attach_id'");
+  if (att && att.n === 0) await run(env, 'ALTER TABLE mail_outbox ADD COLUMN attach_id INTEGER');
+  await run(env, `CREATE TABLE IF NOT EXISTS custom_requests (
+    id INTEGER PRIMARY KEY AUTOINCREMENT, reference TEXT NOT NULL, user_id INTEGER, name TEXT NOT NULL, email TEXT NOT NULL, phone TEXT NOT NULL,
+    organisation TEXT, project_type TEXT, title TEXT NOT NULL, description TEXT NOT NULL, platform TEXT, budget TEXT, deadline TEXT, link TEXT,
+    file_name TEXT, file_mime TEXT, file_size INTEGER, ip TEXT, created_at TEXT NOT NULL)`);
+  await run(env, 'CREATE TABLE IF NOT EXISTS attachment_chunks (request_id INTEGER NOT NULL, idx INTEGER NOT NULL, data TEXT NOT NULL, PRIMARY KEY (request_id, idx))');
   schemaChecked = true;
 }
 
@@ -116,11 +123,18 @@ async function ensureAdmin(env) {
 }
 
 // ------------------------------------------------------------------------------------------------ mail (via a Google Apps Script web app that sends as help.jrlearners@gmail.com)
-async function queueMail(env, to, subject, body) {
-  const r = await run(env, 'INSERT INTO mail_outbox (to_addr,subject,body,created_at) VALUES (?,?,?,?)', to, subject.slice(0, 200), body, nowIso());
+async function queueMail(env, to, subject, body, attachId = null) {
+  const r = await run(env, 'INSERT INTO mail_outbox (to_addr,subject,body,created_at,attach_id) VALUES (?,?,?,?,?)', to, subject.slice(0, 200), body, nowIso(), attachId);
   return r.meta.last_row_id;
 }
 const notifyAdmin = (env, subject, body) => queueMail(env, env.ADMIN_NOTIFY_EMAIL || 'admin@jrlearners.com', `[JR Learners] ${subject}`, body);
+
+async function loadAttachment(env, attachId) {
+  const meta = await one(env, 'SELECT file_name, file_mime FROM custom_requests WHERE id=?', attachId);
+  const chunks = await all(env, 'SELECT data FROM attachment_chunks WHERE request_id=? ORDER BY idx', attachId);
+  if (!meta || !chunks.length) return null;
+  return { name: meta.file_name, mime: meta.file_mime, data: chunks.map((c) => c.data).join('') };
+}
 
 async function flushMail(env) {
   if (!env.MAIL_WEBHOOK_URL) return 0;
@@ -128,13 +142,18 @@ async function flushMail(env) {
   let sent = 0;
   for (const m of rows) {
     try {
+      const payload = { secret: env.MAIL_WEBHOOK_SECRET || '', to: m.to_addr, subject: m.subject, body: m.body };
+      if (m.attach_id) {
+        const att = await loadAttachment(env, m.attach_id);
+        if (att) payload.attachment = att;
+      }
       const res = await fetch(env.MAIL_WEBHOOK_URL, {
-        method: 'POST', redirect: 'follow', headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify({ secret: env.MAIL_WEBHOOK_SECRET || '', to: m.to_addr, subject: m.subject, body: m.body }),
+        method: 'POST', redirect: 'follow', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(payload),
       });
       const out = await res.json().catch(() => ({}));
       if (!res.ok || out.ok !== true) throw new Error(out.error || `HTTP ${res.status}`);
       await run(env, "UPDATE mail_outbox SET status='sent', sent_at=?, attempts=attempts+1, last_error=NULL WHERE id=?", nowIso(), m.id);
+      if (m.attach_id) await run(env, 'DELETE FROM attachment_chunks WHERE request_id=?', m.attach_id);   // the file now lives in the e-mail
       sent++;
     } catch (e) {
       const attempts = m.attempts + 1;
@@ -351,6 +370,61 @@ async function route(req, env, ctx) {
     if (ex.length) lines.push('', 'DETAILS', ...ex.map(([k, v]) => `  ${k}: ${v}`));
     await notifyAdmin(env, `${b.kind[0].toUpperCase()}${b.kind.slice(1)} from ${name}`, lines.join('\n'));
     return json({ ok: true });
+  }
+
+  // ---- customised project requests (details + optional file, e-mailed to the team)
+  if (m === 'POST' && path === `${API}/custom-requests`) {
+    await rateLimit(env, `custom:${ip}`, Number(env.CUSTOM_RATE_LIMIT) || 10, 3600);
+    if (Number(req.headers.get('content-length') || 0) > 3_600_000) throw new HttpError(413, 'The upload is too large. Attach a file up to 2 MB or share a link instead.');
+    const b = await body(req);
+    if (b.website) return json({ ok: true, reference: 'CP-0000' });             // honeypot
+    const name = str(b.name, 'name', 2, 80), mail = email(b.email), ph = phone(b.phone);
+    const title = str(b.title, 'project title', 3, 150), desc = str(b.description, 'description', 10, 5000);
+    if (b.consent !== true) throw new HttpError(422, 'consent: please tick the box to allow us to contact you');
+    const opt = (v, max) => (v ? String(v).trim().slice(0, max) : null);
+    const link = opt(b.link, 300);
+    if (link && !/^https?:\/\//i.test(link)) throw new HttpError(422, 'link: must start with http:// or https://');
+    let att = null;
+    if (b.file) {
+      const f = b.file;
+      const fname = String(f.name || '').replace(/[^A-Za-z0-9._ -]/g, '_').slice(0, 100);
+      const ext = (fname.split('.').pop() || '').toLowerCase();
+      const TYPES = {
+        pdf: 'application/pdf', txt: 'text/plain', doc: 'application/msword', docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        ppt: 'application/vnd.ms-powerpoint', pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+      };
+      if (!TYPES[ext]) throw new HttpError(422, 'file: only PDF, TXT, DOC, DOCX, PPT or PPTX files are accepted');
+      const data = String(f.data || '').replace(/\s/g, '');
+      if (!/^[A-Za-z0-9+/]+={0,2}$/.test(data.slice(0, 2000)) || data.length < 4) throw new HttpError(422, 'file: could not read the upload');
+      const size = Math.floor((data.length * 3) / 4) - (data.endsWith('==') ? 2 : data.endsWith('=') ? 1 : 0);
+      if (size > 2 * 1024 * 1024) throw new HttpError(413, 'file: the limit is 2 MB. Share a link to larger files instead.');
+      const head = atob(data.slice(0, 16));
+      const hex8 = [...head].map((c) => c.charCodeAt(0).toString(16).padStart(2, '0')).join('');
+      const ok = ext === 'txt' || (ext === 'pdf' && head.startsWith('%PDF')) || ((ext === 'docx' || ext === 'pptx') && hex8.startsWith('504b')) || ((ext === 'doc' || ext === 'ppt') && hex8.startsWith('d0cf11e0'));
+      if (!ok) throw new HttpError(422, 'file: the content does not match the file type');
+      att = { name: fname, mime: TYPES[ext], data, size };
+    }
+    const me = await optionalUser(env, req);
+    const reference = `CP-${Date.now().toString(36).toUpperCase()}${hex(crypto.getRandomValues(new Uint8Array(2))).toUpperCase()}`;
+    const ins = await run(env, `INSERT INTO custom_requests (reference,user_id,name,email,phone,organisation,project_type,title,description,platform,budget,deadline,link,file_name,file_mime,file_size,ip,created_at)
+      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`, reference, me ? me.id : null, name, mail.toLowerCase(), ph, opt(b.organisation, 120), opt(b.projectType, 60), title, desc,
+      opt(b.platform, 60), opt(b.budget, 60), opt(b.deadline, 20), link, att ? att.name : null, att ? att.mime : null, att ? att.size : null, ip, nowIso());
+    const reqId = ins.meta.last_row_id;
+    if (att) {
+      for (let i = 0, idx = 0; i < att.data.length; i += 700000, idx++) await run(env, 'INSERT INTO attachment_chunks (request_id, idx, data) VALUES (?,?,?)', reqId, idx, att.data.slice(i, i + 700000));
+    }
+    const lines = [`CUSTOMISED PROJECT REQUEST ${reference}`, '='.repeat(40), '',
+      `Name         : ${name}`, `E-mail       : ${mail}`, `Phone        : ${ph}`, `Organisation : ${opt(b.organisation, 120) || '-'}`,
+      `Account      : ${me ? `#${me.id} ${me.email}` : 'not signed in'}`, '',
+      `Project      : ${title}`, `Type         : ${opt(b.projectType, 60) || '-'}`, `Platform     : ${opt(b.platform, 60) || '-'}`,
+      `Budget       : ${opt(b.budget, 60) || '-'}`, `Needed by    : ${opt(b.deadline, 20) || '-'}`, `Link         : ${link || '-'}`,
+      `File         : ${att ? `${att.name} (${Math.round(att.size / 1024)} KB, attached)` : 'none'}`, '', 'DESCRIPTION', desc, '', `Received ${nowIso()} from ${ip}`];
+    const team = env.CUSTOM_REQUEST_TO || env.ADMIN_NOTIFY_EMAIL || 'admin@jrlearners.com';
+    await queueMail(env, team, `[JR Learners] Custom project request ${reference}: ${title}`.slice(0, 200), lines.join('\n'), att ? reqId : null);
+    await queueMail(env, mail, `We received your project request ${reference}`, `Hi ${name},\n\nThank you for telling us about "${title}". Your reference is ${reference}. Our team will read it and reply to ${mail} (or call ${ph}) soon.\n\nQuestions? help.jrlearners@gmail.com\n`);
+    await audit(env, me ? me.id : null, 'custom_request', ip, reference);
+    ctx.waitUntil(flushMail(env));
+    return json({ ok: true, reference }, 201);
   }
 
   // ---- accounts
