@@ -118,7 +118,7 @@ export default function Home() {
                   <p className="text-xs text-slate-400">₹{allKit.originalPrice - allKit.price} less than buying the 8 kits separately.</p>
                 </div>
                 <div className="space-y-3 md:text-right">
-                  <div className="text-3xl font-heading font-extrabold">₹{allKit.price}</div>
+                  <div className="text-3xl font-heading font-extrabold">₹{allKit.price}<span className="text-xs font-normal text-slate-400 ml-2">+ 18% GST</span></div>
                   <div className="text-xs line-through text-slate-400">₹{allKit.originalPrice} as 8 separate kits</div>
                   <Link href="/products/prod-9" className="inline-flex px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-bold items-center gap-2">See the kit <ArrowRight className="w-4 h-4" /></Link>
                 </div>
@@ -177,6 +177,7 @@ export default function Home() {
 
                   <div className="p-5 pt-0 flex items-center justify-between border-t border-slate-800/80 mt-4">
                     <span className="text-lg font-bold text-white font-heading">₹{product.price}</span>
+                    <span className="text-[10px] font-normal text-slate-500 ml-1.5">+ 18% GST</span>
                     <button
                       onClick={() => addToCart(product)}
                       className="px-3.5 py-2 rounded-xl bg-[#FBBF24] hover:bg-[#F59E0B] text-[#000B1C] text-xs font-bold flex items-center gap-1.5 transition-all shadow-md shadow-yellow-500/10"
@@ -239,6 +240,7 @@ export default function Home() {
 
                   <div className="p-5 pt-0 flex items-center justify-between border-t border-slate-200 mt-4">
                     <span className="text-lg font-bold text-[#000B1C] font-heading">₹{product.price}</span>
+                    <span className="text-[10px] font-normal text-slate-500 ml-1.5">+ 18% GST</span>
                     <button
                       onClick={() => addToCart(product)}
                       className="px-3.5 py-2 rounded-xl bg-[#000B1C] hover:bg-slate-800 text-white text-xs font-semibold flex items-center gap-1.5 transition-all shadow-md"

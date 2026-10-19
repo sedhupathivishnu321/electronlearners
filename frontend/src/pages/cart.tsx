@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { computeTotals, SHIPPING_PUDUCHERRY, SHIPPING_STANDARD } from '../utils/pricing';
 import Link from 'next/link';
 import { useApp } from '../context/AppContext';
 import { ShoppingCart, Trash2, Plus, Minus, ArrowRight, Tag, Gift, Award } from 'lucide-react';
@@ -28,10 +29,11 @@ export default function CartPage() {
     }
   };
 
-  const shipping = subtotal > 0 ? 50 : 0;
-  // Free shipping over ₹1500
-  const finalShipping = subtotal > 1500 ? 0 : shipping;
-  const total = Math.max(0, subtotal + finalShipping - discountAmount);
+  // GST 18 % is added on the kits after any coupon; shipping is Rs 100 (Rs 50 inside Puducherry), fixed at checkout from the delivery state
+  const t = computeTotals(subtotal, discountAmount, '');
+  const gst = t.tax;
+  const finalShipping = t.shipping;
+  const total = t.total;
 
   // Recommendations: frequently bought together
   const cartProductIds = cart.map(item => item.product.id);
@@ -168,18 +170,16 @@ export default function CartPage() {
                   </div>
                 )}
                 <div className="flex justify-between">
-                  <span>Shipping Cost</span>
-                  {finalShipping === 0 ? (
-                    <span className="text-emerald-450 font-bold uppercase text-[10px]">FREE</span>
-                  ) : (
-                    <span>₹{finalShipping}</span>
-                  )}
+                  <span>GST (18%)</span>
+                  <span>₹{gst}</span>
                 </div>
-                {subtotal <= 1500 && (
-                  <div className="text-[10px] text-slate-500 italic text-right">
-                    Add ₹{1501 - subtotal} more to get FREE shipping!
-                  </div>
-                )}
+                <div className="flex justify-between">
+                  <span>Shipping</span>
+                  <span>₹{finalShipping}</span>
+                </div>
+                <div className="text-[10px] text-slate-500 italic text-right">
+                  Shipping is ₹{SHIPPING_STANDARD}; ₹{SHIPPING_PUDUCHERRY} when delivering inside Puducherry (set at checkout).
+                </div>
                 <div className="flex justify-between text-sm font-bold text-white pt-3 border-t border-slate-850 font-heading">
                   <span>Total Payable</span>
                   <span className="text-blue-400">₹{total}</span>

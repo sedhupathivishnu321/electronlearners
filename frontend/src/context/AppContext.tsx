@@ -30,6 +30,7 @@ export interface Order {
   id: string;                                   // order reference (PayU transaction id)
   items: OrderItem[];
   subtotal: number;
+  tax: number;
   shipping: number;
   discount: number;
   total: number;
@@ -67,7 +68,7 @@ export function mapServerOrder(o: any): Order {
   return {
     id: o.txnid,
     items: (o.items || []).map((i: any) => ({ productId: i.id, productName: i.name, price: i.price, quantity: i.quantity })),
-    subtotal: o.subtotal, shipping: o.shipping, discount: o.discount, total: o.amount,
+    subtotal: o.subtotal, tax: o.tax || 0, shipping: o.shipping, discount: o.discount, total: o.amount,
     customerEmail: o.customer?.email || o.user_email || '',
     shippingAddress: o.customer,
     paymentMethod: method,

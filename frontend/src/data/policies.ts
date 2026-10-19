@@ -25,7 +25,7 @@ export const POLICIES: Policy[] = [
         'We may suspend or close an account that is used for fraud, abuse or in breach of these terms.'] },
       { id: 'orders', title: '4. Products, prices and orders', body: [
         'We sell the eight JR Learners Arduino kits (Level 1 to Level 8) and the All-in-One kit. Each kit lists its parts on its product page. Photographs and the simulator are illustrations; minor differences in the colour, make or model of equivalent components can occur.',
-        'All prices are in Indian rupees (INR). The amount you pay is shown at checkout before you confirm: kit price, any coupon discount and shipping. Where GST applies it appears on the invoice. We recalculate every order on our servers, so the price shown at payment is the price that applies.',
+        'Prices on the site are in Indian rupees (INR) and do not include GST. At checkout 18% GST is added on the kit price (after any coupon discount), then shipping. The amount you pay is shown before you confirm: kit price, coupon discount, GST, shipping and the total. We recalculate every order on our servers, so the total shown at payment is the amount that applies.',
         'An order is accepted when we confirm it by e-mail. We may cancel an order (with a full refund) if an item is unavailable, a price was shown wrongly, or we suspect fraud.',
         'Coupons are single-use offers with their own conditions (minimum spend, maximum discount, expiry). They cannot be combined unless stated and have no cash value.'] },
       { id: 'payment', title: '5. Payment', body: [
@@ -122,7 +122,7 @@ export const POLICIES: Policy[] = [
         'If your kit arrives damaged, with a missing or faulty part, or with the wrong items, tell us within 7 days of delivery at ' + SUPPORT_EMAIL + ' (or WhatsApp) with your order reference and clear photos of the parcel and the item.',
         'We will send the missing or replacement part, or replace the kit, or refund the affected amount, whichever you prefer where stock allows. We pay the return shipping when we ask for the item back. Keep the original packaging until the matter is settled.'] },
       { id: 'return', title: '3. Returning an unopened kit', body: [
-        'You may return a kit within 7 days of delivery if it is unopened, unused, complete and in its original packaging. You pay the return shipping unless the return is our mistake. We refund the price of the kit once we receive and check it. Shipping charges paid at checkout are refunded only if the return is due to our error.'] },
+        'You may return a kit within 7 days of delivery if it is unopened, unused, complete and in its original packaging. You pay the return shipping unless the return is our mistake. We refund the price of the kit together with the GST charged on it once we receive and check it. Shipping charges paid at checkout are refunded only if the return is due to our error.'] },
       { id: 'nonreturn', title: '4. What cannot be returned or refunded', body: [
         { list: [
           'Kits or parts that were opened, assembled, soldered or used, except for defects reported under section 2.',
@@ -152,9 +152,11 @@ export const POLICIES: Policy[] = [
         'We deliver to addresses across India that our courier partners serve. We do not ship outside India at the moment. Cash on Delivery is offered where the courier supports it for your pincode; if it is not available the checkout will show online payment only.'] },
       { id: 'cost', title: '2. Shipping charges', body: [
         { list: [
-          'Orders above Rs 1,500 ship free.',
-          'Orders of Rs 1,500 or less pay Rs 50 shipping.',
-          'The shipping amount is shown at checkout before you pay.'] }] },
+          'Standard shipping is Rs 100 per order for delivery anywhere in India outside Puducherry.',
+          'Delivery to an address inside Puducherry (Pondicherry) costs Rs 50 per order.',
+          'The shipping fee follows the state you select in the delivery address, and is shown at checkout before you pay.',
+          'Shipping is charged once per order, however many kits it contains. There is no free-shipping threshold.',
+          'GST at 18% is charged on the kit price and shown separately at checkout.'] }] },
       { id: 'time', title: '3. Processing and delivery time', body: [
         { list: [
           'Processing: we dispatch most orders within 1 to 2 working days of confirmation. Kits are packed and checked against the parts list first.',

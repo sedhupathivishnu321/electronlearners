@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS orders (
   method TEXT NOT NULL CHECK (method IN ('payu','cod')),
   status TEXT NOT NULL CHECK (status IN ('pending','paid','failed','refunded','placed')),
   fulfilment TEXT NOT NULL DEFAULT 'Ordered' CHECK (fulfilment IN ('Ordered','Packed','Shipped','Delivered')),
-  amount REAL NOT NULL, subtotal REAL NOT NULL, shipping REAL NOT NULL, discount REAL NOT NULL,
+  amount REAL NOT NULL, subtotal REAL NOT NULL, tax REAL NOT NULL DEFAULT 0, shipping REAL NOT NULL, discount REAL NOT NULL,
   coupon TEXT, items TEXT NOT NULL, customer TEXT NOT NULL,
   payu_id TEXT, payment_mode TEXT, bank_ref TEXT, error TEXT,
   created_at TEXT NOT NULL, updated_at TEXT NOT NULL

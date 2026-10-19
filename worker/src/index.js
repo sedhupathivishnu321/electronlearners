@@ -94,6 +94,14 @@ async function rateLimit(env, key, limit, windowS) {
   await run(env, 'INSERT INTO rate_hits (key, ts) VALUES (?,?)', key, now);
 }
 
+let schemaChecked = false;
+async function ensureSchema(env) {
+  if (schemaChecked) return;
+  const col = await one(env, "SELECT COUNT(*) n FROM pragma_table_info('orders') WHERE name='tax'");
+  if (col && col.n === 0) await run(env, 'ALTER TABLE orders ADD COLUMN tax REAL NOT NULL DEFAULT 0');
+  schemaChecked = true;
+}
+
 // the administrator account follows ADMIN_EMAIL / ADMIN_PASSWORD (checked cheaply with a marker, so no hashing per request)
 async function ensureAdmin(env) {
   if (!env.ADMIN_EMAIL || !env.ADMIN_PASSWORD || passwordProblem(env.ADMIN_PASSWORD)) return;
@@ -167,7 +175,14 @@ const COUPONS = {
   BULK15: { percent: 15, min_spend: 5000, max_discount: 2000 },
   FESTIVE25: { percent: 25, min_spend: 1500, max_discount: 600 },
 };
-function priceCart(items, couponIn) {
+const GST_RATE = 0.18;                                   // added on the kit price after any coupon discount
+const SHIPPING_PUDUCHERRY = 50;                         // delivery inside Puducherry (Pondicherry)
+const SHIPPING_STANDARD = 100;                          // everywhere else in India
+function isPuducherry(state) {
+  const t = String(state || '').toLowerCase().replace(/[^a-z]/g, '');
+  return t.includes('puducherry') || t.includes('pondicherry') || t === 'pondy' || t === 'py';
+}
+function priceCart(items, couponIn, state) {
   if (!Array.isArray(items) || items.length < 1 || items.length > 20) throw new HttpError(422, 'items: 1-20 lines required');
   const lines = [];
   let subtotal = 0;
@@ -187,8 +202,10 @@ function priceCart(items, couponIn) {
     if (subtotal < c.min_spend) throw new HttpError(400, `Coupon ${code} needs a minimum spend of Rs ${c.min_spend}`);
     discount = Math.min(Math.round((subtotal * c.percent) / 100), c.max_discount);
   }
-  const shipping = subtotal > 1500 ? 0 : 50;
-  return { items: lines, subtotal, discount, shipping, coupon: code, total: Math.max(0, subtotal + shipping - discount) };
+  const taxable = Math.max(0, subtotal - discount);
+  const tax = Math.round(taxable * GST_RATE);
+  const shipping = isPuducherry(state) ? SHIPPING_PUDUCHERRY : SHIPPING_STANDARD;
+  return { items: lines, subtotal, discount, tax, shipping, coupon: code, total: taxable + tax + shipping };
 }
 
 // ------------------------------------------------------------------------------------------------ PayU
@@ -211,7 +228,7 @@ async function payuApi(env, command, var1, extra = {}) {
 // ------------------------------------------------------------------------------------------------ orders
 function orderView(o) {
   return {
-    txnid: o.txnid, method: o.method, status: o.status, fulfilment: o.fulfilment, amount: o.amount, subtotal: o.subtotal, shipping: o.shipping, discount: o.discount,
+    txnid: o.txnid, method: o.method, status: o.status, fulfilment: o.fulfilment, amount: o.amount, subtotal: o.subtotal, tax: o.tax || 0, shipping: o.shipping, discount: o.discount,
     coupon: o.coupon, items: JSON.parse(o.items), customer: JSON.parse(o.customer), payment_mode: o.payment_mode, created_at: o.created_at,
   };
 }
@@ -220,8 +237,8 @@ const newTxn = () => `JRL${Math.floor(Date.now() / 1000)}${hex(crypto.getRandomV
 
 async function createOrder(env, userId, method, status, cart, customer) {
   const txnid = newTxn();
-  await run(env, 'INSERT INTO orders (txnid,user_id,method,status,amount,subtotal,shipping,discount,coupon,items,customer,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)',
-    txnid, userId, method, status, cart.total, cart.subtotal, cart.shipping, cart.discount, cart.coupon, JSON.stringify(cart.items), JSON.stringify(customer), nowIso(), nowIso());
+  await run(env, 'INSERT INTO orders (txnid,user_id,method,status,amount,subtotal,tax,shipping,discount,coupon,items,customer,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+    txnid, userId, method, status, cart.total, cart.subtotal, cart.tax, cart.shipping, cart.discount, cart.coupon, JSON.stringify(cart.items), JSON.stringify(customer), nowIso(), nowIso());
   return txnid;
 }
 async function updatePayment(env, txnid, status, payuId = '', mode = '', bankRef = '', error = '') {
@@ -238,7 +255,7 @@ function orderMail(o, u, headline) {
   if (c.gstin) lines.push(`  GSTIN         : ${c.gstin}`);
   lines.push('', 'SHIP TO', `  ${c.address}`, `  ${c.city}, ${c.state} ${c.zip}`, '', 'ITEMS');
   for (const it of items) lines.push(`  ${it.quantity} x ${it.name}  @ Rs ${it.price}  = Rs ${it.quantity * it.price}`);
-  lines.push('', `  Subtotal : Rs ${o.subtotal}`, `  Discount : Rs ${o.discount}${o.coupon ? '  (' + o.coupon + ')' : ''}`, `  Shipping : Rs ${o.shipping}`, `  TOTAL    : Rs ${o.amount}`);
+  lines.push('', `  Subtotal : Rs ${o.subtotal}`, `  Discount : Rs ${o.discount}${o.coupon ? '  (' + o.coupon + ')' : ''}`, `  GST 18%  : Rs ${o.tax || 0}`, `  Shipping : Rs ${o.shipping}${isPuducherry(c.state) ? '  (Puducherry)' : ''}`, `  TOTAL    : Rs ${o.amount}`);
   return lines.join('\n');
 }
 async function announceOrder(env, txnid, what) {
@@ -311,6 +328,7 @@ async function route(req, env, ctx) {
   const origin = url.origin;
 
   if (path === '/' || path === '/health') return json({ status: 'ok', service: 'JR Learners API' });
+  await ensureSchema(env);
   await ensureAdmin(env);
 
   if (m === 'GET' && path === `${API}/products`) return json({ count: KITS.length, products: KITS });
@@ -415,8 +433,9 @@ async function route(req, env, ctx) {
     const u = await currentUser(env, req);
     await rateLimit(env, `order:${u.id}`, 10, 600);
     const b = await body(req);
-    const cart = priceCart(b.items, b.coupon);
-    const txnid = await createOrder(env, u.id, 'cod', 'placed', cart, address(b.customer));
+    const cust = address(b.customer);
+    const cart = priceCart(b.items, b.coupon, cust.state);
+    const txnid = await createOrder(env, u.id, 'cod', 'placed', cart, cust);
     await audit(env, u.id, 'order_cod', ip, txnid);
     await announceOrder(env, txnid, 'New COD order');
     ctx.waitUntil(flushMail(env));
@@ -428,8 +447,8 @@ async function route(req, env, ctx) {
     if (!payuReady(env)) throw new HttpError(503, 'Online payment is not configured on the server');
     await rateLimit(env, `order:${u.id}`, 10, 600);
     const b = await body(req);
-    const cart = priceCart(b.items, b.coupon);
     const cust = address(b.customer);
+    const cart = priceCart(b.items, b.coupon, cust.state);
     const txnid = await createOrder(env, u.id, 'payu', 'pending', cart, cust);
     const clean = (s) => s.replace(/[^A-Za-z0-9 ]/g, '');
     const info = cart.items.map((l) => `${clean(l.name)} x${l.quantity}`).join(', ').slice(0, 100);
@@ -441,7 +460,7 @@ async function route(req, env, ctx) {
     };
     fields.hash = await payuRequestHash(env, fields);
     await audit(env, u.id, 'payu_initiated', ip, txnid);
-    return json({ txnid, action: payuPayUrl(env), fields, totals: { subtotal: cart.subtotal, discount: cart.discount, shipping: cart.shipping, total: cart.total } });
+    return json({ txnid, action: payuPayUrl(env), fields, totals: { subtotal: cart.subtotal, discount: cart.discount, tax: cart.tax, shipping: cart.shipping, total: cart.total } });
   }
 
   if (m === 'POST' && path === `${API}/payments/payu/callback`) {

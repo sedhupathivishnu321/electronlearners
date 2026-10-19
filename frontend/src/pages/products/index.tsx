@@ -185,7 +185,7 @@ export default function ProductsCatalog() {
                 <tr>
                   <td className="p-3 font-bold text-white">Price</td>
                   {comparisonProducts.map((p, idx) => (
-                    <td key={idx} className="p-3 text-center font-extrabold text-blue-450 text-sm">₹{p.price}</td>
+                    <td key={idx} className="p-3 text-center font-extrabold text-blue-450 text-sm">₹{p.price}<span className="block text-[10px] font-normal text-slate-500">+ 18% GST</span></td>
                   ))}
                 </tr>
                 <tr className="bg-slate-900/10">
@@ -363,6 +363,7 @@ export default function ProductsCatalog() {
                       <div className="flex items-center justify-between mt-2">
                         <div>
                           <span className="text-base font-extrabold text-white font-heading">₹{product.price}</span>
+                          <span className="text-[10px] font-normal text-slate-500 ml-1.5">+ 18% GST</span>
                           {product.originalPrice && product.originalPrice > product.price && (
                             <span className="text-xs text-slate-500 line-through ml-2">₹{product.originalPrice}</span>
                           )}

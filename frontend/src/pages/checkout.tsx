@@ -3,10 +3,9 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useApp } from '../context/AppContext';
 import { api, paymentsConfigured } from '../utils/api';
+import { computeTotals, INDIAN_STATES, SHIPPING_PUDUCHERRY, SHIPPING_STANDARD } from '../utils/pricing';
 import { ShieldCheck, CreditCard, Truck, Info, Loader2, AlertTriangle } from 'lucide-react';
 
-const FREE_SHIPPING_OVER = 1500;
-const SHIPPING_FEE = 50;
 
 type Method = 'payu' | 'cod';
 
@@ -15,6 +14,8 @@ export default function CheckoutPage() {
   const { cart, user, authReady, validateCoupon, clearCart, refreshOrders } = useApp();
 
   const [coupon, setCoupon] = useState('');
+  const [state, setState] = useState('');
+  const stateName = state;
   useEffect(() => {
     if (router.isReady) setCoupon(String(router.query.coupon || '').toUpperCase());
   }, [router.isReady, router.query]);
@@ -27,9 +28,8 @@ export default function CheckoutPage() {
       const res = validateCoupon(coupon, subtotal);
       if (res.success && res.discountAmount !== undefined) discount = res.discountAmount;
     }
-    const shipping = subtotal === 0 || subtotal > FREE_SHIPPING_OVER ? 0 : SHIPPING_FEE;
-    return { subtotal, discount, shipping, total: Math.max(0, subtotal + shipping - discount) };
-  }, [cart, coupon, validateCoupon]);
+    return computeTotals(subtotal, discount, stateName);
+  }, [cart, coupon, validateCoupon, stateName]);
 
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -39,7 +39,6 @@ export default function CheckoutPage() {
   }, [user]);
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
-  const [state, setState] = useState('');
   const [zip, setZip] = useState('');
   const [gstin, setGstin] = useState('');
   const [method, setMethod] = useState<Method>(paymentsConfigured ? 'payu' : 'cod');
@@ -170,8 +169,11 @@ export default function CheckoutPage() {
                 <input id="co-city" className={field} type="text" required autoComplete="address-level2" placeholder="e.g. Chennai" value={city} onChange={(e) => setCity(e.target.value)} />
               </div>
               <div>
-                <label className={label} htmlFor="co-state">State *</label>
-                <input id="co-state" className={field} type="text" required autoComplete="address-level1" placeholder="e.g. Tamil Nadu" value={state} onChange={(e) => setState(e.target.value)} />
+                <label className={label} htmlFor="co-state">State / UT *</label>
+                <select id="co-state" className={field} required autoComplete="address-level1" value={state} onChange={(e) => setState(e.target.value)}>
+                  <option value="">Select state</option>
+                  {INDIAN_STATES.map((st) => <option key={st} value={st}>{st}</option>)}
+                </select>
               </div>
               <div>
                 <label className={label} htmlFor="co-zip">Pincode *</label>
@@ -225,10 +227,12 @@ export default function CheckoutPage() {
               {totals.discount > 0 && (
                 <div className="flex justify-between text-emerald-500"><span>Discount ({coupon})</span><span>-₹{totals.discount}</span></div>
               )}
+              <div className="flex justify-between"><span>GST (18%)</span><span>₹{totals.tax}</span></div>
               <div className="flex justify-between">
-                <span>Shipping</span>
-                {totals.shipping === 0 ? <span className="text-emerald-500 font-bold uppercase text-[10px]">Free</span> : <span>₹{totals.shipping}</span>}
+                <span>Shipping {!state ? '(select your state)' : totals.shipping === SHIPPING_PUDUCHERRY ? '(within Puducherry)' : ''}</span>
+                <span>₹{totals.shipping}</span>
               </div>
+              <p className="text-[10px] text-slate-500">Shipping is ₹{SHIPPING_STANDARD} across India and ₹{SHIPPING_PUDUCHERRY} for delivery inside Puducherry.</p>
               <div className="flex justify-between text-sm font-bold pt-3 border-t border-slate-300 font-heading">
                 <span>Total Payable</span>
                 <span className="text-blue-500">₹{totals.total}</span>

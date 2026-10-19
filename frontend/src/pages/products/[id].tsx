@@ -108,6 +108,7 @@ export default function ProductDetail() {
           <div className="space-y-4">
             <div className="flex items-baseline gap-2">
               <span className="text-3xl font-extrabold text-white font-heading">₹{product.price}</span>
+              <span className="text-[10px] font-normal text-slate-500 ml-1.5">+ 18% GST</span>
               {product.originalPrice && product.originalPrice > product.price && (
                 <span className="text-sm font-normal text-slate-500 line-through">₹{product.originalPrice}</span>
               )}
