@@ -202,7 +202,7 @@ export default function ResourcesHub() {
 
                     {article.videoUrl && (
                       <div className="p-4 rounded-xl bg-slate-900 border border-slate-850 flex items-center justify-between text-xs max-w-2xl">
-                        <span className="font-semibold text-slate-200">YouTube Walkthrough by @LetsGetEngagedin</span>
+                        <span className="font-semibold text-slate-200">YouTube Walkthrough by @jrlearners2</span>
                         <a href={article.videoUrl} target="_blank" rel="noopener noreferrer" className="px-3 py-1.5 rounded-lg bg-red-650 hover:bg-red-550 text-white font-semibold">
                           Watch Video
                         </a>

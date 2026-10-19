@@ -18,7 +18,7 @@ export interface YouTubeTutorial {
   relatedProductId?: string;
 }
 
-export const YOUTUBE_CHANNEL_URL = "https://www.youtube.com/@LetsGetEngagedin";
+export const YOUTUBE_CHANNEL_URL = "https://www.youtube.com/@jrlearners2";
 
 export const YOUTUBE_TUTORIALS: YouTubeTutorial[] = [
   {
@@ -27,13 +27,13 @@ export const YOUTUBE_TUTORIALS: YouTubeTutorial[] = [
     slug: "arduino-complete-beginner-tutorial",
     youtubeId: "nL34zDTPkcs",
     youtubeUrl: "https://www.youtube.com/watch?v=nL34zDTPkcs",
-    channelName: "LetsGetEngagedin",
+    channelName: "JR Learners",
     category: "Arduino",
     duration: "42:15",
     views: "24.5K",
     publishedDate: "2026-03-15",
     thumbnail: "https://images.unsplash.com/photo-1553406830-ef2513450d76?w=600&auto=format&fit=crop&q=80",
-    description: "Welcome to the ultimate Arduino course by LetsGetEngagedin! In this step-by-step tutorial, we cover breadboard wiring, C++ functions, digital reading, analog PWM fading, and serial communication.",
+    description: "Welcome to the ultimate Arduino course by JR Learners! In this step-by-step tutorial, we cover breadboard wiring, C++ functions, digital reading, analog PWM fading, and serial communication.",
     transcriptSummary: [
       "00:00 - Introduction to Arduino UNO hardware anatomy",
       "05:20 - Installing Arduino IDE 2.3 and USB FTDI drivers",
@@ -50,14 +50,14 @@ export const YOUTUBE_TUTORIALS: YouTubeTutorial[] = [
       "USB Cable"
     ],
     codeDownloadName: "Arduino_Beginner_Master_Code.ino",
-    codeSnippet: `// JR Learners YouTube Tutorial Sketch - @LetsGetEngagedin
+    codeSnippet: `// JR Learners YouTube Tutorial Sketch - @jrlearners2
 const int LED_PIN = 9; // PWM pin
 const int POT_PIN = A0;
 
 void setup() {
   pinMode(LED_PIN, OUTPUT);
   Serial.begin(9600);
-  Serial.println("LetsGetEngagedin - Arduino Started!");
+  Serial.println("JR Learners - Arduino Started!");
 }
 
 void loop() {
@@ -80,7 +80,7 @@ void loop() {
     slug: "esp32-web-server-home-automation",
     youtubeId: "3q-v_q3rXqY",
     youtubeUrl: "https://www.youtube.com/watch?v=3q-v_q3rXqY",
-    channelName: "LetsGetEngagedin",
+    channelName: "JR Learners",
     category: "ESP32",
     duration: "28:40",
     views: "18.2K",
@@ -149,7 +149,7 @@ void loop() {
     slug: "build-line-follower-robot-pid-tuning",
     youtubeId: "XWpA6zX8x-8",
     youtubeUrl: "https://www.youtube.com/watch?v=XWpA6zX8x-8",
-    channelName: "LetsGetEngagedin",
+    channelName: "JR Learners",
     category: "Robotics",
     duration: "35:10",
     views: "31.9K",
@@ -170,8 +170,8 @@ void loop() {
       "Arduino UNO Board",
       "18650 Li-Ion Batteries"
     ],
-    codeDownloadName: "PID_LineFollower_LetsGetEngagedin.ino",
-    codeSnippet: `// PID Line Follower Code - JR Learners / @LetsGetEngagedin
+    codeDownloadName: "PID_LineFollower_JR Learners.ino",
+    codeSnippet: `// PID Line Follower Code - JR Learners / @jrlearners2
 float Kp = 25.0, Ki = 0.0, Kd = 15.0;
 float error = 0, previousError = 0, integral = 0, derivative = 0;
 int baseSpeed = 150;
@@ -198,7 +198,7 @@ void loop() {
     slug: "pcb-design-beginners-kicad-workflow",
     youtubeId: "vaCVh2PtWE4",
     youtubeUrl: "https://www.youtube.com/watch?v=vaCVh2PtWE4",
-    channelName: "LetsGetEngagedin",
+    channelName: "JR Learners",
     category: "PCB Design",
     duration: "50:00",
     views: "15.7K",
@@ -231,7 +231,7 @@ void loop() {
     slug: "ai-vision-esp32-cam-opencv",
     youtubeId: "JmC-q39k8r8",
     youtubeUrl: "https://www.youtube.com/watch?v=JmC-q39k8r8",
-    channelName: "LetsGetEngagedin",
+    channelName: "JR Learners",
     category: "AI & ML",
     duration: "31:25",
     views: "29.4K",
@@ -250,7 +250,7 @@ void loop() {
       "Python 3.11 with OpenCV & Requests"
     ],
     codeDownloadName: "esp32_opencv_vision.py",
-    codeSnippet: `# Python OpenCV ESP32-CAM Stream Reader - @LetsGetEngagedin
+    codeSnippet: `# Python OpenCV ESP32-CAM Stream Reader - @jrlearners2
 import cv2
 import urllib.request
 import numpy as np

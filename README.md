@@ -70,7 +70,7 @@ Cloudflare D1 (SQLite): `users` (password hash, lock-out counters, role, profile
 
 ## Contact
 
-Help and support: help.jrlearners@gmail.com. YouTube: [@LetsGetEngagedin](https://www.youtube.com/@LetsGetEngagedin).
+Help and support: help.jrlearners@gmail.com. YouTube: [@jrlearners2](https://www.youtube.com/@jrlearners2) · [Facebook](https://www.facebook.com/profile.php?id=61595649146123) · [X](https://x.com/JRLearners) · [LinkedIn](https://www.linkedin.com/in/jr-learners-5845b4437) · WhatsApp +91 93429 45688 · learnersjr@gmail.com.
 
 ## Front end
 
@@ -89,4 +89,4 @@ Deployed to GitHub Pages by `.github/workflows/deploy.yml` on every push to `mai
 
 ---
 
-YouTube: [@LetsGetEngagedin](https://www.youtube.com/@LetsGetEngagedin)
+YouTube: [@jrlearners2](https://www.youtube.com/@jrlearners2) · [Facebook](https://www.facebook.com/profile.php?id=61595649146123) · [X](https://x.com/JRLearners) · [LinkedIn](https://www.linkedin.com/in/jr-learners-5845b4437) · WhatsApp +91 93429 45688 · learnersjr@gmail.com

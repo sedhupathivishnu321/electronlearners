@@ -27,7 +27,7 @@ export default function YouTubeTutorialsPage() {
             <Youtube className="w-4 h-4" /> YouTube Channel Hub
           </div>
           <h1 className="text-3xl sm:text-4xl font-heading font-extrabold text-white">
-            Official Tutorials by <span className="text-red-500">@LetsGetEngagedin</span>
+            Official Tutorials by <span className="text-red-500">@jrlearners2</span>
           </h1>
           <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
             Structured video walkthroughs for electronics, Arduino C++, ESP32 IoT, KiCad PCB design, and autonomous robotics. Download verified source code files (.ino, .py, .c) for every lesson!

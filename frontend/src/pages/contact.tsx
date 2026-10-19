@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Mail, MapPin, Clock, Youtube, Loader2, CheckCircle, AlertTriangle } from 'lucide-react';
-import { ADDRESS, HOURS, SUPPORT_EMAIL, YOUTUBE_HANDLE, YOUTUBE_URL } from '../data/siteConfig';
+import { Mail, MapPin, Clock, Phone, LifeBuoy, MessageCircle, Loader2, CheckCircle, AlertTriangle } from 'lucide-react';
+import { COMPANY, CONTACT_EMAIL, PHONE_URL, SUPPORT_EMAIL, WHATSAPP_NUMBER_DISPLAY, WHATSAPP_URL } from '../data/siteConfig';
+import { SocialButtons } from '../components/ui/SocialButtons';
 import { api, paymentsConfigured } from '../utils/api';
 
 export default function ContactPage() {
@@ -28,6 +29,7 @@ export default function ContactPage() {
 
   const field = 'w-full rounded-xl px-3 py-2';
   const label = 'block text-slate-500 mb-1 font-semibold';
+  const link = 'text-blue-500 hover:underline font-semibold';
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
@@ -38,13 +40,19 @@ export default function ContactPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="p-8 rounded-3xl glass-card space-y-5">
-          <h2 className="text-xl font-bold font-heading">Contact details</h2>
+          <h2 className="text-xl font-bold font-heading">Contact &amp; support</h2>
           <ul className="space-y-4 text-sm">
-            <li className="flex items-start gap-3"><Mail className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" /><span><span className="block text-[10px] uppercase font-bold text-slate-500">Help &amp; support</span><a href={`mailto:${SUPPORT_EMAIL}`} className="text-blue-500 hover:underline font-semibold">{SUPPORT_EMAIL}</a></span></li>
-            <li className="flex items-start gap-3"><Youtube className="w-5 h-5 text-red-500 shrink-0 mt-0.5" /><span><span className="block text-[10px] uppercase font-bold text-slate-500">YouTube</span><a href={YOUTUBE_URL} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline font-semibold">{YOUTUBE_HANDLE}</a></span></li>
-            <li className="flex items-start gap-3"><MapPin className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" /><span><span className="block text-[10px] uppercase font-bold text-slate-500">Address</span>{ADDRESS}</span></li>
-            <li className="flex items-start gap-3"><Clock className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" /><span><span className="block text-[10px] uppercase font-bold text-slate-500">Hours</span>{HOURS}</span></li>
+            <li className="flex items-start gap-3"><Mail className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" /><span><span className="block text-[10px] uppercase font-bold text-slate-500">General enquiries</span><a href={`mailto:${CONTACT_EMAIL}`} className={link}>{CONTACT_EMAIL}</a></span></li>
+            <li className="flex items-start gap-3"><LifeBuoy className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" /><span><span className="block text-[10px] uppercase font-bold text-slate-500">Help, orders &amp; support</span><a href={`mailto:${SUPPORT_EMAIL}`} className={link}>{SUPPORT_EMAIL}</a></span></li>
+            <li className="flex items-start gap-3"><MessageCircle className="w-5 h-5 text-green-500 shrink-0 mt-0.5" /><span><span className="block text-[10px] uppercase font-bold text-slate-500">WhatsApp</span><a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className={link}>{WHATSAPP_NUMBER_DISPLAY}</a></span></li>
+            <li className="flex items-start gap-3"><Phone className="w-5 h-5 text-cyan-500 shrink-0 mt-0.5" /><span><span className="block text-[10px] uppercase font-bold text-slate-500">Call</span><a href={PHONE_URL} className={link}>{WHATSAPP_NUMBER_DISPLAY}</a></span></li>
+            <li className="flex items-start gap-3"><MapPin className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" /><span><span className="block text-[10px] uppercase font-bold text-slate-500">Address</span>{COMPANY.address}</span></li>
+            <li className="flex items-start gap-3"><Clock className="w-5 h-5 text-slate-500 shrink-0 mt-0.5" /><span><span className="block text-[10px] uppercase font-bold text-slate-500">Support hours</span>{COMPANY.hours}</span></li>
           </ul>
+          <div className="pt-2 space-y-2 border-t border-slate-300">
+            <p className="text-[10px] uppercase font-bold text-slate-500">Follow us</p>
+            <SocialButtons />
+          </div>
         </div>
 
         <div className="p-8 rounded-3xl glass-card space-y-4">

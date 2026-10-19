@@ -1,82 +1,109 @@
 import React from 'react';
 import Link from 'next/link';
-import { Cpu, Youtube, Github, Mail, MapPin, Phone, ShieldCheck, Heart } from 'lucide-react';
-import { YOUTUBE_CHANNEL_URL } from '../../data/youtubeData';
+import { Mail, MapPin, Phone, Clock, LifeBuoy, MessageCircle } from 'lucide-react';
 import { Logo } from '../ui/Logo';
+import { SocialButtons } from '../ui/SocialButtons';
+import { COMPANY, CONTACT_EMAIL, PHONE_URL, SUPPORT_EMAIL, WHATSAPP_NUMBER_DISPLAY, WHATSAPP_URL } from '../../data/siteConfig';
+
+const linkCls = 'hover:text-blue-500 hover:underline transition-colors';
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="bg-[#0B1120] text-slate-400 text-sm border-t border-slate-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
-          
-          {/* Brand Col */}
-          <div className="lg:col-span-2 space-y-4">
+    <footer className="relative z-10 bg-white/70 text-sm border-t border-slate-300">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 pb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10">
+          {/* Company */}
+          <div className="lg:col-span-4 space-y-4">
             <Link href="/" className="flex items-center space-x-3">
-              <div className="h-10 flex items-center justify-center p-1.5 rounded-xl bg-slate-900 border border-slate-800">
+              <div className="h-10 flex items-center justify-center p-1.5 rounded-xl bg-white border border-slate-300">
                 <Logo size="sm" />
               </div>
-              <span className="text-xl font-heading font-bold text-white">
+              <span className="text-xl font-heading font-bold">
                 JR<span className="text-blue-500">Learners</span>
               </span>
             </Link>
-            <p className="text-xs leading-relaxed text-slate-400 max-w-sm">
-              Empowering students, makers, and schools across India with high-quality physical STEM kits, structured online courses, open-source projects, and learning resources.
-            </p>
-            <div className="flex items-center space-x-4 pt-2">
-              <a href={YOUTUBE_CHANNEL_URL} target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-lg bg-red-600/10 text-red-500 hover:bg-red-600 hover:text-white flex items-center justify-center transition-all">
-                <Youtube className="w-5 h-5" />
-              </a>
-              <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 flex items-center justify-center transition-all">
-                <Github className="w-5 h-5" />
-              </a>
-              <a href="mailto:help.jrlearners@gmail.com" className="w-9 h-9 rounded-lg bg-blue-600/10 text-blue-500 hover:bg-blue-600 hover:text-white flex items-center justify-center transition-all">
-                <Mail className="w-5 h-5" />
-              </a>
+            <p className="text-xs leading-relaxed text-slate-500 max-w-sm">{COMPANY.description}</p>
+            <div className="text-xs space-y-1 text-slate-500">
+              {COMPANY.legalName && <p><span className="font-semibold">Legal name:</span> {COMPANY.legalName}</p>}
+              {COMPANY.gstin && <p><span className="font-semibold">GSTIN:</span> {COMPANY.gstin}</p>}
+              {COMPANY.registration && <p><span className="font-semibold">Registration:</span> {COMPANY.registration}</p>}
+            </div>
+            <div className="pt-1 space-y-2">
+              <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">Follow us</p>
+              <SocialButtons size="sm" />
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h4 className="text-white text-xs font-semibold uppercase tracking-wider mb-4 font-heading">Shop & Build</h4>
-            <ul className="space-y-2.5 text-xs">
-              <li><Link href="/products" className="hover:text-blue-400 transition-colors">Shop Catalog</Link></li>
-              <li><Link href="/projects" className="hover:text-orange-400 transition-colors">Projects Library</Link></li>
-              <li><Link href="/courses" className="hover:text-cyan-400 transition-colors">Online Courses</Link></li>
-              <li><a href="/simulator/" className="hover:text-cyan-400 transition-colors">Arduino Simulator</a></li>
+          {/* Shop & learn */}
+          <div className="lg:col-span-2">
+            <h4 className="text-xs font-semibold uppercase tracking-wider mb-4 font-heading">Shop &amp; Learn</h4>
+            <ul className="space-y-2.5 text-xs text-slate-500">
+              <li><Link href="/products" className={linkCls}>The 8 Kits</Link></li>
+              <li><Link href="/products/prod-9" className={linkCls}>All-in-One Kit</Link></li>
+              <li><Link href="/projects" className={linkCls}>400 Projects</Link></li>
+              <li><Link href="/simulator" className={linkCls}>Arduino Simulator</Link></li>
+              <li><Link href="/courses" className={linkCls}>Courses</Link></li>
+              <li><Link href="/downloads" className={linkCls}>Downloads</Link></li>
+              <li><Link href="/schools" className={linkCls}>Schools &amp; Bulk Orders</Link></li>
             </ul>
           </div>
 
-          {/* Portals & Ecosystem */}
-          <div>
-            <h4 className="text-white text-xs font-semibold uppercase tracking-wider mb-4 font-heading">Support & Institutional</h4>
-            <ul className="space-y-2.5 text-xs">
-              <li><Link href="/dashboard" className="hover:text-blue-400 transition-colors">My Account</Link></li>
-              <li><Link href="/schools" className="hover:text-orange-400 transition-colors">For Schools & Bulk Orders</Link></li>
-              <li><Link href="/resources" className="hover:text-cyan-400 transition-colors">Resources & Calculators</Link></li>
-              <li><Link href="/support" className="hover:text-white transition-colors">Support & FAQs</Link></li>
-              <li><Link href="/admin" className="hover:text-amber-400 transition-colors">Admin Portal</Link></li>
+          {/* Company & policies */}
+          <div className="lg:col-span-3">
+            <h4 className="text-xs font-semibold uppercase tracking-wider mb-4 font-heading">Company &amp; Policies</h4>
+            <ul className="space-y-2.5 text-xs text-slate-500">
+              <li><Link href="/about" className={linkCls}>About JR Learners</Link></li>
+              <li><Link href="/contact" className={linkCls}>Contact Us</Link></li>
+              <li><Link href="/support" className={linkCls}>Support &amp; Help</Link></li>
+              <li><Link href="/policies" className={linkCls}>All Policies</Link></li>
+              <li><Link href="/terms" className={linkCls}>Terms of Service</Link></li>
+              <li><Link href="/privacy" className={linkCls}>Privacy Policy</Link></li>
+              <li><Link href="/refund" className={linkCls}>Refund &amp; Cancellation</Link></li>
+              <li><Link href="/shipping" className={linkCls}>Shipping &amp; Delivery</Link></li>
+              <li><Link href="/cookie" className={linkCls}>Cookie Policy</Link></li>
             </ul>
           </div>
 
-          {/* Legal & Newsletter */}
-          <div>
-            <h4 className="text-white text-xs font-semibold uppercase tracking-wider mb-4 font-heading">Legal & Policies</h4>
-            <ul className="space-y-2.5 text-xs">
-              <li><Link href="/privacy" className="hover:text-slate-200 transition-colors">Privacy Policy</Link></li>
-              <li><Link href="/terms" className="hover:text-slate-200 transition-colors">Terms of Service</Link></li>
-              <li><Link href="/refund" className="hover:text-slate-200 transition-colors">Refund Policy</Link></li>
-              <li><Link href="/shipping" className="hover:text-slate-200 transition-colors">Shipping & Delivery</Link></li>
-              <li><Link href="/contact" className="hover:text-slate-200 transition-colors">Contact Us</Link></li>
+          {/* Contact */}
+          <div className="lg:col-span-3">
+            <h4 className="text-xs font-semibold uppercase tracking-wider mb-4 font-heading">Contact &amp; Support</h4>
+            <ul className="space-y-3 text-xs text-slate-500">
+              <li className="flex items-start gap-2.5">
+                <Mail className="w-4 h-4 mt-0.5 shrink-0 text-blue-500" />
+                <span><span className="block font-semibold">General enquiries</span><a href={`mailto:${CONTACT_EMAIL}`} className={linkCls}>{CONTACT_EMAIL}</a></span>
+              </li>
+              <li className="flex items-start gap-2.5">
+                <LifeBuoy className="w-4 h-4 mt-0.5 shrink-0 text-emerald-500" />
+                <span><span className="block font-semibold">Help &amp; order support</span><a href={`mailto:${SUPPORT_EMAIL}`} className={linkCls}>{SUPPORT_EMAIL}</a></span>
+              </li>
+              <li className="flex items-start gap-2.5">
+                <MessageCircle className="w-4 h-4 mt-0.5 shrink-0 text-green-500" />
+                <span><span className="block font-semibold">WhatsApp</span><a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className={linkCls}>{WHATSAPP_NUMBER_DISPLAY}</a></span>
+              </li>
+              <li className="flex items-start gap-2.5">
+                <Phone className="w-4 h-4 mt-0.5 shrink-0 text-cyan-500" />
+                <span><span className="block font-semibold">Call</span><a href={PHONE_URL} className={linkCls}>{WHATSAPP_NUMBER_DISPLAY}</a></span>
+              </li>
+              <li className="flex items-start gap-2.5">
+                <MapPin className="w-4 h-4 mt-0.5 shrink-0 text-amber-500" />
+                <span><span className="block font-semibold">Address</span>{COMPANY.address}</span>
+              </li>
+              <li className="flex items-start gap-2.5">
+                <Clock className="w-4 h-4 mt-0.5 shrink-0 text-slate-500" />
+                <span><span className="block font-semibold">Support hours</span>{COMPANY.hours}</span>
+              </li>
             </ul>
           </div>
-
         </div>
 
-        <div className="mt-12 pt-8 border-t border-slate-800/80 flex flex-col md:flex-row items-center justify-between text-xs text-slate-500">
-          <p>© 2026 JR Learners. All rights reserved.</p>
-          <p className="mt-2 md:mt-0 flex items-center gap-1">
-            Built for STEM Makers & Engineers.
+        <div className="mt-12 pt-6 border-t border-slate-300 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+          <p>© {new Date().getFullYear()} {COMPANY.legalName || COMPANY.name}. All rights reserved. Made in India.</p>
+          <p className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
+            <Link href="/terms" className={linkCls}>Terms</Link>
+            <Link href="/privacy" className={linkCls}>Privacy</Link>
+            <Link href="/refund" className={linkCls}>Refunds</Link>
+            <Link href="/shipping" className={linkCls}>Shipping</Link>
+            <Link href="/cookie" className={linkCls}>Cookies</Link>
           </p>
         </div>
       </div>

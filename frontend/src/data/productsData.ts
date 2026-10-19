@@ -157,7 +157,7 @@ export const PRODUCTS_DATA: STEMProduct[] = [
     ],
     "manualUrl": "/arduinoforge/",
     "datasheetUrl": "/downloads",
-    "videoUrl": "https://www.youtube.com/@LetsGetEngagedin",
+    "videoUrl": "https://www.youtube.com/@jrlearners2",
     "faqs": [
       {
         "question": "Which parts are in this kit?",
@@ -558,7 +558,7 @@ export const PRODUCTS_DATA: STEMProduct[] = [
     ],
     "manualUrl": "/arduinoforge/",
     "datasheetUrl": "/downloads",
-    "videoUrl": "https://www.youtube.com/@LetsGetEngagedin",
+    "videoUrl": "https://www.youtube.com/@jrlearners2",
     "faqs": [
       {
         "question": "Which parts are in this kit?",
@@ -950,7 +950,7 @@ export const PRODUCTS_DATA: STEMProduct[] = [
     ],
     "manualUrl": "/arduinoforge/",
     "datasheetUrl": "/downloads",
-    "videoUrl": "https://www.youtube.com/@LetsGetEngagedin",
+    "videoUrl": "https://www.youtube.com/@jrlearners2",
     "faqs": [
       {
         "question": "Which parts are in this kit?",
@@ -1346,7 +1346,7 @@ export const PRODUCTS_DATA: STEMProduct[] = [
     ],
     "manualUrl": "/arduinoforge/",
     "datasheetUrl": "/downloads",
-    "videoUrl": "https://www.youtube.com/@LetsGetEngagedin",
+    "videoUrl": "https://www.youtube.com/@jrlearners2",
     "faqs": [
       {
         "question": "Which parts are in this kit?",
@@ -1758,7 +1758,7 @@ export const PRODUCTS_DATA: STEMProduct[] = [
     ],
     "manualUrl": "/arduinoforge/",
     "datasheetUrl": "/downloads",
-    "videoUrl": "https://www.youtube.com/@LetsGetEngagedin",
+    "videoUrl": "https://www.youtube.com/@jrlearners2",
     "faqs": [
       {
         "question": "Which parts are in this kit?",
@@ -2178,7 +2178,7 @@ export const PRODUCTS_DATA: STEMProduct[] = [
     ],
     "manualUrl": "/arduinoforge/",
     "datasheetUrl": "/downloads",
-    "videoUrl": "https://www.youtube.com/@LetsGetEngagedin",
+    "videoUrl": "https://www.youtube.com/@jrlearners2",
     "faqs": [
       {
         "question": "Which parts are in this kit?",
@@ -2586,7 +2586,7 @@ export const PRODUCTS_DATA: STEMProduct[] = [
     ],
     "manualUrl": "/arduinoforge/",
     "datasheetUrl": "/downloads",
-    "videoUrl": "https://www.youtube.com/@LetsGetEngagedin",
+    "videoUrl": "https://www.youtube.com/@jrlearners2",
     "faqs": [
       {
         "question": "Which parts are in this kit?",
@@ -2994,7 +2994,7 @@ export const PRODUCTS_DATA: STEMProduct[] = [
     ],
     "manualUrl": "/arduinoforge/",
     "datasheetUrl": "/downloads",
-    "videoUrl": "https://www.youtube.com/@LetsGetEngagedin",
+    "videoUrl": "https://www.youtube.com/@jrlearners2",
     "faqs": [
       {
         "question": "Which parts are in this kit?",
@@ -3590,7 +3590,7 @@ export const PRODUCTS_DATA: STEMProduct[] = [
     ],
     "manualUrl": "/projects",
     "datasheetUrl": "/downloads",
-    "videoUrl": "https://www.youtube.com/@LetsGetEngagedin",
+    "videoUrl": "https://www.youtube.com/@jrlearners2",
     "faqs": [
       {
         "question": "What is in the All-in-One kit?",

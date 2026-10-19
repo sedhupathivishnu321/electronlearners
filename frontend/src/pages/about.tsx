@@ -39,7 +39,7 @@ export default function AboutPage() {
         <div className="space-y-4 text-xs text-slate-300">
           <div className="flex items-start gap-4">
             <span className="px-3 py-1 rounded bg-blue-600 text-white font-bold font-mono">2024</span>
-            <p className="pt-0.5">Launched YouTube channel @LetsGetEngagedin providing free Arduino & electronics tutorials.</p>
+            <p className="pt-0.5">Launched YouTube channel @jrlearners2 providing free Arduino & electronics tutorials.</p>
           </div>
           <div className="flex items-start gap-4">
             <span className="px-3 py-1 rounded bg-cyan-600 text-white font-bold font-mono">2025</span>
