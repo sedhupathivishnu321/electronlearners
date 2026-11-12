@@ -1,33 +1,82 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>PixelForge – Online Photo Studio</title>
+<meta name="description" content="Free online photo editor: resize, enhance, edit and remove watermarks. Runs entirely in your browser.">
+<title>Photo Studio — Resize, Enhance, Edit & Remove Watermarks</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header>
-  <div class="brand">◩ PixelForge</div>
-  <button id="bOpen" class="pri">Open photo</button>
-  <button id="bUndo" title="Ctrl+Z">↶ Undo</button>
-  <button id="bRedo" title="Ctrl+Y">↷ Redo</button>
-  <button id="bCmp" title="Hold to see the original">◐ Hold: original</button>
-  <span class="sp"></span>
-  <span id="info"></span>
-  <button id="zOut">−</button><button id="zFit">Fit</button><button id="z100">100%</button><button id="zIn">+</button>
-  <button id="bExport" class="pri">⬇ Export</button>
-</header>
-<main>
-  <nav id="rail"></nav>
-  <aside id="panel"></aside>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-adjust" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10M14 4v6M6 14v6" /></symbol>
+    <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/></symbol>
+    <symbol id="i-resize" viewBox="0 0 24 24"><path d="M4 9V4h5M20 15v5h-5M4 4l6 6M20 20l-6-6"/></symbol>
+    <symbol id="i-crop" viewBox="0 0 24 24"><path d="M6 2v14a2 2 0 002 2h14M2 6h14a2 2 0 012 2v14"/></symbol>
+    <symbol id="i-brush" viewBox="0 0 24 24"><path d="M18.4 2.6a2 2 0 013 3L11 16l-4 1 1-4zM7 17c0 2.5-1.5 4-4 4 2 0 5 0 6-2.5"/></symbol>
+    <symbol id="i-stamp" viewBox="0 0 24 24"><path d="M5 21h14M7 17h10l-1-5a3 3 0 01-.5-5.4A3.5 3.5 0 008.5 7.6 3 3 0 018 12z"/></symbol>
+    <symbol id="i-eraser" viewBox="0 0 24 24"><path d="M20 20H9L3.6 14.6a2 2 0 010-2.8L12.8 2.6a2 2 0 012.8 0l5.8 5.8a2 2 0 010 2.8L13 19.6M7 11l6 6"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4.5-4.5M12 15l4.5-4.5M4 20h16"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5zM3 13l9 5 9-5M3 17.5l9 5 9-5"/></symbol>
+    <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 14L4 9l5-5M4 9h10a6 6 0 010 12h-3"/></symbol>
+    <symbol id="i-redo" viewBox="0 0 24 24"><path d="M15 14l5-5-5-5M20 9H10a6 6 0 000 12h3"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+    <symbol id="i-fit" viewBox="0 0 24 24"><path d="M4 9V5a1 1 0 011-1h4M15 4h4a1 1 0 011 1v4M20 15v4a1 1 0 01-1 1h-4M9 20H5a1 1 0 01-1-1v-4"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 13A9 9 0 1111 3a7 7 0 0010 10z"/></symbol>
+    <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 15V4m0 0L7.5 8.5M12 4l4.5 4.5M4 20h16"/></symbol>
+  </defs>
+</svg>
+
+<div id="app">
+  <header id="top">
+    <div class="brand"><svg class="ic lg"><use href="#i-image"/></svg><span>Photo Studio</span></div>
+    <button id="bOpen" class="btn"><svg class="ic"><use href="#i-upload"/></svg>Open</button>
+    <span class="vsep"></span>
+    <button id="bUndo" class="btn icon" title="Undo (Ctrl+Z)" aria-label="Undo"><svg class="ic"><use href="#i-undo"/></svg></button>
+    <button id="bRedo" class="btn icon" title="Redo (Ctrl+Y)" aria-label="Redo"><svg class="ic"><use href="#i-redo"/></svg></button>
+    <button id="bCmp" class="btn" title="Hold to compare with the original (or hold \)"><svg class="ic"><use href="#i-eye"/></svg>Compare</button>
+    <span class="grow"></span>
+    <div class="seg" role="group" aria-label="Zoom">
+      <button id="zOut" class="btn icon" title="Zoom out (−)" aria-label="Zoom out"><svg class="ic"><use href="#i-minus"/></svg></button>
+      <button id="zLabel" class="btn zl" title="Reset to 100%">100%</button>
+      <button id="zIn" class="btn icon" title="Zoom in (+)" aria-label="Zoom in"><svg class="ic"><use href="#i-plus"/></svg></button>
+      <button id="zFit" class="btn icon" title="Fit to screen (F)" aria-label="Fit"><svg class="ic"><use href="#i-fit"/></svg></button>
+    </div>
+    <button id="bTheme" class="btn icon" title="Toggle light / dark" aria-label="Toggle theme"><svg class="ic"><use href="#i-moon"/></svg></button>
+    <button id="bExport" class="btn primary"><svg class="ic"><use href="#i-download"/></svg>Export</button>
+  </header>
+
+  <nav id="rail" aria-label="Tools"></nav>
+
   <section id="stage">
-    <div id="drop"><div><h1>Drop a photo here</h1><p>or click <b>Open photo</b> · paste with Ctrl+V<br>Resize · Enhance · Edit · Remove watermarks — all in your browser, nothing is uploaded.</p></div></div>
-    <div id="scroll"><div id="wrap"><canvas id="view"></canvas><canvas id="ov"></canvas></div></div>
+    <div id="drop">
+      <div class="dz">
+        <svg class="ic xl"><use href="#i-image"/></svg>
+        <h1>Edit photos in your browser</h1>
+        <p>Drop an image here, paste with Ctrl+V, or choose a file.<br>Resize · Enhance · Edit · Remove watermarks. Nothing is uploaded.</p>
+        <div class="dzb"><button class="btn primary lgb" id="dzOpen">Choose a photo</button><button class="btn lgb" id="dzSample">Try a sample</button></div>
+        <small>JPG · PNG · WebP · GIF · BMP · AVIF</small>
+      </div>
+    </div>
+    <div id="scroll"><div id="wrap"><canvas id="view"></canvas><canvas id="gl"></canvas><canvas id="ov"></canvas></div></div>
+    <div id="cursor" hidden></div>
+    <div id="chip" hidden>Original</div>
   </section>
-</main>
-<div id="busy" hidden><div class="box"><div id="busyMsg">Working…</div><div class="bar"><i id="bar"></i></div><button id="bCancel">Cancel</button></div></div>
-<div id="toast"></div>
+
+  <aside id="panel" aria-label="Properties"></aside>
+
+  <footer id="status">
+    <span id="sDim">—</span><span id="sZoom"></span><span id="sPos"></span><span class="grow"></span><span id="sMem"></span><span id="sGpu" title="Real-time preview engine"></span>
+  </footer>
+</div>
+
+<div id="busy" hidden role="dialog" aria-modal="true"><div class="box"><div class="spin"></div><div id="busyMsg">Working…</div><div class="bar"><i id="bar"></i></div><button id="bCancel" class="btn">Cancel</button></div></div>
+<div id="toast" role="status" aria-live="polite"></div>
 <input type="file" id="file" accept="image/*" hidden>
 <input type="file" id="logoFile" accept="image/*" hidden>
 <input type="file" id="batchFiles" accept="image/*" multiple hidden>
