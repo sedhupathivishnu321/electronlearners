@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PixelForge – Online Photo Studio</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="brand">◩ PixelForge</div>
+  <button id="bOpen" class="pri">Open photo</button>
+  <button id="bUndo" title="Ctrl+Z">↶ Undo</button>
+  <button id="bRedo" title="Ctrl+Y">↷ Redo</button>
+  <button id="bCmp" title="Hold to see the original">◐ Hold: original</button>
+  <span class="sp"></span>
+  <span id="info"></span>
+  <button id="zOut">−</button><button id="zFit">Fit</button><button id="z100">100%</button><button id="zIn">+</button>
+  <button id="bExport" class="pri">⬇ Export</button>
+</header>
+<main>
+  <nav id="rail"></nav>
+  <aside id="panel"></aside>
+  <section id="stage">
+    <div id="drop"><div><h1>Drop a photo here</h1><p>or click <b>Open photo</b> · paste with Ctrl+V<br>Resize · Enhance · Edit · Remove watermarks — all in your browser, nothing is uploaded.</p></div></div>
+    <div id="scroll"><div id="wrap"><canvas id="view"></canvas><canvas id="ov"></canvas></div></div>
+  </section>
+</main>
+<div id="busy" hidden><div class="box"><div id="busyMsg">Working…</div><div class="bar"><i id="bar"></i></div><button id="bCancel">Cancel</button></div></div>
+<div id="toast"></div>
+<input type="file" id="file" accept="image/*" hidden>
+<input type="file" id="logoFile" accept="image/*" hidden>
+<input type="file" id="batchFiles" accept="image/*" multiple hidden>
+<script src="app.js"></script>
+</body>
+</html>

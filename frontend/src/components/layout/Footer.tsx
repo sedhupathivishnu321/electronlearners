@@ -42,6 +42,7 @@ export const Footer: React.FC = () => {
               <li><Link href="/products/prod-9" className={linkCls}>All-in-One Kit</Link></li>
               <li><Link href="/projects" className={linkCls}>400 Projects</Link></li>
               <li><Link href="/simulator" className={linkCls}>Arduino Simulator</Link></li>
+              <li><a href="/photo-studio/index.html" className={linkCls}>Photo Studio</a></li>
               <li><Link href="/custom-project" className={linkCls}>Customized Projects</Link></li>
               <li><Link href="/courses" className={linkCls}>Courses</Link></li>
               <li><Link href="/downloads" className={linkCls}>Downloads</Link></li>

@@ -38,6 +38,7 @@ export const Header: React.FC = () => {
             <Link href="/courses" className="hover:text-blue-400 transition-colors">Courses</Link>
             <Link href="/projects" className="hover:text-blue-400 transition-colors">Projects</Link>
             <a href="/simulator/" className="hover:text-blue-400 transition-colors">Simulator</a>
+            <a href="/photo-studio/index.html" className="hover:text-blue-400 transition-colors">Photo Studio</a>
             <Link href="/resources" className="hover:text-blue-400 transition-colors">Resources</Link>
             <Link href="/schools" className="hover:text-blue-400 transition-colors">For Schools</Link>
             
@@ -157,6 +158,7 @@ export const Header: React.FC = () => {
           <Link href="/courses" onClick={() => setIsMobileMenuOpen(false)} className="block text-sm font-medium text-slate-200 py-1">Courses</Link>
           <Link href="/projects" onClick={() => setIsMobileMenuOpen(false)} className="block text-sm font-medium text-slate-200 py-1">Projects</Link>
           <a href="/simulator/" className="block text-sm font-medium text-slate-200 py-1">Simulator</a>
+          <a href="/photo-studio/index.html" className="block text-sm font-medium text-slate-200 py-1">Photo Studio</a>
           <Link href="/resources" onClick={() => setIsMobileMenuOpen(false)} className="block text-sm font-medium text-slate-200 py-1">Resources</Link>
           <Link href="/schools" onClick={() => setIsMobileMenuOpen(false)} className="block text-sm font-medium text-slate-200 py-1">For Schools</Link>
           <Link href="/dashboard" onClick={() => setIsMobileMenuOpen(false)} className="block text-sm font-medium text-slate-200 py-1">My Account</Link>
